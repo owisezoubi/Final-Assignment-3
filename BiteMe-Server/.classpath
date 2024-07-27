@@ -5,5 +5,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JavaFX"/>
 	<classpathentry kind="lib" path="/Users/owisesmac/Desktop/softwares/mysql-connector-java-8.0.13.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/BiteMe-Common"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

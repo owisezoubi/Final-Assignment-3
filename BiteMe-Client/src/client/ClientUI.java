@@ -2,8 +2,6 @@ package client;
 import javafx.application.Application;
 
 import javafx.stage.Stage;
-import logic.Faculty;
-import logic.Student;
 
 import java.util.Vector;
 import gui.IPConnectionPageController;
