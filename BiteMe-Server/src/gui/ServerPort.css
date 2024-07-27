@@ -1,0 +1,51 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+#btnStudentInfo {
+    -fx-background-color: lightblue;
+    -fx-text-fill: red;
+    -fx-padding: 6 6 6 6;
+    -fx-border-radius: 8;
+    -fx-font-weight: bold;
+}
+
+.root {
+    -fx-background-color: #ccffff;
+}
+
+.label {
+    -fx-text-fill: black; /* Default text color for all labels */
+}
+
+#messageLabelServerPort {
+    -fx-text-fill: red; /* Red text color for the message label */
+    -fx-alignment: center; /* Center alignment */
+    -fx-font-size: 14px; /* Font size */
+    -fx-padding: 10px; /* Padding around the text */
+}
+
+#serverIpTextField,
+#dBInternalTextField,
+#dBExternalTextField,
+#PasswordTextField {
+    -fx-background-color: white;
+    -fx-border-color: gray;
+    -fx-border-radius: 5px;
+    -fx-padding: 5px;
+}
+
+#startServerButton,
+#exitButton,
+#disconnectServerButton {
+    -fx-background-color: lightblue;
+    -fx-text-fill: black;
+    -fx-border-radius: 5px;
+    -fx-font-weight: bold;
+    -fx-padding: 5px 10px;
+}
+
+#ClientsTableView {
+    -fx-background-color: white;
+    -fx-border-color: gray;
+    -fx-border-radius: 5px;
+    -fx-padding: 5px;
+}
