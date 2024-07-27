@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="504.0" prefWidth="564.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ServerPortFrameController">
+
+   
+   
+   <children>
+      <TableView fx:id="ClientsTableView" layoutX="72.0" layoutY="225.0" prefHeight="197.0" prefWidth="437.0">
+        <columns>
+          <TableColumn fx:id="guestNameColumn" prefWidth="143.66668701171875" text="Guest Name" />
+          <TableColumn fx:id="ipColumn" prefWidth="123.33331298828125" text="Ip" />
+          <TableColumn fx:id="statusTabelColumn" prefWidth="149.3333740234375" text="Status" />
+        </columns>
+      </TableView>
+      <TextField fx:id="serverIpTextField" layoutX="161.0" layoutY="36.0" promptText="Server Ip" />
+      <TextField fx:id="dBInternalTextField" layoutX="161.0" layoutY="70.0" promptText="DB Schema Name" />
+      <TextField fx:id="dBExternalTextField" layoutX="161.0" layoutY="104.0" promptText="DB Schema Name" />
+      <Label fx:id="serverIpLabel" layoutX="86.0" layoutY="41.0" text="Server Ip:" />
+      <Label fx:id="dBInternalLabel" layoutX="74.0" layoutY="72.0" text="DB Internal:" />
+      <Label fx:id="dBExternalLabel" layoutX="72.0" layoutY="109.0" text="DB External:" />
+      <Button fx:id="startServerButton" layoutX="385.0" layoutY="45.0" mnemonicParsing="false" onAction="#StartServerButtonOnClickAction" prefHeight="36.0" prefWidth="112.0" text="Start Server" />
+      <Button fx:id="exitButton" layoutX="240.0" layoutY="449.0" mnemonicParsing="false" onAction="#ExitButtonOnClickAction" prefHeight="27.0" prefWidth="63.0" text="Exit" />
+      <TextField fx:id="PasswordTextField" layoutX="161.0" layoutY="136.0" promptText="Password" />
+      <Label layoutX="61.0" layoutY="139.0" text="DB Password:" />
+      <Label fx:id="serverLabel" layoutX="259.0" layoutY="6.0" prefHeight="17.0" prefWidth="39.0" text="Server" textAlignment="CENTER" />
+      <Button fx:id="disconnectServerButton" layoutX="384.0" layoutY="104.0" mnemonicParsing="false" onAction="#disconnectServerButtonOnClickAction" prefHeight="36.0" prefWidth="112.0" text="Disconnect" />
+      <Label fx:id="messageLabelServerPort" layoutX="72.0" layoutY="175.0" prefHeight="27.0" prefWidth="437.0" style="-fx-background-color: LightBlue;" textAlignment="CENTER" />
+   </children>
+</AnchorPane>
