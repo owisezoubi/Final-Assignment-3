@@ -41,5 +41,8 @@ public class ClientInfo implements Serializable{
 		this.ip = ip;
 		this.Status = status;
 	}
+	
+	
+	// test for commiting
 
 }
