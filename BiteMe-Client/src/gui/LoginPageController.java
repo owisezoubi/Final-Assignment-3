@@ -1,8 +1,13 @@
 package gui;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.ResourceBundle;
 
+import client.ChatClient;
+import client.ClientUI;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -31,12 +36,19 @@ public class LoginPageController implements Initializable{
 
     @FXML
     private Label PasswordLabel;
+    
+    @FXML
+    private Label messageLoginPage;
 
     @FXML
     private Button exitButton;
 
     @FXML
     private PasswordField passwordField;
+    
+    
+    
+    
     
     @Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -59,6 +71,24 @@ public class LoginPageController implements Initializable{
     
     @FXML
     void LoginButtonOnClickAction(ActionEvent event) {
+    	
+    	String userName = userNameTextField.getText().trim();
+    	String password = passwordField.getText().trim();
+;    	
+    	if (userName.isEmpty() || userName.isEmpty()) { // handling empty input
+			messageLoginPage.setText("please fill the fields");
+		}
+    	else {
+    		ArrayList<String> msg = new ArrayList<>();
+    		msg.add(0, "Get Login Validation");
+    		msg.add(1, userName);
+    		msg.add(2, password);
+    		
+    		ClientUI.chat.accept(msg);
+    		ArrayList<String> result = ChatClient.inputList;
+		}
+    	
+    	
 
     }
 
@@ -70,6 +100,8 @@ public class LoginPageController implements Initializable{
 
     @FXML
     void exitButtonOnClickAction(ActionEvent event) {
+		System.out.println("Close Login Page");
+    	ClientUI.chat.client.quit();
     	System.exit(0);
 
     }

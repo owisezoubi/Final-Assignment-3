@@ -70,7 +70,7 @@ public class IPConnectionPageController implements Initializable {
     @FXML
     public void connectButtonOnClickAction(ActionEvent event) throws Exception {
        
-        if (ipTextField.getText().isEmpty()) {
+        if (ipTextField.getText().trim().isEmpty()) {
         	ipMessageLabel.setText("please enter ip address");
             return;
         } else {

@@ -3,6 +3,7 @@ package Server;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import gui.ServerPortFrameController;
@@ -100,12 +101,58 @@ public class DataBaseControl {
 	
 	
 	//the function update the "isLoggedIn" to all users to zero when exiting - logging out
-	public static void LogOutAllAccounts() throws SQLException {
-		PreparedStatement ps;
+    public static void LogOutAllAccounts() throws Exception {
+        PreparedStatement ps = null;
+        try {
+            if (connection == null || connection.isClosed()) {
+                // Assuming connectToInternalDB is the desired connection method
+                connection = connectToInternalDB();
+            }
+            ps = connection.prepareStatement("UPDATE Assignment3_DB.users SET IsLoggedIn = ?");
+            ps.setInt(1, 0);
+            ps.executeUpdate();
+            System.out.println("All accounts logged out successfully.");
+        } catch (SQLException ex) {
+            System.out.println("Failed to log out all accounts.");
+            ex.printStackTrace();
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+        
+        
 
-		ps = connection.prepareStatement("UPDATE Assignment3_DB.users SET IsLoggedIn = ? ");
-		ps.setInt(1, 0);
-		ps.executeUpdate();
-	}
+    }
+
+	
+    public static String validateLogin(String username, String password) throws Exception {
+        String sql = "SELECT user_name, password FROM users WHERE user_name = ?";
+        try (PreparedStatement pstmt = internalConnection.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                String storedPassword = rs.getString("password");
+                if (storedPassword.equals(password)) {
+                    return "LoggedIn";
+                } else {
+                    return "InvalidPassword";
+                }
+            } else {
+                return "NotExist";
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return "Error";
+        }
+    }
+	
+	
+	
 	
 }
