@@ -70,12 +70,14 @@ public class ChatClient extends AbstractClient
   @SuppressWarnings("unchecked")
 public void handleMessageFromServer(Object msg) 
   {
+	  
+	  
 	  System.out.println("--> handleMessageFromServer");
 
 	  awaitResponse = false;
 	  inputList = (ArrayList<String>) msg;
 	  
-	  System.out.println(inputList.toString());
+	  System.out.println("ChatClient: message from server " + msg.toString());
 	 
   }
 

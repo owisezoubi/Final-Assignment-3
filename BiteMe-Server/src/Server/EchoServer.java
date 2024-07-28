@@ -94,29 +94,59 @@ public class EchoServer extends AbstractServer
 		System.out.println("Message received: " + msg + " from " + client);
 		
 		switch (inputList.get(0)) {
+		
 			case "Get Login Validation":
 			
+				try {
+					//inputList.remove(0);
+				
+					System.out.println("EchoServer: " + inputList.toString());
+				
+					ArrayList<String> resultList = DataBaseControl.getUserNameLogin(inputList.get(1));
+				
+					System.out.println("result: " + resultList.toString());
+				
+					this.sendToAllClients(resultList);
+				
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}  
+			break;
+
 			
-			
+			case "User Logged In":
 			try {
-				//inputList.remove(0);
 				
-				System.out.println("EchoServer: " + inputList.toString());
+				System.out.println("UserLoggedIn: " + inputList.toString());
 				
-				String resultList = DataBaseControl.validateLogin(inputList.get(1), inputList.get(2));
+				DataBaseControl.UserLoggedIn(inputList.get(1));
 				
-				System.out.println("result: " + resultList);
+				
+				this.sendToAllClients(null);
+				
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+				
+				break;
+				
+				
+			case "User Logged Out":
+			try {
+				DataBaseControl.UserLoggedOut(inputList.get(1));
+				
+				
+				this.sendToAllClients(null);
 
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+				break;
 			
 			
-			
-		    this.sendToAllClients(msg);		    
-			break;
-
 		default:
 			break;
 		}
