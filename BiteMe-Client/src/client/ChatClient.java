@@ -23,6 +23,10 @@ import java.util.ArrayList;
  */
 public class ChatClient extends AbstractClient
 {
+	
+	public static ArrayList<String> inputList;
+	
+	
   //Instance variables **********************************************
   
 	public static boolean awaitResponse = false;
@@ -63,9 +67,15 @@ public class ChatClient extends AbstractClient
    *
    * @param msg The message from the server.
    */
-  public void handleMessageFromServer(Object msg) 
+  @SuppressWarnings("unchecked")
+public void handleMessageFromServer(Object msg) 
   {
-	 
+	  System.out.println("--> handleMessageFromServer");
+
+	  awaitResponse = false;
+	  inputList = (ArrayList<String>) msg;
+	  
+	  System.out.println(inputList.toString());
 	 
   }
 
@@ -75,25 +85,25 @@ public class ChatClient extends AbstractClient
    * @param message The message from the UI.    
    */
   
-  public void handleMessageFromClientUI(String message)  
-  {
-//	  awaitResponse = true;
-//		try {
-//			sendToServer(message);
-//		} catch (IOException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
-//		// wait for response
-//		while (awaitResponse) {
-//			try {
-//
-//				Thread.sleep(100);
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
-//		}
-  }
+  public void handleMessageFromClientUI(Object msg) {
+		try {
+			openConnection();// in order to send more than one message
+			awaitResponse = true;
+			sendToServer(msg);
+			// wait for response
+			while (awaitResponse) {
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			clientUI.display("Could not send message to server: Terminating client." + e);
+			quit();
+		}
+	}
 
   
   /**
