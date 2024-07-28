@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import gui.ServerPortFrameController;
 
@@ -130,29 +131,67 @@ public class DataBaseControl {
     }
 
 	
-    public static String validateLogin(String username, String password) throws Exception {
-        String sql = "SELECT user_name, password FROM users WHERE user_name = ?";
+    public static ArrayList<String> getUserNameLogin(String username) throws Exception {
+        String sql = "SELECT user_name, password, is_logged_in, user_type FROM users WHERE user_name = ?";
+        ArrayList<String> result = new ArrayList<>();
+        result.add("Error"); // Default message
+
         try (PreparedStatement pstmt = internalConnection.prepareStatement(sql)) {
             pstmt.setString(1, username);
             ResultSet rs = pstmt.executeQuery();
-            
+
             if (rs.next()) {
                 String storedPassword = rs.getString("password");
-                if (storedPassword.equals(password)) {
-                    return "LoggedIn";
-                } else {
-                    return "InvalidPassword";
-                }
+                String isLoggedIn = rs.getString("is_logged_in");
+                String userType = rs.getString("user_type");
+                
+                result.set(0, "UserFound");
+                result.add(username);
+                result.add(storedPassword);
+                result.add(isLoggedIn);
+                result.add(userType);
             } else {
-                return "NotExist";
+                result.set(0, "NotExist");
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            return "Error";
+            result.set(0, "Error");
         }
+        
+        
+        System.out.println("DB class: " + result.toString());
+        
+        return result;
+              
     }
 	
 	
-	
+ // Update the is_logged_in status to 1 (logged in)
+    public static void UserLoggedIn(String username) throws Exception {
+        String sql = "UPDATE users SET is_logged_in = 1 WHERE user_name = ?";
+        try (PreparedStatement pstmt = internalConnection.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            pstmt.executeUpdate();
+            System.out.println("User " + username + " logged in successfully.");
+        } catch (SQLException e) {
+            System.out.println("Error updating login status for user " + username);
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    
+
+    // Update the is_logged_in status to 0 (logged out)
+    public static void UserLoggedOut(String username) throws Exception {
+        String sql = "UPDATE users SET is_logged_in = 0 WHERE user_name = ?";
+        try (PreparedStatement pstmt = internalConnection.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            pstmt.executeUpdate();
+            System.out.println("User " + username + " logged out successfully.");
+        } catch (SQLException e) {
+            System.out.println("Error updating logout status for user " + username);
+            System.out.println(e.getMessage());
+        }
+    }
 	
 }
