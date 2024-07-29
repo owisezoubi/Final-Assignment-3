@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="548.0" prefWidth="417.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CustomerHomePageController">
+   <children>
+      <Button fx:id="orderCustomerButton" layoutX="151.0" layoutY="203.0" mnemonicParsing="false" onAction="#myOrdersCustomerButtonOnClickAction" prefHeight="25.0" prefWidth="120.0" text="Order" />
+      <Button fx:id="logoutCustomerButton" layoutX="180.0" layoutY="486.0" mnemonicParsing="false" onAction="#logoutCustomerButtonOnClickAction" text="Log Out" />
+      <Button fx:id="myOrdersCustomerButton" layoutX="151.0" layoutY="264.0" mnemonicParsing="false" onAction="#myOrdersCustomerButtonOnClickAction" prefHeight="25.0" prefWidth="120.0" text="My Orders" />
+      <Label fx:id="greetingsCustomerHomePageLabel" layoutX="50.0" layoutY="36.0" prefHeight="34.0" prefWidth="320.0" style="-fx-background-color: lightblue;" />
+   </children>
+</AnchorPane>
