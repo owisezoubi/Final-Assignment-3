@@ -79,6 +79,24 @@ public class LoginPageController implements Initializable{
     	
     	String userName = userNameTextField.getText().trim();
     	String password = passwordField.getText().trim();
+    	
+    	// init arraylists for sending messages
+    	ArrayList<String> userLoggedInMessage = new ArrayList<>();
+    	
+    	userLoggedInMessage.add(0, null);
+    	userLoggedInMessage.add(1, null);
+    	
+    	ArrayList<String> userLoggedInInfo = new ArrayList<>();
+    	
+    	userLoggedInInfo.add(0, null);
+    	userLoggedInInfo.add(1, null);
+    	
+    	
+    	ArrayList<String> userInfoArrayList;
+    	
+    	
+    	Stage stage, primaryStage;
+    	
 ;    	
     	if (userName.isEmpty() || userName.isEmpty()) { // handling empty input
 			messageLoginPage.setText("please fill the fields");
@@ -110,32 +128,31 @@ public class LoginPageController implements Initializable{
 					switch (result.get(4)) {
 					case "customer":
 						
-						// send to server to update is_logged_in to 1 --- OFF FOR DEBUGGING
-						ArrayList<String> userLoggedInMessage = new ArrayList<>();
-						userLoggedInMessage.add(0, "User Logged In");
-						userLoggedInMessage.add(1, userName);
+						// send to server to update is_logged_in to 1 
+						userLoggedInMessage.set(0, "User Logged In");
+						userLoggedInMessage.set(1, userName);
 						ClientUI.chat.accept(userLoggedInMessage);
 			
 						
 						
 						// send to server to get user info after a successfully log in
-						ArrayList<String> userLoggedInInfo = new ArrayList<>();
-						userLoggedInInfo.add(0, "Get User Info");
-						userLoggedInInfo.add(1, userName);
+						userLoggedInInfo.set(0, "Get User Info");
+						userLoggedInInfo.set(1, userName);
 						ClientUI.chat.accept(userLoggedInInfo);
 						
 						
-						ArrayList<String> userInfoArrayList = ChatClient.inputList;
+						// getting User info after login
+						userInfoArrayList = ChatClient.inputList;
 						
 						ChatClient.user = new User(userInfoArrayList.get(1), userInfoArrayList.get(2), userInfoArrayList.get(3), userInfoArrayList.get(4),userInfoArrayList.get(5), userInfoArrayList.get(6), userInfoArrayList.get(7), userInfoArrayList.get(8), userInfoArrayList.get(9), userInfoArrayList.get(10));
 						
-						System.out.println(ChatClient.user.toString());
-						
-						Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+						// closing current page
+						stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 		            	stage.close();
 
+		            	// opening new page
 		            	CustomerHomePageController LIF = new CustomerHomePageController();
-		            	Stage primaryStage = new Stage();
+		            	primaryStage = new Stage();
 		            	LIF.start(primaryStage);
 
 						
@@ -144,17 +161,109 @@ public class LoginPageController implements Initializable{
 
 					case "restaurant":
 						
+						
+						
+						
+						
+						
+						
+						
+						
 						break;
 						
 					case "certified worker":
+						
+						
+						// send to server to update is_logged_in to 1 
+						userLoggedInMessage.set(0, "User Logged In");
+						userLoggedInMessage.set(1, userName);
+						ClientUI.chat.accept(userLoggedInMessage);
+			
+						
+						
+						// send to server to get user info after a successfully log in
+						userLoggedInInfo.set(0, "Get User Info");
+						userLoggedInInfo.set(1, userName);
+						ClientUI.chat.accept(userLoggedInInfo);
+						
+						
+						// getting User info after login
+						userInfoArrayList = ChatClient.inputList;
+						
+						ChatClient.user = new User(userInfoArrayList.get(1), userInfoArrayList.get(2), userInfoArrayList.get(3), userInfoArrayList.get(4),userInfoArrayList.get(5), userInfoArrayList.get(6), userInfoArrayList.get(7), userInfoArrayList.get(8), userInfoArrayList.get(9), userInfoArrayList.get(10));
+						
+						// closing current page
+						stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+		            	stage.close();
+
+		            	// opening new page
+		            	CertifiedWorkerHomePageController CHPC = new CertifiedWorkerHomePageController();
+		            	primaryStage = new Stage();
+		            	CHPC.start(primaryStage);
+						
+						
 	
 						break;
 	
 					case "branch manager":
+						
+						// send to server to update is_logged_in to 1 
+						userLoggedInMessage.set(0, "User Logged In");
+						userLoggedInMessage.set(1, userName);
+						ClientUI.chat.accept(userLoggedInMessage);
+			
+						
+						
+						// send to server to get user info after a successfully log in
+						userLoggedInInfo.set(0, "Get User Info");
+						userLoggedInInfo.set(1, userName);
+						ClientUI.chat.accept(userLoggedInInfo);
+						
+						
+						// getting User info after login
+						userInfoArrayList = ChatClient.inputList;
+						
+						ChatClient.user = new User(userInfoArrayList.get(1), userInfoArrayList.get(2), userInfoArrayList.get(3), userInfoArrayList.get(4),userInfoArrayList.get(5), userInfoArrayList.get(6), userInfoArrayList.get(7), userInfoArrayList.get(8), userInfoArrayList.get(9), userInfoArrayList.get(10));
+						
+						// closing current page
+						stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+		            	stage.close();
+
+		            	// opening new page
+		            	BranchManagerHomePageController BMHP = new BranchManagerHomePageController();
+		            	primaryStage = new Stage();
+		            	BMHP.start(primaryStage);
 	
 						break;
 					
 					case "CEO":
+						
+						// send to server to update is_logged_in to 1 
+						userLoggedInMessage.set(0, "User Logged In");
+						userLoggedInMessage.set(1, userName);
+						ClientUI.chat.accept(userLoggedInMessage);
+			
+						
+						
+						// send to server to get user info after a successfully log in
+						userLoggedInInfo.set(0, "Get User Info");
+						userLoggedInInfo.set(1, userName);
+						ClientUI.chat.accept(userLoggedInInfo);
+						
+						
+						// getting User info after login
+						userInfoArrayList = ChatClient.inputList;
+						
+						ChatClient.user = new User(userInfoArrayList.get(1), userInfoArrayList.get(2), userInfoArrayList.get(3), userInfoArrayList.get(4),userInfoArrayList.get(5), userInfoArrayList.get(6), userInfoArrayList.get(7), userInfoArrayList.get(8), userInfoArrayList.get(9), userInfoArrayList.get(10));
+						
+						// closing current page
+						stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+		            	stage.close();
+
+		            	// opening new page
+		            	CEOHomePageController CHP = new CEOHomePageController();
+		            	primaryStage = new Stage();
+		            	CHP.start(primaryStage);
 						
 						break;
 						

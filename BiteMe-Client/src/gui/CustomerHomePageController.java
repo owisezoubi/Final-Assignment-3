@@ -14,6 +14,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 public class CustomerHomePageController implements Initializable {
@@ -26,6 +27,9 @@ public class CustomerHomePageController implements Initializable {
 
     @FXML
     private Button myOrdersCustomerButton;
+    
+    @FXML
+    private Label greetingsCustomerHomePageLabel;
 
     @FXML
     void logoutCustomerButtonOnClickAction(ActionEvent event) throws Exception {
@@ -54,6 +58,8 @@ public class CustomerHomePageController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
+		
+		greetingsCustomerHomePageLabel.setText("Welcome Back " + ChatClient.user.getFirst_name());
 		
 	}
 	

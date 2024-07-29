@@ -99,6 +99,14 @@ public class DataBaseControl {
             }
         }
     }
+    
+    
+    // ensuring that the Internal Connection is open
+    private static void ensureInternalConnection() throws Exception {
+        if (internalConnection == null || internalConnection.isClosed()) {
+            internalConnection = connectToInternalDB();
+        }
+    }
 	
 	
 	
@@ -169,6 +177,8 @@ public class DataBaseControl {
 	
  // Update the is_logged_in status to 1 (logged in)
     public static void UserLoggedIn(String username) throws Exception {
+    	ensureInternalConnection();
+    	
         String sql = "UPDATE users SET is_logged_in = 1 WHERE user_name = ?";
         try (PreparedStatement pstmt = internalConnection.prepareStatement(sql)) {
             pstmt.setString(1, username);
@@ -184,20 +194,19 @@ public class DataBaseControl {
 
     // Update the is_logged_in status to 0 (logged out)
     public static void UserLoggedOut(String username) throws Exception {
+    	ensureInternalConnection();
+    	
         String sql = "UPDATE users SET is_logged_in = 0 WHERE user_name = ?";
         try (PreparedStatement pstmt = internalConnection.prepareStatement(sql)) {
             pstmt.setString(1, username);
-            int rowsAffected = pstmt.executeUpdate();
-            if (rowsAffected > 0) {
-                System.out.println("User " + username + " logged out successfully.");
-            } else {
-                System.out.println("No user found with username " + username);
-            }
+            pstmt.executeUpdate();
+            System.out.println("User " + username + " logged out successfully.");
         } catch (SQLException e) {
-            System.out.println("Error updating logout status for user " + username);
+            System.out.println("Error updating login status for user " + username);
             System.out.println(e.getMessage());
         }
     }
+
 
     
     
