@@ -10,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -27,18 +28,22 @@ public class CustomerHomePageController implements Initializable {
     private Button myOrdersCustomerButton;
 
     @FXML
-    void logoutCustomerButtonOnClickAction(ActionEvent event) {
+    void logoutCustomerButtonOnClickAction(ActionEvent event) throws Exception {
 
+    	String userName = ChatClient.user.getUser_name();
     	
     	ArrayList<String> msg = new ArrayList<>();
-		msg.add(0, "Get Login Validation");
-		
-		//msg.add(1, userName);
-		
+		msg.add(0, "User Logged Out");
+		msg.add(1, userName);
+
 		ClientUI.chat.accept(msg);
-		ArrayList<String> result = ChatClient.inputList;
     	
-    	
+		Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    	stage.close();
+
+    	LoginPageController LIF = new LoginPageController();
+    	Stage primaryStage = new Stage();
+    	LIF.start(primaryStage);
     }
 
     @FXML

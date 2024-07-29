@@ -26,7 +26,6 @@ import javafx.stage.Stage;
 
 public class LoginPageController implements Initializable{
 	
-	public static User user;
 
     @FXML
     private TextField userNameTextField;
@@ -111,18 +110,26 @@ public class LoginPageController implements Initializable{
 					switch (result.get(4)) {
 					case "customer":
 						
+						// send to server to update is_logged_in to 1 --- OFF FOR DEBUGGING
 						ArrayList<String> userLoggedInMessage = new ArrayList<>();
 						userLoggedInMessage.add(0, "User Logged In");
 						userLoggedInMessage.add(1, userName);
-			    		
-						
 						ClientUI.chat.accept(userLoggedInMessage);
 			
 						
-						System.out.println("passwords are equal");
+						
+						// send to server to get user info after a successfully log in
+						ArrayList<String> userLoggedInInfo = new ArrayList<>();
+						userLoggedInInfo.add(0, "Get User Info");
+						userLoggedInInfo.add(1, userName);
+						ClientUI.chat.accept(userLoggedInInfo);
 						
 						
-
+						ArrayList<String> userInfoArrayList = ChatClient.inputList;
+						
+						ChatClient.user = new User(userInfoArrayList.get(1), userInfoArrayList.get(2), userInfoArrayList.get(3), userInfoArrayList.get(4),userInfoArrayList.get(5), userInfoArrayList.get(6), userInfoArrayList.get(7), userInfoArrayList.get(8), userInfoArrayList.get(9), userInfoArrayList.get(10));
+						
+						System.out.println(ChatClient.user.toString());
 						
 						Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 		            	stage.close();

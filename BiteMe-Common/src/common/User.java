@@ -6,27 +6,30 @@ public class User {
 	private String id;
 	private String user_name;
 	private String password;
+	private String is_logged_in;
+	private String user_type;
 	private String first_name;
 	private String last_name;
 	private String phone_number;
-	private String email;
-	private String position;
 	private String home_branch;
-	private int is_logged_in;
+	private String email;
 	
-	public User(String id, String user_name, String password, String first_name, String last_name,
-			String phone_number, String email, String position, String home_branch, int is_logged_in) {
+	
+	public User(String id, String user_name, String password, String is_logged_in, String user_type, String first_name, String last_name,
+			String phone_number, String home_branch, String email) {
 		super();
 		this.id = id;
 		this.user_name = user_name;
 		this.password = password;
+		this.is_logged_in = is_logged_in;
+		this.user_type = user_type;
 		this.first_name = first_name;
 		this.last_name = last_name;
 		this.phone_number = phone_number;
-		this.email = email;
-		this.position = position;
 		this.home_branch = home_branch;
-		this.is_logged_in = is_logged_in;
+		this.email = email;
+
+		
 	}
 
 	public String getId() {
@@ -37,11 +40,11 @@ public class User {
 		this.id = id;
 	}
 	
-	public String getUser_name_for_login() {
+	public String getUser_name() {
 		return user_name;
 	}
 	
-	public void setUser_name_for_login(String user_name_for_login) {
+	public void setUser_name(String user_name_for_login) {
 		this.user_name = user_name_for_login;
 	}
 	
@@ -85,12 +88,12 @@ public class User {
 		this.email = email;
 	}
 	
-	public String getPosition() {
-		return position;
+	public String getUser_type() {
+		return user_type;
 	}
 	
-	public void setPosition(String position) {
-		this.position = position;
+	public void setUser_type(String user_type) {
+		this.user_type = user_type;
 	}
 	
 	public String getHome_branch() {
@@ -101,19 +104,20 @@ public class User {
 		this.home_branch = home_branch;
 	}
 	
-	public int getIs_logged_in() {
+	public String getIs_logged_in() {
 		return is_logged_in;
 	}
 	
-	public void setIs_logged_in(int is_logged_in) {
+	public void setIs_logged_in(String is_logged_in) {
 		this.is_logged_in = is_logged_in;
 	}
-	
+
 	@Override
 	public String toString() {
-	    return getClass().getSimpleName() + " [id=" + id + ", user_name_for_login=" + user_name + ", password=" + password
-	      + ", first_name=" + first_name + ", last_name=" + last_name + ", phone_number=" + phone_number
-	      + ", email=" + email + ", position=" + position + ", home_branch=" + home_branch + ", is_logged_in="
-	      + is_logged_in + "]";
+		return "User [id=" + id + ", user_name=" + user_name + ", password=" + password + ", is_logged_in="
+				+ is_logged_in + ", user_type=" + user_type + ", first_name=" + first_name + ", last_name=" + last_name
+				+ ", phone_number=" + phone_number + ", home_branch=" + home_branch + ", email=" + email + "]";
 	}
+	
+	
 }

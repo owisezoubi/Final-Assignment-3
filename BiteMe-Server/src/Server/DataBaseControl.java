@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import common.User;
 import gui.ServerPortFrameController;
 
 public class DataBaseControl {
@@ -186,12 +187,53 @@ public class DataBaseControl {
         String sql = "UPDATE users SET is_logged_in = 0 WHERE user_name = ?";
         try (PreparedStatement pstmt = internalConnection.prepareStatement(sql)) {
             pstmt.setString(1, username);
-            pstmt.executeUpdate();
-            System.out.println("User " + username + " logged out successfully.");
+            int rowsAffected = pstmt.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("User " + username + " logged out successfully.");
+            } else {
+                System.out.println("No user found with username " + username);
+            }
         } catch (SQLException e) {
             System.out.println("Error updating logout status for user " + username);
             System.out.println(e.getMessage());
         }
+    }
+
+    
+    
+    // Method to get user information by username
+    public static ArrayList<String> getLoginUserInfo(String username) throws Exception {
+        ArrayList<String> userInfo = new ArrayList<String>();
+        String sql = "SELECT id, user_name, password, is_logged_in, user_type, first_name, last_name, phone_number, home_branch, email FROM users WHERE user_name = ?";
+        
+        try (Connection conn = connectToInternalDB(); // Ensure connection is established
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                	userInfo.add(null);
+                	userInfo.add(rs.getString("id"));
+                	userInfo.add(username);
+                	userInfo.add(rs.getString("password"));
+                	userInfo.add(rs.getString("is_logged_in"));
+                	userInfo.add(rs.getString("user_type"));
+                	userInfo.add(rs.getString("first_name"));
+                	userInfo.add(rs.getString("last_name"));
+                	userInfo.add(rs.getString("phone_number"));
+                	userInfo.add(rs.getString("home_branch"));
+                	userInfo.add(rs.getString("email"));
+                    
+                    
+                    
+                } else {
+                    System.out.println("User not found: " + username);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error retrieving user information: " + e.getMessage());
+        }
+        
+        return userInfo;
     }
 	
 }
