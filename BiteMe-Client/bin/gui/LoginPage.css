@@ -16,7 +16,7 @@
     -fx-text-fill: black; /* Default text color for all labels */
 }
 
-#ipMessageLabel {
+#messageLoginPage {
     -fx-text-fill: red; /* Red text color for the message label */
     -fx-alignment: center; /* Center alignment */
     -fx-font-size: 14px; /* Font size */

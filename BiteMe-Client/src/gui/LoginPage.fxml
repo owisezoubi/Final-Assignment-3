@@ -6,14 +6,15 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="577.0" prefWidth="442.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LoginPageController">
+<AnchorPane prefHeight="633.0" prefWidth="442.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LoginPageController">
    <children>
       <TextField fx:id="userNameTextField" layoutX="179.0" layoutY="245.0" prefHeight="27.0" prefWidth="191.0" promptText="User name" />
-      <Button fx:id="clearfieldsTextField" layoutX="179.0" layoutY="428.0" mnemonicParsing="false" onAction="#ClearFieldsButtonOnClickAction" prefHeight="6.0" prefWidth="91.0" text="Clear fields" />
-      <Button fx:id="loginButton" layoutX="151.0" layoutY="347.0" mnemonicParsing="false" onAction="#LoginButtonOnClickAction" prefHeight="42.0" prefWidth="145.0" text="Log in" />
+      <Button fx:id="clearfieldsTextField" layoutX="177.0" layoutY="487.0" mnemonicParsing="false" onAction="#ClearFieldsButtonOnClickAction" prefHeight="6.0" prefWidth="91.0" text="Clear fields" />
+      <Button fx:id="loginButton" layoutX="149.0" layoutY="406.0" mnemonicParsing="false" onAction="#LoginButtonOnClickAction" prefHeight="42.0" prefWidth="145.0" text="Log in" />
       <Label fx:id="UsernameLabel" layoutX="80.0" layoutY="249.0" text="User name:" />
       <Label fx:id="PasswordLabel" layoutX="89.0" layoutY="298.0" text="Password:" />
-      <Button fx:id="exitButton" layoutX="189.0" layoutY="490.0" mnemonicParsing="false" onAction="#exitButtonOnClickAction" prefHeight="27.0" prefWidth="70.0" text="Exit" />
+      <Button fx:id="exitButton" layoutX="187.0" layoutY="549.0" mnemonicParsing="false" onAction="#exitButtonOnClickAction" prefHeight="27.0" prefWidth="70.0" text="Exit" />
       <PasswordField fx:id="passwordField" layoutX="179.0" layoutY="293.0" prefHeight="27.0" prefWidth="191.0" promptText="Password" />
+      <Label fx:id="messageLoginPage" layoutX="45.0" layoutY="354.0" prefHeight="27.0" prefWidth="343.0" style="-fx-background-color: lightblue;" />
    </children>
 </AnchorPane>
