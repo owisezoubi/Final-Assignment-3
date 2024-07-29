@@ -6,6 +6,7 @@ package Server;
 
 import java.io.*;
 import java.net.InetAddress;
+import java.util.ArrayList;
 
 import ocsf.server.*;
 
@@ -27,6 +28,8 @@ public class EchoServer extends AbstractServer
    * The default port to listen on.
    */
   final public static int DEFAULT_PORT = 5555;
+  
+  public DataBaseControl dbBaseControl;
   
   //Constructors ****************************************************
   
@@ -81,9 +84,72 @@ public class EchoServer extends AbstractServer
    * @param msg The message received from the client.
    * @param client The connection from which the message originated.
    */
+	@SuppressWarnings("unchecked")
 	public void handleMessageFromClient(Object msg, ConnectionToClient client)	{
-	    System.out.println("Message received: " + msg + " from " + client);
-	    this.sendToAllClients(msg);
+	    
+	    
+	    int flag = 0;
+		ArrayList<String> inputList = (ArrayList<String>) msg;
+		
+		System.out.println("Message received: " + msg + " from " + client);
+		
+		switch (inputList.get(0)) {
+		
+			case "Get Login Validation":
+			
+				try {
+					//inputList.remove(0);
+				
+					System.out.println("EchoServer: " + inputList.toString());
+				
+					ArrayList<String> resultList = DataBaseControl.getUserNameLogin(inputList.get(1));
+				
+					System.out.println("result: " + resultList.toString());
+				
+					this.sendToAllClients(resultList);
+				
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}  
+			break;
+
+			
+			case "User Logged In":
+			try {
+				
+				System.out.println("UserLoggedIn: " + inputList.toString());
+				
+				DataBaseControl.UserLoggedIn(inputList.get(1));
+				
+				
+				this.sendToAllClients(null);
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+				
+				break;
+				
+				
+			case "User Logged Out":
+			try {
+				DataBaseControl.UserLoggedOut(inputList.get(1));
+				
+				
+				this.sendToAllClients(null);
+
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+				break;
+			
+			
+		default:
+			break;
+		}
 	}
 
     

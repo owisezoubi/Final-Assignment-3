@@ -31,7 +31,7 @@ public class ClientController implements ChatIF
   /**
    * The instance of the client that created this ConsoleChat.
    */
-  ChatClient client;
+  public ChatClient client;
 
   //Constructors ****************************************************
 
@@ -53,10 +53,10 @@ public class ClientController implements ChatIF
    * This method waits for input from the console.  Once it is 
    * received, it sends it to the client's message handler.
    */
-  public void accept(String str) 
+  public void accept(Object msg) 
   {
-	  System.out.println("Message recieved");
-	  client.handleMessageFromClientUI(str);
+	  System.out.println("Message: " + msg);
+	  client.handleMessageFromClientUI(msg);
   }
   
   /**

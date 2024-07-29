@@ -1,0 +1,68 @@
+package gui;
+
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
+
+import client.ChatClient;
+import client.ClientUI;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.stage.Stage;
+
+public class CustomerHomePageController implements Initializable {
+
+    @FXML
+    private Button orderCustomerButton;
+
+    @FXML
+    private Button logoutCustomerButton;
+
+    @FXML
+    private Button myOrdersCustomerButton;
+
+    @FXML
+    void logoutCustomerButtonOnClickAction(ActionEvent event) {
+
+    	
+    	ArrayList<String> msg = new ArrayList<>();
+		msg.add(0, "Get Login Validation");
+		
+		//msg.add(1, userName);
+		
+		ClientUI.chat.accept(msg);
+		ArrayList<String> result = ChatClient.inputList;
+    	
+    	
+    }
+
+    @FXML
+    void myOrdersCustomerButtonOnClickAction(ActionEvent event) {
+
+    }
+
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
+	public void start(Stage primaryStage) throws Exception {
+        FXMLLoader loader = new FXMLLoader();
+        Parent root = loader.load(getClass().getResource("/gui/CustomerHomePage.fxml").openStream());
+        Scene scene = new Scene(root);
+        primaryStage.setTitle("CustomerHomePageController");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+        
+        scene.getStylesheets().add(getClass().getResource("/gui/CustomerHomePage.css").toExternalForm());
+    }
+	
+
+}
