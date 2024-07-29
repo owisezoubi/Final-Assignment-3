@@ -244,5 +244,39 @@ public class DataBaseControl {
         
         return userInfo;
     }
+    
+    // Method to get restaurant info by username
+    public static ArrayList<String> getRestaurantInfo(String username) throws Exception {
+    	ensureInternalConnection();
+    	
+        ArrayList<String> restaurantInfo = new ArrayList<>();
+        String sql = "SELECT restaurant_id, user_name, name, home_branch, menu_id FROM restaurants WHERE restaurant_id = ?";
+        
+        try (Connection conn = connectToInternalDB(); // Ensure connection is established
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                	restaurantInfo.add("Restaurant Found");
+                    restaurantInfo.add(rs.getString("restaurant_id"));
+                    restaurantInfo.add(rs.getString("user_name"));
+                    restaurantInfo.add(rs.getString("name"));
+                    restaurantInfo.add(rs.getString("home_branch"));
+                    restaurantInfo.add(rs.getString("menu_id"));
+                } else {
+                    System.out.println("Restaurant not found: " + username);
+                	restaurantInfo.add("Restaurant Not Found");
+
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error retrieving restaurant information: " + e.getMessage());
+            restaurantInfo.add("Error");
+        }
+        
+        return restaurantInfo;
+    }
+
+    
 	
 }

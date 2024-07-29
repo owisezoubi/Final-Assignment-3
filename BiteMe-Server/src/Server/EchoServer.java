@@ -156,6 +156,25 @@ public class EchoServer extends AbstractServer
 					break;
 				
 					
+					
+			case "Get Restaurant Info":
+				
+//				System.out.println("UserLoggedIn: " + inputList.toString());
+//				
+//				ArrayList<String> restaurantInfo = DataBaseControl.getLoginUserInfo(inputList.get(1));
+//
+//				
+//				System.out.println("EchoServer: " + restaurantInfo.toString());
+//				
+//				this.sendToAllClients(restaurantInfo);
+//				
+				
+				
+				
+				break;
+					
+					
+					
 			// changing is_logged_in to 1 after logging in - NOT FINISHED
 			case "User Logged Out":
 			try {

@@ -163,7 +163,32 @@ public class LoginPageController implements Initializable{
 						
 						
 						
+						// send to server to update is_logged_in to 1 
+						userLoggedInMessage.set(0, "User Logged In");
+						userLoggedInMessage.set(1, userName);
+						ClientUI.chat.accept(userLoggedInMessage);
+			
 						
+						
+						// send to server to get user info after a successfully log in
+						userLoggedInInfo.set(0, "Get Restaurant Info");
+						userLoggedInInfo.set(1, userName);
+						ClientUI.chat.accept(userLoggedInInfo);
+						
+						
+						// getting User info after login
+						userInfoArrayList = ChatClient.inputList;
+						
+						ChatClient.user = new User(userInfoArrayList.get(1), userInfoArrayList.get(2), userInfoArrayList.get(3), userInfoArrayList.get(4),userInfoArrayList.get(5), userInfoArrayList.get(6), userInfoArrayList.get(7), userInfoArrayList.get(8), userInfoArrayList.get(9), userInfoArrayList.get(10));
+						
+						// closing current page
+						stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+		            	stage.close();
+
+		            	// opening new page
+		            	RestaurantHomePageController RHP = new RestaurantHomePageController();
+		            	primaryStage = new Stage();
+		            	RHP.start(primaryStage);
 						
 						
 						
