@@ -28,6 +28,8 @@ public class ChatClient extends AbstractClient
 	public static Object inputList;
 	public static User user;
 	public static Restaurant restaurant;
+	
+	public static ArrayList<Restaurant> restaurantsInfo;
 
 	
 	
@@ -71,7 +73,6 @@ public class ChatClient extends AbstractClient
    *
    * @param msg The message from the server.
    */
-  @SuppressWarnings("unchecked")
 public void handleMessageFromServer(Object msg) 
   {
 	  

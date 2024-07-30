@@ -14,6 +14,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -50,56 +51,51 @@ public class OrderRestaurantListPageController implements Initializable {
 
     }
 
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
-		
-		
-		
-	}
-	
-	
-	private void loadRestaurantData() {
-		ArrayList<String> getRestaurantNames = new ArrayList<String>();
-		
-		getRestaurantNames.add(0, "Get Restaurants Info");
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        // Assuming restaurantsInfo is already populated
+        populateGridView();
+    }
+    
+    
 
-		ClientUI.chat.accept(getRestaurantNames);
-		
-		
-        //ArrayList<Restaurant> restaurantsArrayList = ChatClient.inputList;
-        
+    private void populateGridView() {
+        int column = 0;
+        int row = 0;
+
+        for (final Restaurant restaurant : ChatClient.restaurantsInfo) {
+            Button restaurantButton = new Button(restaurant.getRestaurant_name());
+
+            restaurantButton.setOnAction(new javafx.event.EventHandler<javafx.event.ActionEvent>() {
+                @Override
+                public void handle(javafx.event.ActionEvent event) {
+                	// closing current page
+					Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+					stage.close();
+
+					// opening new page
+					RestaurantMenuPageController RMP = new RestaurantMenuPageController();
+					Stage primaryStage = new Stage();
+					try {
+						RMP.start(primaryStage);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}                }
+            });
+
+            gridViewRestaurantList.add(restaurantButton, column, row);
+
+            column++;
+            if (column > 2) { // 3 restaurants per row
+                column = 0;
+                row++;
+            }
+        }
     }
 	
 	
-//	private void populateGridPane() {
-//        int row = 0;
-//        int column = 0;
-//
-//        // Set column and row constraints if needed
-//        gridViewRestaurantList.setHgap(10);
-//        gridViewRestaurantList.setVgap(10);
-//        gridViewRestaurantList.setPadding(new Insets(10));
-//
-//        for (Restaurant restaurant : restaurantData) {
-//            Button restaurantButton = new Button(restaurant.getName());
-//            restaurantButton.setPrefSize(100, 30);
-//            restaurantButton.setOnAction(event -> {
-//                selectedRestaurant = restaurant;
-//                handleChooseRestaurant();
-//            });
-//
-//            gridViewRestaurantList.add(restaurantButton, column, row);
-//            column++;
-//
-//            if (column > 1) { // Adjust number of columns
-//                column = 0;
-//                row++;
-//            }
-//        }
-//    }
-	
-	
+
 	
 	
 	public void start(Stage primaryStage) throws Exception {
