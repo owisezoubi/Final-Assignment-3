@@ -11,7 +11,7 @@ public class Restaurant implements Serializable {
     private String user_type;
     private String home_branch;
     private String restaurant_name;
-    private Menu menu;
+    private String menu_id;
     private String phone_number; 
     private String email;
     
@@ -20,7 +20,7 @@ public class Restaurant implements Serializable {
     
     
 	public Restaurant(String id, String user_name, String password, String is_logged_in, String user_type,
-			String home_branch, String restaurant_name, Menu menu, String phone_number, String email) {
+			String home_branch, String restaurant_name, String menu_id, String phone_number, String email) {
 		super();
 		this.id = id;
 		this.user_name = user_name;
@@ -29,7 +29,7 @@ public class Restaurant implements Serializable {
 		this.user_type = user_type;
 		this.home_branch = home_branch;
 		this.restaurant_name = restaurant_name;
-		this.menu = menu;
+		this.menu_id = menu_id;
 		this.phone_number = phone_number;
 		this.email = email;
 	}
@@ -78,11 +78,11 @@ public class Restaurant implements Serializable {
 	public void setRestaurant_name(String restaurant_name) {
 		this.restaurant_name = restaurant_name;
 	}
-	public Menu getMenu() {
-		return menu;
+	public String getMenu() {
+		return menu_id;
 	}
-	public void setMenu(Menu menu) {
-		this.menu = menu;
+	public void setMenu(String menu_id) {
+		this.menu_id = menu_id;
 	}
 	public String getPhone_number() {
 		return phone_number;
@@ -106,7 +106,7 @@ public class Restaurant implements Serializable {
 	public String toString() {
 		return "Restaurant [id=" + id + ", user_name=" + user_name + ", password=" + password + ", is_logged_in="
 				+ is_logged_in + ", user_type=" + user_type + ", home_branch=" + home_branch + ", restaurant_name="
-				+ restaurant_name + ", menu=" + menu + ", phone_number=" + phone_number + ", email=" + email + "]";
+				+ restaurant_name + ", menu=" + menu_id + ", phone_number=" + phone_number + ", email=" + email + "]";
 	}
 
     

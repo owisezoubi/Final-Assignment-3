@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import common.Restaurant;
 import common.User;
 import gui.ServerPortFrameController;
 
@@ -280,6 +281,43 @@ public class DataBaseControl {
         
         return restaurantInfo;
     }
+    
+    
+
+
+	public static ArrayList<Restaurant> getRestaurantsInfo() throws Exception {
+			ensureInternalConnection();// Ensure connection is established
+		
+	        ArrayList<Restaurant> restaurantList = new ArrayList<>();
+	        String sql = "SELECT * FROM restaurants";
+	
+	        try (PreparedStatement pstmt = internalConnection.prepareStatement(sql);
+	             ResultSet rs = pstmt.executeQuery()) {
+	
+	            while (rs.next()) {
+	                String id = rs.getString("restaurant_id");
+	                String userName = rs.getString("user_name");
+	                String password = rs.getString("password");
+	                String is_logged_in = rs.getString("is_logged_in");
+	                String user_type = rs.getString("user_type");
+	                String home_branch = rs.getString("home_branch");
+	                String restaurant_name = rs.getString("restaurant_name");
+	                String menu_id = rs.getString("menu_id");
+	                String phone_number = rs.getString("phone_number");
+	                String email = rs.getString("email");
+
+	                
+	                
+	
+	                Restaurant restaurant = new Restaurant(id, userName, password, is_logged_in, user_type, home_branch, restaurant_name, menu_id, phone_number, email);
+	                restaurantList.add(restaurant);
+	            }
+	        } catch (SQLException e) {
+	            System.out.println("Error retrieving restaurant information: " + e.getMessage());
+	        }
+	
+	        return restaurantList;
+	    }
 
     
 	

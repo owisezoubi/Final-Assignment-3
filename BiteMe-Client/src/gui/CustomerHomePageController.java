@@ -52,8 +52,23 @@ public class CustomerHomePageController implements Initializable {
 
     @FXML
     void myOrdersCustomerButtonOnClickAction(ActionEvent event) {
+    	
 
     }
+    
+    
+    
+    
+    
+    @FXML
+    void orderCustomerButtonOnClickAction(ActionEvent event) {
+    	
+    }
+    
+    
+    
+    
+    
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {

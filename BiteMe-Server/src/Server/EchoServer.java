@@ -8,6 +8,7 @@ import java.io.*;
 import java.net.InetAddress;
 import java.util.ArrayList;
 
+import common.Restaurant;
 import common.User;
 import ocsf.server.*;
 
@@ -178,7 +179,30 @@ public class EchoServer extends AbstractServer
 			
 				break;
 					
+				
+			case "Get Restaurants Info":
+				
+				
+				try {
+					System.out.println("Get Restaurants Info: " + inputList.toString());
 					
+					ArrayList<Restaurant> restaurantInfo = null;
+					
+
+					restaurantInfo = DataBaseControl.getRestaurantsInfo();
+					
+					System.out.println("EchoServer: " + restaurantInfo.toString());
+					
+					this.sendToAllClients(restaurantInfo);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			
+				break;
+					
+				
+				
 					
 			// changing is_logged_in to 1 after logging in - NOT FINISHED
 			case "User Logged Out":
