@@ -62,6 +62,7 @@ public class RestaurantHomePageController implements Initializable{
 
     }
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
@@ -77,7 +78,7 @@ public class RestaurantHomePageController implements Initializable{
 		ClientUI.chat.accept(restaurantInfoArrayList);
 
 		// getting restaurant info after login
-		restaurantInfoArrayList = ChatClient.inputList;
+		restaurantInfoArrayList = (ArrayList<String>) ChatClient.inputList;
 
 		ChatClient.restaurant = new Restaurant(restaurantInfoArrayList.get(1), restaurantInfoArrayList.get(2),
 				restaurantInfoArrayList.get(3), restaurantInfoArrayList.get(4), restaurantInfoArrayList.get(5),
