@@ -259,7 +259,7 @@ public class DataBaseControl {
                     restaurantInfo.add(rs.getString("id"));
                     restaurantInfo.add(rs.getString("user_name"));
                     restaurantInfo.add(rs.getString("password"));
-                    restaurantInfo.add(rs.getString("is_loggin_in"));
+                    restaurantInfo.add(rs.getString("is_logged_in"));
                     restaurantInfo.add(rs.getString("user_type"));
                     restaurantInfo.add(rs.getString("home_branch"));
                     restaurantInfo.add(rs.getString("restaurant_name"));
