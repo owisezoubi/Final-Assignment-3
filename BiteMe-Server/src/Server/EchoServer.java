@@ -159,18 +159,23 @@ public class EchoServer extends AbstractServer
 					
 			case "Get Restaurant Info":
 				
-//				System.out.println("UserLoggedIn: " + inputList.toString());
-//				
-//				ArrayList<String> restaurantInfo = DataBaseControl.getLoginUserInfo(inputList.get(1));
-//
-//				
-//				System.out.println("EchoServer: " + restaurantInfo.toString());
-//				
-//				this.sendToAllClients(restaurantInfo);
-//				
 				
-				
-				
+				try {
+					System.out.println("UserLoggedIn: " + inputList.toString());
+					
+					ArrayList<String> restaurantInfo = null;
+					
+
+					restaurantInfo = DataBaseControl.getRestaurantInfo(inputList.get(1));
+					
+					System.out.println("EchoServer: " + restaurantInfo.toString());
+					
+					this.sendToAllClients(restaurantInfo);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					}
+			
 				break;
 					
 					
