@@ -7,6 +7,7 @@ package client;
 import ocsf.client.*;
 import client.*;
 import common.ChatIF;
+import common.Restaurant;
 import common.User;
 
 import java.io.*;
@@ -26,6 +27,8 @@ public class ChatClient extends AbstractClient
 	
 	public static ArrayList<String> inputList;
 	public static User user;
+	public static Restaurant restaurant;
+
 	
 	
   //Instance variables **********************************************

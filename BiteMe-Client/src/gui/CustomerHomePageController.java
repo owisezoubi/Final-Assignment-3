@@ -52,14 +52,29 @@ public class CustomerHomePageController implements Initializable {
 
     @FXML
     void myOrdersCustomerButtonOnClickAction(ActionEvent event) {
+    	
 
     }
+    
+    
+    
+    
+    
+    @FXML
+    void orderCustomerButtonOnClickAction(ActionEvent event) {
+    	
+    }
+    
+    
+    
+    
+    
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
 		
-		greetingsCustomerHomePageLabel.setText("Welcome Back " + ChatClient.user.getFirst_name());
+		greetingsCustomerHomePageLabel.setText("Welcome Back " + ChatClient.user.getUser_name());
 		
 	}
 	

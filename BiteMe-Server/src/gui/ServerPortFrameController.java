@@ -128,9 +128,6 @@ public class ServerPortFrameController implements Initializable {
     @FXML
     private void StartServerButtonOnClickAction(ActionEvent event) throws Exception {
     	
-    	// starting the server
-    	ServerUI.runServer(DEFAULT_PORT);
-    	
     	
         // Fetch the credentials from the text fields
         String internalDB = dBInternalTextField.getText().trim();
@@ -146,9 +143,11 @@ public class ServerPortFrameController implements Initializable {
             return;
         }
 
+        
         // Start the server
         ServerUI.runServer(ServerUI.DEFAULT_PORT);
-
+        
+        
         DBInfo.set(0, internalDB);
         DBInfo.set(1, externalDB);
         DBInfo.set(2, password);
@@ -156,6 +155,9 @@ public class ServerPortFrameController implements Initializable {
         boolean internalConnected = false;
         boolean externalConnected = false;
 
+        
+        
+        
         try {
             if (DataBaseControl.connectToInternalDB() != null) {
                 internalConnected = true;
@@ -175,6 +177,10 @@ public class ServerPortFrameController implements Initializable {
         }
 
         if (internalConnected && externalConnected) {
+        	
+        	
+
+        	
             disconnectServerButton.setDisable(false);
             messageLabelServerPort.setText("Connected to both databases successfully");
             messageLabelServerPort.setTextFill(Paint.valueOf("green"));
