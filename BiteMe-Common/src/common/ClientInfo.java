@@ -41,5 +41,14 @@ public class ClientInfo implements Serializable{
 		this.ip = ip;
 		this.Status = status;
 	}
+	
+	
+	@Override
+	public String toString() {
+		return "ClientInfo [hostName=" + hostName + ", ip=" + ip + ", Status=" + Status + "]";
+	}
 
+	
+	
+	
 }
