@@ -8,6 +8,8 @@ import java.io.*;
 import java.net.InetAddress;
 import java.util.ArrayList;
 
+import common.Restaurant;
+import common.User;
 import ocsf.server.*;
 
 /**
@@ -115,6 +117,7 @@ public class EchoServer extends AbstractServer
 			break;
 
 			
+			// changing is_logged_in to 1 after logging in
 			case "User Logged In":
 			try {
 				
@@ -133,8 +136,80 @@ public class EchoServer extends AbstractServer
 				break;
 				
 				
+			// getting user info after login
+			case "Get User Info":
+				try {
+					
+					System.out.println("UserLoggedIn: " + inputList.toString());
+					
+					ArrayList<String> userInfo = DataBaseControl.getLoginUserInfo(inputList.get(1));
+
+					
+					System.out.println("EchoServer: " + userInfo.toString());
+					
+					this.sendToAllClients(userInfo);
+					
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+					
+					break;
+				
+					
+					
+			case "Get Restaurant Info":
+				
+				
+				try {
+					System.out.println("UserLoggedIn: " + inputList.toString());
+					
+					ArrayList<String> restaurantInfo = null;
+					
+
+					restaurantInfo = DataBaseControl.getRestaurantInfo(inputList.get(1));
+					
+					System.out.println("EchoServer: " + restaurantInfo.toString());
+					
+					this.sendToAllClients(restaurantInfo);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			
+				break;
+					
+				
+			case "Get Restaurants Info":
+				
+				
+				try {
+					System.out.println("Get Restaurants Info: " + inputList.toString());
+					
+					ArrayList<Restaurant> restaurantInfo = null;
+					
+
+					restaurantInfo = DataBaseControl.getRestaurantsInfo();
+					
+					System.out.println("EchoServer: " + restaurantInfo.toString());
+					
+					this.sendToAllClients(restaurantInfo);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			
+				break;
+					
+				
+				
+					
+			// changing is_logged_in to 1 after logging in - NOT FINISHED
 			case "User Logged Out":
 			try {
+				
+				System.out.println("UserLoggedOut: " + inputList.toString());
+
 				DataBaseControl.UserLoggedOut(inputList.get(1));
 				
 				

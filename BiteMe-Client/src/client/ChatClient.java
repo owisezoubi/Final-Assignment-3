@@ -7,7 +7,8 @@ package client;
 import ocsf.client.*;
 import client.*;
 import common.ChatIF;
-
+import common.Restaurant;
+import common.User;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -24,7 +25,12 @@ import java.util.ArrayList;
 public class ChatClient extends AbstractClient
 {
 	
-	public static ArrayList<String> inputList;
+	public static Object inputList;
+	public static User user;
+	public static Restaurant restaurant;
+	
+	public static ArrayList<Restaurant> restaurantsInfo;
+
 	
 	
   //Instance variables **********************************************
@@ -67,7 +73,6 @@ public class ChatClient extends AbstractClient
    *
    * @param msg The message from the server.
    */
-  @SuppressWarnings("unchecked")
 public void handleMessageFromServer(Object msg) 
   {
 	  
@@ -75,7 +80,7 @@ public void handleMessageFromServer(Object msg)
 	  System.out.println("--> handleMessageFromServer");
 
 	  awaitResponse = false;
-	  inputList = (ArrayList<String>) msg;
+	  inputList = msg;
 	  
 	  System.out.println("ChatClient: message from server " + msg.toString());
 	 
