@@ -91,7 +91,7 @@ public class LoginPageController implements Initializable {
 		Stage stage, primaryStage;
 
 		;
-		if (userName.isEmpty() || userName.isEmpty()) { // handling empty input
+		if (userName.isEmpty() || password.isEmpty()) { // handling empty input
 			messageLoginPage.setText("please fill the fields");
 		} else {
 			ArrayList<String> msg = new ArrayList<>();

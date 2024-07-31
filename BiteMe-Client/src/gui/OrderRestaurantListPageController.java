@@ -26,14 +26,10 @@ public class OrderRestaurantListPageController implements Initializable {
 	
 	
 	private ObservableList<String> restaurantData = FXCollections.observableArrayList();
-    private ArrayList<String> selectedRestaurant;
 	
 
     @FXML
     private Label RestaurantslistLabel;
-
-    @FXML
-    private Button chooseRestaurantButton;
 
     @FXML
     private Button backtoHomePageButton;
@@ -43,13 +39,21 @@ public class OrderRestaurantListPageController implements Initializable {
 
     @FXML
     void backtoHomePageButtonOnClickAction(ActionEvent event) {
+    	// closing current page
+		Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+		stage.close();
 
+		// opening new page
+		CustomerHomePageController CHP = new CustomerHomePageController();
+		Stage primaryStage = new Stage();
+		try {
+			CHP.start(primaryStage);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}                
     }
 
-    @FXML
-    void chooseRestaurantButtonOnClickAction(ActionEvent event) {
-
-    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -69,6 +73,11 @@ public class OrderRestaurantListPageController implements Initializable {
             restaurantButton.setOnAction(new javafx.event.EventHandler<javafx.event.ActionEvent>() {
                 @Override
                 public void handle(javafx.event.ActionEvent event) {
+                	
+                	ChatClient.chosenRestaurantByCustome = restaurant;
+                	
+                	System.out.println("chosen restaurant: " + ChatClient.chosenRestaurantByCustome);
+                	
                 	// closing current page
 					Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 					stage.close();
@@ -102,7 +111,7 @@ public class OrderRestaurantListPageController implements Initializable {
 		FXMLLoader loader = new FXMLLoader();
 		Parent root = loader.load(getClass().getResource("/gui/OrderRestaurantListPage.fxml").openStream());
 		Scene scene = new Scene(root);
-		primaryStage.setTitle("IPConnectionPage");
+		primaryStage.setTitle("OrderRestaurantListPage");
 		primaryStage.setScene(scene);
 		primaryStage.show();
 

@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -33,7 +34,19 @@ public class RestaurantMenuPageController implements Initializable {
 
     @FXML
     void backToRestaurantsListPageButtonOnClickAction(ActionEvent event) {
+    	// closing current page
+    	Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    	stage.close();
 
+    	// opening new page
+    	OrderRestaurantListPageController ORLHP = new OrderRestaurantListPageController();
+    	Stage primaryStage = new Stage();
+    	try {
+    		ORLHP.start(primaryStage);
+    	} catch (Exception e) {
+    		// TODO Auto-generated catch block
+    		e.printStackTrace();
+    	}                
     }
 
     @FXML
