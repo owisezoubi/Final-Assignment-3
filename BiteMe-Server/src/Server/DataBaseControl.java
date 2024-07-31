@@ -295,7 +295,7 @@ public class DataBaseControl {
 	             ResultSet rs = pstmt.executeQuery()) {
 	
 	            while (rs.next()) {
-	                String id = rs.getString("restaurant_id");
+	                String id = rs.getString("id");
 	                String userName = rs.getString("user_name");
 	                String password = rs.getString("password");
 	                String is_logged_in = rs.getString("is_logged_in");

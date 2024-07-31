@@ -68,6 +68,7 @@ public class LoginPageController implements Initializable {
 		scene.getStylesheets().add(getClass().getResource("/gui/LoginPage.css").toExternalForm());
 	}
 
+	@SuppressWarnings("unchecked")
 	@FXML
 	void LoginButtonOnClickAction(ActionEvent event) throws Exception {
 
@@ -99,11 +100,11 @@ public class LoginPageController implements Initializable {
 			msg.add(2, password);
 
 			ClientUI.chat.accept(msg);
-			ArrayList<String> result = ChatClient.inputList;
-			
+			ArrayList<String> result = (ArrayList<String>) ChatClient.inputList;
+
 			System.out.println("result from Server, in LoginController: " + result);
 
-			switch (result.get(0)) {
+			switch ((String) result.get(0)) {
 			case "NotExist":
 				messageLoginPage.setText("Username Not Exist");
 				break;
@@ -117,7 +118,7 @@ public class LoginPageController implements Initializable {
 
 					messageLoginPage.setText("Invalid password");
 				} else if (Integer.parseInt(result.get(3)) == 0) {
-					switch (result.get(4)) {
+					switch ((String) result.get(4)) {
 					case "customer":
 
 						// send to server to update is_logged_in to 1
@@ -131,7 +132,7 @@ public class LoginPageController implements Initializable {
 						ClientUI.chat.accept(userLoggedInInfo);
 
 						// getting User info after login
-						userInfoArrayList = ChatClient.inputList;
+						userInfoArrayList = (ArrayList<String>) ChatClient.inputList;
 
 						ChatClient.user = new User(userInfoArrayList.get(1), userInfoArrayList.get(2),
 								userInfoArrayList.get(3), userInfoArrayList.get(4), userInfoArrayList.get(5),
@@ -161,7 +162,7 @@ public class LoginPageController implements Initializable {
 						ClientUI.chat.accept(userLoggedInInfo);
 
 						// getting User info after login
-						userInfoArrayList = ChatClient.inputList;
+						userInfoArrayList = (ArrayList<String>) ChatClient.inputList;
 
 						ChatClient.user = new User(userInfoArrayList.get(1), userInfoArrayList.get(2),
 								userInfoArrayList.get(3), userInfoArrayList.get(4), userInfoArrayList.get(5),
@@ -193,7 +194,7 @@ public class LoginPageController implements Initializable {
 						ClientUI.chat.accept(userLoggedInInfo);
 
 						// getting User info after login
-						userInfoArrayList = ChatClient.inputList;
+						userInfoArrayList = (ArrayList<String>) ChatClient.inputList;
 
 						ChatClient.user = new User(userInfoArrayList.get(1), userInfoArrayList.get(2),
 								userInfoArrayList.get(3), userInfoArrayList.get(4), userInfoArrayList.get(5),
@@ -223,7 +224,7 @@ public class LoginPageController implements Initializable {
 						ClientUI.chat.accept(userLoggedInInfo);
 
 						// getting User info after login
-						userInfoArrayList = ChatClient.inputList;
+						userInfoArrayList = (ArrayList<String>) ChatClient.inputList;
 
 						ChatClient.user = new User(userInfoArrayList.get(1), userInfoArrayList.get(2),
 								userInfoArrayList.get(3), userInfoArrayList.get(4), userInfoArrayList.get(5),
@@ -254,7 +255,7 @@ public class LoginPageController implements Initializable {
 						ClientUI.chat.accept(userLoggedInInfo);
 
 						// getting User info after login
-						userInfoArrayList = ChatClient.inputList;
+						userInfoArrayList = (ArrayList<String>) ChatClient.inputList;
 
 						ChatClient.user = new User(userInfoArrayList.get(1), userInfoArrayList.get(2),
 								userInfoArrayList.get(3), userInfoArrayList.get(4), userInfoArrayList.get(5),

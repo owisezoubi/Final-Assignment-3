@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 
 import client.ChatClient;
 import client.ClientUI;
+import common.Restaurant;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -61,7 +62,14 @@ public class CustomerHomePageController implements Initializable {
     
     
     @FXML
-    void orderCustomerButtonOnClickAction(ActionEvent event) {
+    void orderCustomerButtonOnClickAction(ActionEvent event) throws Exception {
+    	
+    	Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    	stage.close();
+
+    	OrderRestaurantListPageController ORLP = new OrderRestaurantListPageController();
+    	Stage primaryStage = new Stage();
+    	ORLP.start(primaryStage);
     	
     }
     
@@ -73,6 +81,18 @@ public class CustomerHomePageController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
+		
+		// getting the restaurants info from DB, for easily usage in customer's interface
+		ArrayList<String> msg = new ArrayList<>();
+		msg.add(0, "Get Restaurants Info");
+
+		ClientUI.chat.accept(msg);
+		ChatClient.restaurantsInfo = (ArrayList<Restaurant>) ChatClient.inputList;
+
+		System.out.println("result from Server, in LoginController: " + ChatClient.restaurantsInfo);
+		
+		
+		
 		
 		greetingsCustomerHomePageLabel.setText("Welcome Back " + ChatClient.user.getUser_name());
 		
