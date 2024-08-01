@@ -8,6 +8,7 @@ import java.io.*;
 import java.net.InetAddress;
 import java.util.ArrayList;
 
+import common.Item;
 import common.Restaurant;
 import common.User;
 import ocsf.server.*;
@@ -121,11 +122,15 @@ public class EchoServer extends AbstractServer
 			case "User Logged In":
 			try {
 				
-				System.out.println("UserLoggedIn: " + inputList.toString());
 				
-				DataBaseControl.UserLoggedIn(inputList.get(1));
+				// Disabled for continues coding, IMPORTANT TO ABLE IT AGAIN!!!!!!!!
+				////////////////////////////////////////////////////////////////////
 				
-				
+//				System.out.println("UserLoggedIn: " + inputList.toString());
+//				
+//				DataBaseControl.UserLoggedIn(inputList.get(1));
+//				
+//				
 				this.sendToAllClients(null);
 				
 			} catch (Exception e) {
@@ -222,9 +227,40 @@ public class EchoServer extends AbstractServer
 				break;
 			
 			
+				
+				
+				
+			case "Get Restaurant Menu Info":
+				
+				try {
+					System.out.println("before getting Restaurant Menu Info: " + inputList.toString());
+					ArrayList<Item> restaurantMenuArrayList = DataBaseControl.getRestaurantMenu(inputList.get(1));
+					
+					System.out.println("after getting Restaurant Menu Info: " + restaurantMenuArrayList);
+					
+					this.sendToAllClients(restaurantMenuArrayList);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				
+				
+
+				
+				
+				break;
+				
+				
+				
 		default:
 			break;
 		}
+		
+		
+		
+		
+		
 	}
 
     

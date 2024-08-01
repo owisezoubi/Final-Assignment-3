@@ -78,10 +78,10 @@ public class Restaurant implements Serializable {
 	public void setRestaurant_name(String restaurant_name) {
 		this.restaurant_name = restaurant_name;
 	}
-	public String getMenu() {
+	public String getMenu_id() {
 		return menu_id;
 	}
-	public void setMenu(String menu_id) {
+	public void setMenu_id(String menu_id) {
 		this.menu_id = menu_id;
 	}
 	public String getPhone_number() {

@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 import client.ChatClient;
 import client.ClientUI;
 import common.ChatIF;
+import common.Item;
 import common.Restaurant;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -26,6 +27,9 @@ public class OrderRestaurantListPageController implements Initializable {
 	
 	
 	private ObservableList<String> restaurantData = FXCollections.observableArrayList();
+	
+	
+
 	
 
     @FXML
@@ -74,23 +78,35 @@ public class OrderRestaurantListPageController implements Initializable {
                 @Override
                 public void handle(javafx.event.ActionEvent event) {
                 	
-                	ChatClient.chosenRestaurantByCustome = restaurant;
+                	ChatClient.chosenRestaurantByCustomer = restaurant;
                 	
-                	System.out.println("chosen restaurant: " + ChatClient.chosenRestaurantByCustome);
+                	System.out.println("chosen restaurant: " + ChatClient.chosenRestaurantByCustomer);
                 	
-                	// closing current page
-					Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-					stage.close();
 
-					// opening new page
-					RestaurantMenuPageController RMP = new RestaurantMenuPageController();
-					Stage primaryStage = new Stage();
-					try {
+                	// getting the restaurants menu info from DB
+                	ArrayList<String> msg = new ArrayList<>();
+                	msg.add(0, "Get Restaurant Menu Info");
+                	msg.add(1, ChatClient.chosenRestaurantByCustomer.getMenu_id());
+
+                	ClientUI.chat.accept(msg);
+                	ChatClient.choosenRestaurantMenu = (ArrayList<Item>) ChatClient.inputList;
+                	
+                	
+                	
+                	try {
+                		// closing current page
+                		Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                		stage.close();
+					
+						// opening new page
+						RestaurantMenuPageController RMP = new RestaurantMenuPageController();
+						Stage primaryStage = new Stage();
 						RMP.start(primaryStage);
+						
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-					}                }
+					}              }
             });
 
             gridViewRestaurantList.add(restaurantButton, column, row);
