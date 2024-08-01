@@ -6,6 +6,7 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ResourceBundle;
 
+import client.ChatClient;
 import client.ClientController;
 import client.ClientUI;
 import javafx.event.ActionEvent;
@@ -70,7 +71,7 @@ public class IPConnectionPageController implements Initializable {
     @FXML
     public void connectButtonOnClickAction(ActionEvent event) throws Exception {
        
-        if (ipTextField.getText().isEmpty()) {
+        if (ipTextField.getText().trim().isEmpty()) {
         	ipMessageLabel.setText("please enter ip address");
             return;
         } else {
@@ -103,7 +104,9 @@ public class IPConnectionPageController implements Initializable {
     
     @FXML
     public void exitButtonOnClickAction(ActionEvent event) throws Exception {
-        System.out.println("exit Academic Tool");
+        System.out.println("exit IP Connection page");
+        
+        
         System.exit(0);
     }
 
