@@ -19,6 +19,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class RestaurantMenuPageController implements Initializable {
@@ -125,21 +126,34 @@ public class RestaurantMenuPageController implements Initializable {
         int row = 0;
 
         for (final Item item : items) {
-            Button itemButton = new Button(item.getItem_name());
+            VBox itemBox = new VBox();
+            itemBox.setSpacing(5); // Space between elements in VBox
+
+            Label itemNameLabel = new Label(item.getItem_name());
+            Label itemDescriptionLabel = new Label(item.getDescription());
+            Label itemPriceLabel = new Label("Price: " + item.getItem_price());
+
+            itemBox.getChildren().addAll(itemNameLabel, itemDescriptionLabel, itemPriceLabel);
+
+            Button itemButton = new Button();
+            itemButton.setGraphic(itemBox); // Set the VBox as the graphic of the Button
             itemButton.setOnAction(event -> {
                 try {
-                	
-                	
-                	// opening Additions page
-					AdditionsPageController AP = new AdditionsPageController();
-					Stage primaryStage = new Stage();
-					AP.start(primaryStage);
-					
-					
+                    // opening Additions page
+                    AdditionsPageController AP = new AdditionsPageController();
+                    Stage primaryStage = new Stage();
+                    AP.start(primaryStage);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             });
+
+            // Ensure the button resizes to fit the content
+            itemButton.setMaxWidth(Double.MAX_VALUE);
+            itemButton.setMaxHeight(Double.MAX_VALUE);
+            GridPane.setFillWidth(itemButton, true);
+            GridPane.setFillHeight(itemButton, true);
+
             gridPane.add(itemButton, column, row);
 
             column++;
@@ -149,6 +163,7 @@ public class RestaurantMenuPageController implements Initializable {
             }
         }
     }
+
 
     
 

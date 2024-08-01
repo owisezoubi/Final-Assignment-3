@@ -22,3 +22,21 @@
     -fx-font-size: 14px; /* Font size */
     -fx-padding: 10px; /* Padding around the text */
 }
+
+
+
+
+
+.button {
+    -fx-padding: 10;
+    -fx-font-size: 14px;
+    -fx-text-fill: #333;
+    -fx-background-color: #f0f0f0;
+    -fx-border-color: #ccc;
+    -fx-border-width: 1;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.button:focused {
+    -fx-background-color: #e0e0e0;
+}
