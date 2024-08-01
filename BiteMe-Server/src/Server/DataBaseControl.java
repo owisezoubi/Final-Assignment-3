@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import common.Item;
 import common.Restaurant;
 import common.User;
 import gui.ServerPortFrameController;
@@ -244,7 +245,7 @@ public class DataBaseControl {
         return userInfo;
     }
     
-    // Method to get restaurant info by username
+    // Method to get restaurant info by login-username
     public static ArrayList<String> getRestaurantInfo(String username) throws Exception {
     	ensureInternalConnection();
     	
@@ -284,7 +285,7 @@ public class DataBaseControl {
     
     
 
-
+    // method to get all the restaurants info 
 	public static ArrayList<Restaurant> getRestaurantsInfo() throws Exception {
 			ensureInternalConnection();// Ensure connection is established
 		
@@ -320,5 +321,37 @@ public class DataBaseControl {
 	    }
 
     
+	
+	
+	// method to get restaurant's menu by menu_id
+	public static ArrayList<Item> getRestaurantMenu(String menuId) throws Exception {
+        ensureInternalConnection(); // Ensure connection is established
+        
+        ArrayList<Item> menuItems = new ArrayList<>();
+        String sql = "SELECT i.item_id, i.item_name, i.description, i.price, i.category " +
+                     "FROM menu_items mi " +
+                     "JOIN items i ON mi.item_id = i.item_id " +
+                     "WHERE mi.menu_id = ?";
+
+        try (PreparedStatement pstmt = internalConnection.prepareStatement(sql)) {
+            pstmt.setString(1, menuId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    String itemId = rs.getString("item_id");
+                    String itemName = rs.getString("item_name");
+                    String description = rs.getString("description");
+                    String price = rs.getString("price");
+                    String category = rs.getString("category");
+
+                    Item item = new Item(itemId, itemName, description, price, category);
+                    menuItems.add(item);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error retrieving menu items: " + e.getMessage());
+        }
+        
+        return menuItems;
+    }
 	
 }

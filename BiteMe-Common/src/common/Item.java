@@ -5,70 +5,69 @@ import java.util.Arrays;
 
 public class Item implements Serializable {
     private static final long serialVersionUID = 1L;
-    public enum Category {
-        SALAD, DRINK, DESSERT, MAIN_DISH
-    }
 
-    private int item_id;
+    private String item_id;
     private String item_name;
-    private Double item_price;
-    private String[] optional_additions;
-    private Category category;
-    private static int current_item_id = 1;
+    private String description;
+    private String item_price;
+    private String category;
+      
+    
+    
+	public Item(String item_id, String item_name, String description, String item_price, String category) {
+		super();
+		this.item_id = item_id;
+		this.item_name = item_name;
+		this.description = description;
+		this.item_price = item_price;
+		this.category = category;
+	}
 
-    // Constructor
-    public Item(String item_name, Double item_price, String[] optional_additions, Category category) {
-        this.item_id = current_item_id++;
-        this.item_name = item_name;
-        this.item_price = item_price;
-        this.optional_additions = optional_additions;
-        this.category = category;
-    }
+	public String getItem_id() {
+		return item_id;
+	}
 
-    // Getters and setters
-    public int getItem_id() {
-        return item_id;
-    }
+	public void setItem_id(String item_id) {
+		this.item_id = item_id;
+	}
 
-    public void setItem_id(int item_id) {
-        this.item_id = item_id;
-    }
+	public String getItem_name() {
+		return item_name;
+	}
 
-    public String getItem_name() {
-        return item_name;
-    }
+	public void setItem_name(String item_name) {
+		this.item_name = item_name;
+	}
 
-    public void setItem_name(String item_name) {
-        this.item_name = item_name;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public Double getItem_price() {
-        return item_price;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public void setItem_price(Double item_price) {
-        this.item_price = item_price;
-    }
+	public String getItem_price() {
+		return item_price;
+	}
 
-    public String[] getOptional_additions() {
-        return optional_additions;
-    }
+	public void setItem_price(String item_price) {
+		this.item_price = item_price;
+	}
 
-    public void setOptional_additions(String[] optional_additions) {
-        this.optional_additions = optional_additions;
-    }
+	public String getCategory() {
+		return category;
+	}
 
-    public Category getCategory() {
-        return category;
-    }
+	public void setCategory(String category) {
+		this.category = category;
+	}
 
-    public void setCategory(Category category) {
-        this.category = category;
-    }
+	@Override
+	public String toString() {
+		return "Item [item_id=" + item_id + ", item_name=" + item_name + ", description=" + description
+				+ ", item_price=" + item_price + ", category=" + category + "]";
+	}
 
-    @Override
-    public String toString() {
-        return "Item [item_id=" + item_id + ", item_name=" + item_name + ", item_price=" + item_price
-                + ", optional_additions=" + Arrays.toString(optional_additions) + ", category=" + category + "]";
-    }
+   
 }

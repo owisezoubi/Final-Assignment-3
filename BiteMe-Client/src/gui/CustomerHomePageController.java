@@ -78,6 +78,7 @@ public class CustomerHomePageController implements Initializable {
     
     
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub

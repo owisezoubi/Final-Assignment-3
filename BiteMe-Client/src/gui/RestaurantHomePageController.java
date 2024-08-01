@@ -48,9 +48,13 @@ public class RestaurantHomePageController implements Initializable{
 
 		ClientUI.chat.accept(msg);
     	
+		
+		// closing current page
 		Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
     	stage.close();
 
+    	
+    	// opening new window -> LoginPage
     	LoginPageController LIF = new LoginPageController();
     	Stage primaryStage = new Stage();
     	LIF.start(primaryStage);
