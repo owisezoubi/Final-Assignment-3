@@ -1,6 +1,7 @@
 package gui;
 
 import java.net.URL;
+
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -23,18 +24,35 @@ public class BranchManagerHomePageController implements Initializable {
     private Button addNewCustomerButton;
 
     @FXML
-    private Button showReportBranchManagerButton;
-
-    @FXML
     private Button logoutBranchManagerButton;
 
     @FXML
     private Label greetingsBranchManagerLabel;
+    
+    @FXML
+    private Button showReportBranchManagerButton;
+    
 
+
+    
+    private Stage stage, primaryStage;
+    
     @FXML
     void addNewCustomerBranchManagerOnClickAction(ActionEvent event) {
+    	
+    	
+    	
+    	
+    	stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+		stage.close();
 
+		// opening new page Register
+		
+		// CHP = new IncomeReportPageController();
+		//primaryStage = new Stage();
+		//CHP.start(primaryStage);
     }
+    
 
     @FXML
     void logoutBranchManagerOnClickAction(ActionEvent event) throws Exception {
@@ -57,9 +75,19 @@ public class BranchManagerHomePageController implements Initializable {
     }
 
     @FXML
-    void showReportBranchManagerOnClickAction(ActionEvent event) {
+    void showReportBranchManagerButtonOnClickAction(ActionEvent event) throws Exception {
+    	// closing current page
+		stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+		stage.close();
+
+		// opening new page
+		TypesOfReportsPageController CHPT = new TypesOfReportsPageController();
+		primaryStage = new Stage();
+		CHPT.start(primaryStage);
 
     }
+
+    
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {

@@ -6,7 +6,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="605.0" prefWidth="774.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.IncomeReportPageControl">
+<AnchorPane prefHeight="605.0" prefWidth="774.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.IncomeReportPageController">
    <children>
       <TableView layoutX="67.0" layoutY="149.0" prefHeight="333.0" prefWidth="589.0">
         <columns>
@@ -18,7 +18,7 @@
       <Label fx:id="incomeReportLabel" layoutX="285.0" layoutY="23.0" text="Income  Report" />
       <Label fx:id="restaurantnameLabel" layoutX="77.0" layoutY="64.0" text="Restaurant name" />
       <Label fx:id="branchnameLabel" layoutX="77.0" layoutY="85.0" text="Branch name" />
-      <Label fx:id="monthLabel" layoutX="90.0" layoutY="106.0" text="month" />
+      <Label fx:id="monthLabel" layoutX="77.0" layoutY="106.0" text="month" />
       <Button fx:id="finishIncomeReportButton" layoutX="323.0" layoutY="517.0" mnemonicParsing="false" onAction="#finishIncomeReportButtonOnClickAction" text="Finish" />
    </children>
 </AnchorPane>

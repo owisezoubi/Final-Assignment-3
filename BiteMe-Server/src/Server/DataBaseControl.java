@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import common.Order;
 import common.Restaurant;
 import common.User;
 import gui.ServerPortFrameController;
@@ -319,6 +320,13 @@ public class DataBaseControl {
 	        return restaurantList;
 	    }
 
-    
+	
+	public static ArrayList<Order> getOrdersInfo() throws Exception {
+		return null;
+	
+	}
+
+
+	
 	
 }

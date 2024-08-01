@@ -7,6 +7,7 @@ package client;
 import ocsf.client.*;
 import client.*;
 import common.ChatIF;
+import common.Order;
 import common.Restaurant;
 import common.User;
 
@@ -30,7 +31,7 @@ public class ChatClient extends AbstractClient
 	public static Restaurant restaurant;
 	
 	public static ArrayList<Restaurant> restaurantsInfo;
-
+	public static ArrayList<Order> OrdersInfo;
 	
 	
   //Instance variables **********************************************

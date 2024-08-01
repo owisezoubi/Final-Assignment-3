@@ -8,6 +8,7 @@ import java.io.*;
 import java.net.InetAddress;
 import java.util.ArrayList;
 
+import common.Order;
 import common.Restaurant;
 import common.User;
 import ocsf.server.*;
@@ -201,6 +202,28 @@ public class EchoServer extends AbstractServer
 			
 				break;
 					
+				
+				
+            case "Get Orders Info":
+				
+				
+				try {
+					System.out.println("Get Orders Info " + inputList.toString());
+					//Change to Order type with the class
+					ArrayList<Order> OrdersInfo = null;
+					
+                     
+					OrdersInfo = (ArrayList<Order>) DataBaseControl.getOrdersInfo();
+					
+					System.out.println("EchoServer: " + OrdersInfo.toString());
+					
+					this.sendToAllClients(OrdersInfo);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			
+				break;
 				
 				
 					

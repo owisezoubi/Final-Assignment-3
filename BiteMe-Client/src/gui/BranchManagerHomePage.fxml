@@ -6,9 +6,12 @@
 
 <AnchorPane prefHeight="380.0" prefWidth="416.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.BranchManagerHomePageController">
    <children>
-      <Button fx:id="addNewCustomerButton" layoutX="132.0" layoutY="96.0" mnemonicParsing="false" onAction="#addNewCustomerBranchManagerOnClickAction" prefHeight="25.0" prefWidth="137.0" text="Add New Customer" />
-      <Button fx:id="showReportBranchManagerButton" layoutX="132.0" layoutY="165.0" mnemonicParsing="false" onAction="#showReportBranchManagerOnClickAction" prefHeight="25.0" prefWidth="137.0" text="Show Report" />
+      <Button fx:id="addNewCustomerButton" layoutX="105.0" layoutY="111.0" mnemonicParsing="false" onAction="#addNewCustomerBranchManagerOnClickAction" prefHeight="31.0" prefWidth="207.0" text="Add New Customer" />
+ 
       <Button fx:id="logoutBranchManagerButton" layoutX="39.0" layoutY="285.0" mnemonicParsing="false" onAction="#logoutBranchManagerOnClickAction" text="Log out" />
       <Label fx:id="greetingsBranchManagerLabel" layoutX="35.0" layoutY="38.0" prefHeight="27.0" prefWidth="339.0" style="-fx-background-color: violet;" />
+      <Button fx:id="showReportBranchManagerButton" layoutX="156.0" layoutY="183.0" mnemonicParsing="false" onAction="#showReportBranchManagerButtonOnClickAction" text="Show Report" />
+      
+      
    </children>
 </AnchorPane>
