@@ -139,6 +139,8 @@ public class RestaurantMenuPageController implements Initializable {
             itemButton.setGraphic(itemBox); // Set the VBox as the graphic of the Button
             itemButton.setOnAction(event -> {
                 try {
+                	ChatClient.chosenItemInOrder = item;
+                	
                     // opening Additions page
                     AdditionsPageController AP = new AdditionsPageController();
                     Stage primaryStage = new Stage();

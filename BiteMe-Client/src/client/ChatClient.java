@@ -37,6 +37,8 @@ public class ChatClient extends AbstractClient
 	public static Restaurant chosenRestaurantByCustomer;
 	public static ArrayList<Item> choosenRestaurantMenu;
 	
+	public static Item chosenItemInOrder;
+	
 	
 	
   //Instance variables **********************************************
