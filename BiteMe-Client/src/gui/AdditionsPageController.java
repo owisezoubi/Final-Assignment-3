@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 
 import client.ChatClient;
 import client.ClientUI;
+import common.ChosenItem;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -36,7 +37,7 @@ public class AdditionsPageController implements Initializable {
     private VBox additionsVBox;
 
     private ArrayList<String> availableAdditions; // List of available additions
-    private ArrayList<String> selectedAdditions; // List to store selected additions
+    protected ArrayList<String> selectedAdditions; // List to store selected additions
     private ArrayList<String> getAdditionsMSG; // Message to send to server for getting item's relevant additions
     private String category; // Category of the current item
 
@@ -113,6 +114,15 @@ public class AdditionsPageController implements Initializable {
         // Optionally, handle saving the selected additions or moving to the next step
         System.out.println("Selected additions: " + selectedAdditions);
 
+        System.out.println("chosenItemInOrder: " + ChatClient.chosenItemInOrder);
+        
+        System.out.println("selectedAdditions: " + selectedAdditions);
+        
+        
+        ChosenItem chosenItem = new ChosenItem(ChatClient.chosenItemInOrder, selectedAdditions);
+        ChatClient.cart.add(chosenItem);
+        
+        
         // Close the current window or proceed as needed
         Stage stage = (Stage) doneAdditionsButton.getScene().getWindow();
         stage.close();

@@ -11,7 +11,7 @@
       <AnchorPane layoutX="6.0" layoutY="-1.0" prefHeight="413.0" prefWidth="274.0">
          <children>
             <Button fx:id="cancelButton" layoutX="110.0" layoutY="363.0" mnemonicParsing="false" onAction="#cancelOnClickAction" text="cancel" />
-            <Button fx:id="doneAdditionsButton" layoutX="86.0" layoutY="296.0" mnemonicParsing="false" onAction="#doneAdditionsOnClickAction" prefHeight="43.0" prefWidth="103.0" text="done" />
+            <Button fx:id="doneAdditionsButton" layoutX="86.0" layoutY="296.0" mnemonicParsing="false" onAction="#doneAdditionsOnClickAction" prefHeight="43.0" prefWidth="103.0" text="Add item" />
             <Label fx:id="additionsPageLabel" layoutX="104.0" layoutY="14.0" prefHeight="32.0" prefWidth="66.0" text="Additions" />
             <ScrollPane layoutX="38.0" layoutY="46.0" prefHeight="200.0" prefWidth="200.0" style="border: lightblue;">
                <content>

@@ -82,11 +82,15 @@ public class RestaurantMenuPageController implements Initializable {
     @FXML
     void finishChoosingOrderButtonOnClickAction(ActionEvent event) {
         // Implement the functionality to finalize the order
+    	
+    	System.err.println(ChatClient.cart);
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        categorizeItemsByCategory();
+    	ChatClient.cart = new ArrayList<>();
+    	
+    	categorizeItemsByCategory();
     }
 
     private void categorizeItemsByCategory() {
