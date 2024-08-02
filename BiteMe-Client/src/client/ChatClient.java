@@ -9,6 +9,7 @@ import client.*;
 import common.ChatIF;
 import common.Item;
 import common.Restaurant;
+import common.RestaurantReport;
 import common.User;
 
 import java.io.*;
@@ -31,6 +32,7 @@ public class ChatClient extends AbstractClient
 	public static Restaurant restaurant;
 	
 	public static ArrayList<Restaurant> restaurantsInfo;
+	public static RestaurantReport chosenRestaurantReport;
 	
 	public static Restaurant chosenRestaurantByCustomer;
 	public static ArrayList<Item> choosenRestaurantMenu;

@@ -9,6 +9,7 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 
 import common.Item;
+import common.OrderDetails;
 import common.Restaurant;
 import common.User;
 import ocsf.server.*;
@@ -107,7 +108,7 @@ public class EchoServer extends AbstractServer
 				
 					ArrayList<String> resultList = DataBaseControl.getUserNameLogin(inputList.get(1));
 				
-					System.out.println("result: " + resultList.toString());
+					System.out.println("EchoServer: result: " + resultList.toString());
 				
 					this.sendToAllClients(resultList);
 				
@@ -243,14 +244,26 @@ public class EchoServer extends AbstractServer
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
-				
-				
 
-				
-				
 				break;
 				
+			
+				
+			// getting msg from client - retrieving data for OrderReport
+			case "Get OrdersReport Info":
+                try {
+                    System.out.println("Get OrderReport Info: " + inputList.toString());
+                    ArrayList<OrderDetails> OrdersInfo = null;
+                    OrdersInfo = DataBaseControl.getOrdersByMonthYear(inputList.get(1),inputList.get(2),inputList.get(3));
+                    System.out.println("EchoServer: " + OrdersInfo.toString());
+
+                    this.sendToAllClients(OrdersInfo);
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
+                break;
 				
 				
 		default:

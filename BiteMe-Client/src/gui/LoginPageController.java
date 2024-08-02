@@ -110,6 +110,19 @@ public class LoginPageController implements Initializable {
 				break;
 
 			case "UserFound":
+				
+				
+				// sending message for getting the restaurants info from DB, for easily usage in customer's interface
+				ArrayList<String> restaurantsInfoMSG = new ArrayList<>();
+				restaurantsInfoMSG.add(0, "Get Restaurants Info");
+
+				ClientUI.chat.accept(restaurantsInfoMSG);
+				ChatClient.restaurantsInfo = (ArrayList<Restaurant>) ChatClient.inputList;
+
+				System.out.println("result from Server, in LoginController: " + ChatClient.restaurantsInfo);
+				
+				
+				
 
 				if (result.get(2).equals(password) == false) {
 

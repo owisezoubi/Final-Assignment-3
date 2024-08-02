@@ -7,7 +7,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.jws.Oneway;
+
 import common.Item;
+import common.OrderDetails;
 import common.Restaurant;
 import common.User;
 import gui.ServerPortFrameController;
@@ -352,6 +355,58 @@ public class DataBaseControl {
         }
         
         return menuItems;
+    }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	// method to get OrdersReport 
+    public static ArrayList<OrderDetails> getOrdersByMonthYear(String restaurantName, String month, String year) throws Exception {
+        ensureInternalConnection();
+
+        ArrayList<OrderDetails> orderDetailsList = new ArrayList<>();
+        String sql = "SELECT o.order_id, o.date, d.category, d.quantity, d.unit_price " +
+                     "FROM orders o " +
+                     "JOIN order_details d ON o.order_id = d.order_id " +
+                     "JOIN restaurants r ON o.restaurant_id = r.id " +
+                     "WHERE r.restaurant_name = ? " +
+                     "AND DATE_FORMAT(STR_TO_DATE(o.date, '%Y-%m-%d'), '%Y') = ? " +
+                     "AND DATE_FORMAT(STR_TO_DATE(o.date, '%Y-%m-%d'), '%m') = ?";
+
+        try (PreparedStatement pstmt = internalConnection.prepareStatement(sql)) {
+            pstmt.setString(1, restaurantName);
+            pstmt.setString(2, year);
+            pstmt.setString(3, month);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    String orderId = rs.getString("order_id");
+                    String date = rs.getString("date");
+                    String category = rs.getString("category");
+                    String quantity = rs.getString("quantity");
+                    String unitPrice = rs.getString("unit_price");
+
+                    OrderDetails orderDetails = new OrderDetails(orderId, date, category, quantity, unitPrice);
+                    orderDetailsList.add(orderDetails);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error retrieving order details: " + e.getMessage());
+            
+            return null;
+        }
+
+        return orderDetailsList;
     }
 	
 }
