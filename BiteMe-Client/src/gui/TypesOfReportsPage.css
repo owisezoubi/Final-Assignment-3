@@ -1,0 +1,24 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+#btnStudentInfo {
+    -fx-background-color: lightblue;
+    -fx-text-fill: red;
+    -fx-padding: 6 6 6 6;
+    -fx-border-radius: 8;
+    -fx-font-weight: bold;
+}
+
+.root {
+    -fx-background-color: #ccffff;
+}
+
+.label {
+    -fx-text-fill: black; /* Default text color for all labels */
+}
+
+#messageTypesOfReportsPageLabel {
+    -fx-text-fill: red; /* Red text color for the message label */
+    -fx-alignment: center; /* Center alignment */
+    -fx-font-size: 14px; /* Font size */
+    -fx-padding: 10px; /* Padding around the text */
+}

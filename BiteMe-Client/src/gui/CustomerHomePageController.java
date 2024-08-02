@@ -83,14 +83,7 @@ public class CustomerHomePageController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
 		
-		// getting the restaurants info from DB, for easily usage in customer's interface
-		ArrayList<String> msg = new ArrayList<>();
-		msg.add(0, "Get Restaurants Info");
-
-		ClientUI.chat.accept(msg);
-		ChatClient.restaurantsInfo = (ArrayList<Restaurant>) ChatClient.inputList;
-
-		System.out.println("result from Server, in LoginController: " + ChatClient.restaurantsInfo);
+		
 		
 		
 		

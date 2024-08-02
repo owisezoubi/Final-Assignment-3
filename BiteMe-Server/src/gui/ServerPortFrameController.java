@@ -104,8 +104,8 @@ public class ServerPortFrameController implements Initializable {
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
-        dBInternalTextField.setText("Assignment3_DB");
-        dBExternalTextField.setText("BiteMe_DB");
+        dBInternalTextField.setText("biteme_database");
+        dBExternalTextField.setText("biteme_usermanagement");
         PasswordTextField.setText("Aa123456");
 
         DBInfo.add(dBInternalTextField.getText());

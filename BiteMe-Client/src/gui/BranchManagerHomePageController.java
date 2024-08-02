@@ -47,6 +47,7 @@ public class BranchManagerHomePageController implements Initializable {
 
 		ClientUI.chat.accept(msg);
     	
+		// logging out - getting back to loginPage
 		Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
     	stage.close();
 
@@ -57,8 +58,16 @@ public class BranchManagerHomePageController implements Initializable {
     }
 
     @FXML
-    void showReportBranchManagerOnClickAction(ActionEvent event) {
+    void showReportBranchManagerOnClickAction(ActionEvent event) throws Exception {
+    	
+    	// closing current page and opening TypeOfReportPage
+    	Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    	stage.close();
 
+    	TypesOfReportsPageController TOFP = new TypesOfReportsPageController();
+    	Stage primaryStage = new Stage();
+    	TOFP.start(primaryStage);
+    	
     }
 
 	@Override
