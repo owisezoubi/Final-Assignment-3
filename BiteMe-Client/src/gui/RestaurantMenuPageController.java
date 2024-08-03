@@ -82,11 +82,15 @@ public class RestaurantMenuPageController implements Initializable {
     @FXML
     void finishChoosingOrderButtonOnClickAction(ActionEvent event) {
         // Implement the functionality to finalize the order
+    	
+    	System.err.println(ChatClient.cart);
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        categorizeItemsByCategory();
+    	ChatClient.cart = new ArrayList<>();
+    	
+    	categorizeItemsByCategory();
     }
 
     private void categorizeItemsByCategory() {
@@ -139,6 +143,8 @@ public class RestaurantMenuPageController implements Initializable {
             itemButton.setGraphic(itemBox); // Set the VBox as the graphic of the Button
             itemButton.setOnAction(event -> {
                 try {
+                	ChatClient.chosenItemInOrder = item;
+                	
                     // opening Additions page
                     AdditionsPageController AP = new AdditionsPageController();
                     Stage primaryStage = new Stage();

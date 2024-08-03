@@ -326,36 +326,64 @@ public class DataBaseControl {
     
 	
 	
-	// method to get restaurant's menu by menu_id
+	// Method to get restaurant's menu by menu_id
 	public static ArrayList<Item> getRestaurantMenu(String menuId) throws Exception {
-        ensureInternalConnection(); // Ensure connection is established
-        
-        ArrayList<Item> menuItems = new ArrayList<>();
-        String sql = "SELECT i.item_id, i.item_name, i.description, i.price, i.category " +
-                     "FROM menu_items mi " +
-                     "JOIN items i ON mi.item_id = i.item_id " +
-                     "WHERE mi.menu_id = ?";
+	    ensureInternalConnection(); // Ensure connection is established
+	    
+	    ArrayList<Item> menuItems = new ArrayList<>();
+	    String sql = "SELECT item_id, item_name, description, price, category " +
+	                 "FROM menu_items " +
+	                 "WHERE menu_id = ?";
 
-        try (PreparedStatement pstmt = internalConnection.prepareStatement(sql)) {
-            pstmt.setString(1, menuId);
-            try (ResultSet rs = pstmt.executeQuery()) {
-                while (rs.next()) {
-                    String itemId = rs.getString("item_id");
-                    String itemName = rs.getString("item_name");
-                    String description = rs.getString("description");
-                    String price = rs.getString("price");
-                    String category = rs.getString("category");
+	    try (PreparedStatement pstmt = internalConnection.prepareStatement(sql)) {
+	        pstmt.setString(1, menuId);
+	        try (ResultSet rs = pstmt.executeQuery()) {
+	            while (rs.next()) {
+	                String itemId = rs.getString("item_id");
+	                String itemName = rs.getString("item_name");
+	                String description = rs.getString("description");
+	                String price = rs.getString("price");
+	                String category = rs.getString("category");
 
-                    Item item = new Item(itemId, itemName, description, price, category);
-                    menuItems.add(item);
-                }
-            }
-        } catch (SQLException e) {
-            System.out.println("Error retrieving menu items: " + e.getMessage());
-        }
-        
-        return menuItems;
-    }
+	                Item item = new Item(itemId, itemName, description, price, category);
+	                menuItems.add(item);
+	            }
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("Error retrieving menu items: " + e.getMessage());
+	    }
+	    
+	    return menuItems;
+	}
+
+
+	
+	
+	// Method to get additions based on a category
+	public static ArrayList<String> getAdditionsForCategory(String category) throws Exception {
+	    ensureInternalConnection(); // Ensure connection is established
+
+	    ArrayList<String> additions = new ArrayList<>();
+	    String sql = "SELECT a.addition_name " +
+	                 "FROM category_additions ca " +
+	                 "JOIN additions a ON ca.addition_id = a.addition_id " +
+	                 "WHERE ca.category = ?";
+
+	    try (PreparedStatement pstmt = internalConnection.prepareStatement(sql)) {
+	        pstmt.setString(1, category);
+	        try (ResultSet rs = pstmt.executeQuery()) {
+	            while (rs.next()) {
+	                String additionName = rs.getString("addition_name");
+	                additions.add(additionName);
+	            }
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("Error retrieving additions for category: " + e.getMessage());
+	    }
+
+	    return additions;
+	}
+
 	
 	
 	
@@ -408,5 +436,9 @@ public class DataBaseControl {
 
         return orderDetailsList;
     }
+    
+
+    
+    
 	
 }
