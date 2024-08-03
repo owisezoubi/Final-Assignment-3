@@ -80,10 +80,21 @@ public class RestaurantMenuPageController implements Initializable {
     }
 
     @FXML
-    void finishChoosingOrderButtonOnClickAction(ActionEvent event) {
+    void finishChoosingOrderButtonOnClickAction(ActionEvent event) throws Exception {
         // Implement the functionality to finalize the order
     	
-    	System.err.println(ChatClient.cart);
+    	
+    	// Closing current page
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.close();
+
+        // Opening new page
+        OrderTypePageController OTP = new OrderTypePageController();
+        Stage primaryStage = new Stage();
+        OTP.start(primaryStage);
+    
+    	
+    	System.out.println(ChatClient.cart);
     }
 
     @Override
