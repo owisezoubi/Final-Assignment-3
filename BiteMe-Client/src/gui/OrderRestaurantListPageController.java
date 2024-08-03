@@ -42,7 +42,7 @@ public class OrderRestaurantListPageController implements Initializable {
     private GridPane gridViewRestaurantList;
 
     @FXML
-    void backtoHomePageButtonOnClickAction(ActionEvent event) {
+    void backtoHomePageButtonOnClickAction(ActionEvent event) throws Exception {
     	// closing current page
 		Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 		stage.close();
@@ -50,12 +50,7 @@ public class OrderRestaurantListPageController implements Initializable {
 		// opening new page
 		CustomerHomePageController CHP = new CustomerHomePageController();
 		Stage primaryStage = new Stage();
-		try {
-			CHP.start(primaryStage);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}                
+		CHP.start(primaryStage);             
     }
 
 
