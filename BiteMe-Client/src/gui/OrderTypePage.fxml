@@ -20,13 +20,13 @@
       <ComboBox fx:id="arrivalTimeInMinutesComboBox" layoutX="437.0" layoutY="614.0" prefHeight="29.0" prefWidth="92.0" promptText="m" />
       <Label layoutX="222.0" layoutY="614.0" prefHeight="28.0" prefWidth="100.0" text="Arrival Time:" />
       <Label layoutX="422.0" layoutY="619.0" prefHeight="18.0" prefWidth="10.0" text=":" textAlignment="CENTER" />
-      <TableView fx:id="cartView" layoutX="20.0" layoutY="60.0" prefHeight="454.0" prefWidth="703.0">
+      <TableView fx:id="cartView" layoutX="20.0" layoutY="60.0" prefHeight="450.0" prefWidth="700.0">
          <columns>
             <TableColumn fx:id="itemNameColumn" prefWidth="168.0" text="Item Name" />
             <TableColumn fx:id="itemPriceColumn" prefWidth="104.0" text="Price" />
             <TableColumn fx:id="itemCategoryColumn" prefWidth="118.0" text="Category" />
             <TableColumn fx:id="itemAdditionsColumn" prefWidth="225.0" text="Additions" />
-            <TableColumn fx:id="deleteColumn" prefWidth="77.0" text="Action" />
+            <TableColumn fx:id="deleteColumn" prefWidth="77.0" />
          </columns>
       </TableView>
    </children>

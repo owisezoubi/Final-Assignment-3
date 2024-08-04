@@ -176,7 +176,7 @@ public class OrderTypePageController implements Initializable {
                 System.err.println("Invalid price format for item: " + item.getItemPrice());
             }
         }
-        priceTextField.setText(String.format("Total Price: $%.2f", totalPrice));
+        priceTextField.setText(String.format("%.2f $", totalPrice));
     }
 
     @FXML
