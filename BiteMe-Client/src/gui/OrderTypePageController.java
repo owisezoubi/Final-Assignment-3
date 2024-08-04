@@ -15,12 +15,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
@@ -113,6 +115,7 @@ public class OrderTypePageController implements Initializable {
                         deleteButton.setOnAction(event -> {
                             ChosenItem chosenItem = getTableView().getItems().get(getIndex());
                             getTableView().getItems().remove(chosenItem);
+                            ChatClient.cart.remove(chosenItem); // Remove from ChatClient.cart
                             updateTotalPrice(); // Update total price after removal
                         });
                     }
@@ -176,7 +179,7 @@ public class OrderTypePageController implements Initializable {
                 System.err.println("Invalid price format for item: " + item.getItemPrice());
             }
         }
-        priceTextField.setText(String.format("%.2f $", totalPrice));
+        priceTextField.setText(String.format("%.2f ₪", totalPrice));
     }
 
     @FXML
@@ -193,14 +196,43 @@ public class OrderTypePageController implements Initializable {
 
     @FXML
     void nextButtonOnClickAction(ActionEvent event) throws Exception {
-        // Closing current page
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.close();
+        // Can't move to next page if cart is empty
+        if (ChatClient.cart.isEmpty()) {
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Alert");
+            alert.setHeaderText(null); // You can set a header text if needed
+            alert.setContentText("The Cart is Empty.\nPlease get back to Menu Page and choose an Item.");
 
-        // Opening new page
-        OrderDeliveryPageController ODP = new OrderDeliveryPageController();
-        Stage primaryStage = new Stage();
-        ODP.start(primaryStage);
+            // Show the alert dialog
+            alert.showAndWait();
+        } else {
+        	
+        	
+        	if (ordersTypeComboBox.getValue() == null || arrivalTimeInHoursComboBox.getValue() == null || arrivalTimeInMinutesComboBox.getValue() == null) {
+    			// display an alert for empty input
+            	Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle("Alert");
+                alert.setHeaderText(null); // You can set a header text if needed
+                alert.setContentText("Please fill all the data");
+
+                // Show the alert dialog
+                alert.showAndWait();
+    		} else {
+    			// Closing current page
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.close();
+
+                // Opening new page
+                OrderDeliveryPageController ODP = new OrderDeliveryPageController();
+                Stage primaryStage = new Stage();
+                ODP.start(primaryStage);
+
+                System.out.println(ChatClient.cart);
+			}
+            
+        }      
+            
+        
     }
 
     public void start(Stage primaryStage) throws Exception {

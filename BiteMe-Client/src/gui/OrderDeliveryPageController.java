@@ -15,6 +15,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -22,6 +23,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -109,6 +111,28 @@ public class OrderDeliveryPageController implements Initializable {
     @FXML
     void NextButtonOnClickAction(ActionEvent event) {
         // Implement next button logic here
+    	
+    	 // Can't move to next page if cart is empty
+        if (ChatClient.cart.isEmpty()) {
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Alert");
+            alert.setHeaderText(null); // You can set a header text if needed
+            alert.setContentText("The Cart is Empty.\nPlease get back to Menu Page and choose an Item.");
+
+            // Show the alert dialog
+            alert.showAndWait();
+        } else {
+            // Closing current page
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.close();
+
+            // Opening new page
+            //OrderDeliveryPageController ODP = new OrderDeliveryPageController();
+            //Stage primaryStage = new Stage();
+            //ODP.start(primaryStage);
+
+            System.out.println(ChatClient.cart);
+        }
     }
 
     @Override
@@ -197,8 +221,6 @@ public class OrderDeliveryPageController implements Initializable {
 
     private void disableDeliveryFields(boolean disable) {
         deliveryAddressTextField.setDisable(disable);
-        phoneNumberTextField.setDisable(disable);
-        orderNameTextField.setDisable(disable);
         deliveryTypeComboBox.setDisable(disable);
         
         if (disable) {

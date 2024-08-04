@@ -14,11 +14,15 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -66,40 +70,95 @@ public class RestaurantMenuPageController implements Initializable {
     private ArrayList<Item> drinks = new ArrayList<>();
 
     @FXML
-    void backToRestaurantsListPageButtonOnClickAction(ActionEvent event) {
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.close();
+    void backToRestaurantsListPageButtonOnClickAction(ActionEvent event) throws Exception {
+        // Create a confirmation alert for leaving the Menu Page
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Alert");
+        alert.setHeaderText("Leaving the current page leads to deleting the cart's contents.");
+    	alert.setContentText("Do you want to proceed?");
 
-        try {
-            OrderRestaurantListPageController ORLHP = new OrderRestaurantListPageController();
-            Stage primaryStage = new Stage();
-            ORLHP.start(primaryStage);
-        } catch (Exception e) {
-            e.printStackTrace();
+    	// Customizing buttons
+    	ButtonType yesButton = new ButtonType("Yes");
+    	ButtonType noButton = new ButtonType("No");
+    	alert.getButtonTypes().setAll(yesButton, noButton);
+
+
+    	
+
+
+
+        // if cart is not empty
+        if (!ChatClient.cart.isEmpty()) {
+        	
+        	ButtonType result = alert.showAndWait().orElse(ButtonType.CANCEL);
+        	
+            // Handle the result
+            if (result == yesButton) {
+                System.out.println("User chose YES");
+
+                // Close the current page
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.close();
+
+                // Open OrderRestaurantListPage
+    	        OrderRestaurantListPageController ORP = new OrderRestaurantListPageController();
+    	        Stage primaryStage = new Stage();
+    	        ORP.start(primaryStage);
+
+            } else if (result == ButtonType.NO) {
+                System.out.println("User chose NO");
+                // Optionally, you can add additional behavior if needed
+            }
+        } else {
+            // Handle the case where the cart is empty
+        	// Close the current page
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.close();
+
+            // Open OrderRestaurantListPage
+            OrderRestaurantListPageController ORP = new OrderRestaurantListPageController();
+	        Stage primaryStage = new Stage();
+	        ORP.start(primaryStage);
         }
     }
+
+
+	
+
+	
 
     @FXML
     void finishChoosingOrderButtonOnClickAction(ActionEvent event) throws Exception {
         // Implement the functionality to finalize the order
     	
-    	
-    	// Closing current page
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.close();
+    	if (ChatClient.cart.isEmpty()) {
+    		Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Alert");
+            alert.setHeaderText(null); // You can set a header text if needed
+            alert.setContentText("The Cart is Empty.\nPlease choose an Item.");
 
-        // Opening new page
-        OrderTypePageController OTP = new OrderTypePageController();
-        Stage primaryStage = new Stage();
-        OTP.start(primaryStage);
-    
+            // Show the alert dialog
+            alert.showAndWait();
+
+		} else {
+			// Closing current page
+	        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+	        stage.close();
+
+	        // Opening new page
+	        OrderTypePageController OTP = new OrderTypePageController();
+	        Stage primaryStage = new Stage();
+	        OTP.start(primaryStage);
+	    
+	    	
+	    	System.out.println(ChatClient.cart);
+		}
     	
-    	System.out.println(ChatClient.cart);
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-    	ChatClient.cart = new ArrayList<>();
+    	
     	
     	categorizeItemsByCategory();
     }

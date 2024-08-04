@@ -56,7 +56,10 @@ public class OrderRestaurantListPageController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Assuming restaurantsInfo is already populated
+    	// empty the cart
+    	ChatClient.cart = new ArrayList<>();
+    	
+        // restaurantsInfo is already populated
         populateGridView();
     }
     

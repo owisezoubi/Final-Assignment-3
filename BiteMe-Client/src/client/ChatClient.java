@@ -9,6 +9,7 @@ import client.*;
 import common.ChatIF;
 import common.ChosenItem;
 import common.Item;
+import common.Order;
 import common.Restaurant;
 import common.RestaurantReport;
 import common.User;
@@ -41,6 +42,7 @@ public class ChatClient extends AbstractClient
 	public static Item chosenItemInOrder;
 	
 	public static ArrayList<ChosenItem> cart;
+	public static Order currentOrder;
 	
 	
 	
