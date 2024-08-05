@@ -14,6 +14,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
@@ -31,6 +32,44 @@ public class CEOHomePageController implements Initializable {
     @FXML
     private Label greetingsCEOLabel;
 
+    @FXML
+    private Button quarterlyReportButton;
+    
+    @FXML
+    private ComboBox<String> BranchComboBox;
+    
+    @FXML
+    private Label messageBranchLabel;
+
+   
+   
+    
+    @FXML
+    void quarterlyReportButtonOnClickAction(ActionEvent event) throws Exception {
+    	
+ 	String selectedBranch=BranchComboBox.getValue();
+    	if(selectedBranch==null)
+    		messageBranchLabel.setText("please choose a branch");
+    	else {
+    	if (selectedBranch.equals("North"))
+    		ChatClient.branch="1";
+    	else if (selectedBranch.equals("South"))
+    		ChatClient.branch="2";
+    	else 
+    		ChatClient.branch="3";
+
+    	// closing current page
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.close();
+
+        // opening BranchManagerHomePage
+        QuarterlyReportPageController QRC = new QuarterlyReportPageController();
+        Stage newStage = new Stage();
+        QRC.start(newStage);
+    	}
+    } 
+    
+    
     @FXML
     void compraeCEOButtonOnClickAction(ActionEvent event) {
 
@@ -57,13 +96,41 @@ public class CEOHomePageController implements Initializable {
     }
 
     @FXML
-    void showReportCEOButtonOnClickAction(ActionEvent event) {
+    void showReportCEOButtonOnClickAction(ActionEvent event) throws Exception {
+    	
+    	String selectedBranch=BranchComboBox.getValue();
+    	if (selectedBranch== null) {
+   		 messageBranchLabel.setText("Please choose a branch.");
+        }
+    	else {
+    		if (selectedBranch.equals("North")) {
+    			ChatClient.branch="1";
+    		}
+    		else if (selectedBranch.equals("South")) {
+    			ChatClient.branch="2";
+    		}
+    		else {
+    			ChatClient.branch="3";
+    		}
+    		// closing current page
+    		Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    		stage.close();
 
+    		// opening BranchManagerHomePage
+    		TypesOfReportsPageController Ceo = new TypesOfReportsPageController();
+    		Stage newStage = new Stage();
+    		Ceo.start(newStage);
+    	}
     }
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
+
+        if (BranchComboBox != null) {
+        	BranchComboBox.getItems().addAll("North", "South", "Central");
+        }
+
+      
 		
 	}
 	

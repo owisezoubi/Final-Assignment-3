@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="843.0" prefWidth="1272.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.QuarterlyReportPageController">
+   <children>
+      <Label fx:id="quarterlyReportLabel" layoutX="532.0" layoutY="27.0" text="Quarterly   Report" />
+      <BarChart fx:id="ordersPerRestaurantBarChart" layoutX="43.0" layoutY="288.0">
+        <xAxis>
+          <CategoryAxis side="BOTTOM" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis side="LEFT" />
+        </yAxis>
+      </BarChart>
+      <BarChart fx:id="revenuePerRestaurantBarChart" layoutX="699.0" layoutY="288.0">
+        <xAxis>
+          <CategoryAxis side="BOTTOM" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis side="LEFT" />
+        </yAxis>
+      </BarChart>
+      <Label fx:id="ordersPerRestaurantLabel" layoutX="201.0" layoutY="217.0" text="Total Orders Per Restaurantr" />
+      <Label fx:id="revenuePerRestaurantLabel" layoutX="838.0" layoutY="207.0" text="Total Revenue Per Restaurant" />
+      <Button fx:id="backCEOHomePage" layoutX="72.0" layoutY="762.0" mnemonicParsing="false" onAction="#backCEOHomePageOnClickAction" text="Back" />
+      <Label fx:id="messageforquarterlyReport" layoutX="340.0" layoutY="702.0" prefHeight="2.0" prefWidth="654.0" style="-fx-background-color: yellow;" />
+      <ComboBox fx:id="yearQuaterlyReportcombobox" layoutX="517.0" layoutY="140.0" prefWidth="150.0" promptText="Year" />
+      <Button fx:id="showReportQuarterlyReportButton" layoutX="724.0" layoutY="118.0" mnemonicParsing="false" onAction="#showReportQuarterlyReportButtonOnClickAction" prefHeight="31.0" prefWidth="133.0" text="Show Report" />
+      <ComboBox fx:id="QuarterComboBox" layoutX="517.0" layoutY="87.0" prefWidth="150.0" promptText="Quarter" />
+   </children>
+</AnchorPane>

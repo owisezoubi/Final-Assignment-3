@@ -44,6 +44,9 @@ public class ChatClient extends AbstractClient
 	public static ArrayList<ChosenItem> cart;
 	public static Order currentOrder;
 	
+	// Static methods for Branch Manger's Interface
+	public static String branch;
+	
 	
 	
   //Instance variables **********************************************

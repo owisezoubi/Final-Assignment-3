@@ -39,6 +39,7 @@ public class BranchManagerHomePageController implements Initializable {
     @FXML
     void logoutBranchManagerOnClickAction(ActionEvent event) throws Exception {
     	
+    	//send message to server when bm logged out - modify is_logged_in to 0
     	String userName = ChatClient.user.getUser_name();
     	
     	ArrayList<String> msg = new ArrayList<>();

@@ -9,8 +9,11 @@ import java.util.ArrayList;
 
 import javax.jws.Oneway;
 
+import common.IncomeOrdersDetails;
 import common.Item;
-import common.OrderDetails;
+import common.OrdersReport;
+import common.PerformanceReport;
+import common.QuarterlyOrdersReport;
 import common.Restaurant;
 import common.User;
 import gui.ServerPortFrameController;
@@ -387,58 +390,166 @@ public class DataBaseControl {
 	
 	
 	
+	// get data from table orders, for the OrdersReport
+	public static ArrayList<OrdersReport> getOrdersReport(String restaurantName, String month, String year) throws Exception {
+	    ensureInternalConnection(); // Ensure connection is established
+
+	    ArrayList<OrdersReport> ordersList = new ArrayList<>();
+	    String sql = "SELECT o.date, " +
+	            "SUM(CASE WHEN oc.category = 'main dish' THEN oc.quantity ELSE 0 END) AS mainDish, " +
+	            "SUM(CASE WHEN oc.category = 'salad' THEN oc.quantity ELSE 0 END) AS salad, " +
+	            "SUM(CASE WHEN oc.category = 'drink' THEN oc.quantity ELSE 0 END) AS drink, " +
+	            "SUM(CASE WHEN oc.category = 'dessert' THEN oc.quantity ELSE 0 END) AS dessert " +
+	            "FROM orders o " +
+	            "JOIN order_category oc ON o.order_id = oc.order_id " +
+	            "JOIN restaurants r ON o.restaurant_id = r.id " +
+	            "WHERE r.restaurant_name = ? AND MONTH(o.date) = ? AND YEAR(o.date) = ? " +
+	            "GROUP BY o.date " +
+	            "ORDER BY o.date";
+
+	    try (PreparedStatement pstmt = internalConnection.prepareStatement(sql)) {
+	        pstmt.setString(1, restaurantName);
+	        pstmt.setInt(2, Integer.parseInt(month)); // month as integer
+	        pstmt.setInt(3, Integer.parseInt(year));  // year as integer
+	        try (ResultSet rs = pstmt.executeQuery()) {
+	            while (rs.next()) {
+	                String date = rs.getString("date");
+	                String mainDish = rs.getString("mainDish");
+	                String salad = rs.getString("salad");
+	                String drink = rs.getString("drink");
+	                String dessert = rs.getString("dessert");
+
+	                OrdersReport order = new OrdersReport(date, mainDish, salad, drink, dessert);
+	                ordersList.add(order);
+	            }
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("Error retrieving OrdersReport: " + e.getMessage());
+	    }
+
+	    return ordersList;
+	}
+
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	// method to get OrdersReport 
-    public static ArrayList<OrderDetails> getOrdersByMonthYear(String restaurantName, String month, String year) throws Exception {
+	// Add the new method to get order stats
+    public static ArrayList<IncomeOrdersDetails> getOrderStatsForMonthYear(String restaurantName, String month, String year) throws Exception {
         ensureInternalConnection();
 
-        ArrayList<OrderDetails> orderDetailsList = new ArrayList<>();
-        String sql = "SELECT o.order_id, o.date, d.category, d.quantity, d.unit_price " +
+        ArrayList<IncomeOrdersDetails> orderStatsList = new ArrayList<>();
+        String sql = "SELECT DATE(date) as order_date, " +
+                     "COUNT(order_id) as number_of_orders, " +
+                     "SUM(total_price) as total_price " +
                      "FROM orders o " +
-                     "JOIN order_details d ON o.order_id = d.order_id " +
                      "JOIN restaurants r ON o.restaurant_id = r.id " +
                      "WHERE r.restaurant_name = ? " +
-                     "AND DATE_FORMAT(STR_TO_DATE(o.date, '%Y-%m-%d'), '%Y') = ? " +
-                     "AND DATE_FORMAT(STR_TO_DATE(o.date, '%Y-%m-%d'), '%m') = ?";
+                     "AND MONTH(STR_TO_DATE(o.date, '%Y-%m-%d')) = ? " +
+                     "AND YEAR(STR_TO_DATE(o.date, '%Y-%m-%d')) = ? " +
+                     "GROUP BY DATE(o.date)";
 
         try (PreparedStatement pstmt = internalConnection.prepareStatement(sql)) {
             pstmt.setString(1, restaurantName);
-            pstmt.setString(2, year);
-            pstmt.setString(3, month);
-
+            pstmt.setString(2, month);
+            pstmt.setString(3, year);
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
-                    String orderId = rs.getString("order_id");
-                    String date = rs.getString("date");
-                    String category = rs.getString("category");
-                    String quantity = rs.getString("quantity");
-                    String unitPrice = rs.getString("unit_price");
-
-                    OrderDetails orderDetails = new OrderDetails(orderId, date, category, quantity, unitPrice);
-                    orderDetailsList.add(orderDetails);
+                    String orderDate = rs.getString("order_date");
+                    int numberOfOrders = rs.getInt("number_of_orders");
+                    double totalPrice = rs.getDouble("total_price");
+                    IncomeOrdersDetails orderStats = new IncomeOrdersDetails(orderDate, numberOfOrders, totalPrice);
+                    orderStatsList.add(orderStats);
                 }
             }
         } catch (SQLException e) {
-            System.out.println("Error retrieving order details: " + e.getMessage());
-            
-            return null;
+            System.out.println("Error retrieving order stats: " + e.getMessage());
+        }
+        return orderStatsList;
+    }
+	
+	
+    
+    
+    public static ArrayList<PerformanceReport> getLatePerformanceReport(String restaurantName, String month, String year) throws Exception {
+        ensureInternalConnection(); // Ensure connection is established
+
+        ArrayList<PerformanceReport> performanceList = new ArrayList<>();
+        String sql = "SELECT " +
+                     "o.date, " +
+                     "SUM(CASE WHEN o.is_late = '1' THEN 1 ELSE 0 END) AS lateOrders, " +
+                     "SUM(CASE WHEN o.is_late = '0' THEN 1 ELSE 0 END) AS notLateOrders " +
+                     "FROM orders o " +
+                     "JOIN restaurants r ON o.restaurant_id = r.id " +
+                     "WHERE r.restaurant_name = ? " +
+                     "AND MONTH(STR_TO_DATE(o.date, '%Y-%m-%d')) = ? " +
+                     "AND YEAR(STR_TO_DATE(o.date, '%Y-%m-%d')) = ? " +
+                     "GROUP BY o.date " +
+                     "ORDER BY o.date";
+
+        try (PreparedStatement pstmt = internalConnection.prepareStatement(sql)) {
+            pstmt.setString(1, restaurantName);
+            pstmt.setInt(2, Integer.parseInt(month)); // month as integer
+            pstmt.setInt(3, Integer.parseInt(year));  // year as integer
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    String date = rs.getString("date");
+                    int lateOrders = rs.getInt("lateOrders");
+                    int notLateOrders = rs.getInt("notLateOrders");
+
+                    PerformanceReport report = new PerformanceReport(date, lateOrders, notLateOrders);
+                    performanceList.add(report);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error retrieving PerformanceReport: " + e.getMessage());
         }
 
-        return orderDetailsList;
+        return performanceList;
     }
+	
+	
+	
     
+    
+	
+    // Method to get quarterly orders report for specified months and year
+    public static ArrayList<QuarterlyOrdersReport> getQuarterlyOrdersReport(String branchId, String month1, String month2, String month3, String year) throws Exception {
+        ensureInternalConnection();
+
+        ArrayList<QuarterlyOrdersReport> quarterlyOrdersReportList = new ArrayList<>();
+        String sql = "SELECT DATE(o.date) as order_date, r.restaurant_name, COUNT(o.order_id) as number_of_orders " +
+                     "FROM orders o " +
+                     "JOIN restaurants r ON o.restaurant_id = r.id " +
+                     "WHERE r.home_branch = ? " +
+                     "AND (MONTH(STR_TO_DATE(o.date, '%Y-%m-%d')) = ? " +
+                     "OR MONTH(STR_TO_DATE(o.date, '%Y-%m-%d')) = ? " +
+                     "OR MONTH(STR_TO_DATE(o.date, '%Y-%m-%d')) = ?) " +
+                     "AND YEAR(STR_TO_DATE(o.date, '%Y-%m-%d')) = ? " +
+                     "GROUP BY DATE(o.date), r.restaurant_name";
+
+        try (PreparedStatement pstmt = internalConnection.prepareStatement(sql)) {
+            pstmt.setString(1, branchId);
+            pstmt.setString(2, month1);
+            pstmt.setString(3, month2);
+            pstmt.setString(4, month3);
+            pstmt.setString(5, year);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    String orderDate = rs.getString("order_date");
+                    String restaurantName = rs.getString("restaurant_name");
+                    int numberOfOrders = rs.getInt("number_of_orders");
+                    QuarterlyOrdersReport quarterlyOrdersReport = new QuarterlyOrdersReport(orderDate, restaurantName, numberOfOrders);
+                    quarterlyOrdersReportList.add(quarterlyOrdersReport);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error retrieving quarterly orders report: " + e.getMessage());
+        }
+
+        return quarterlyOrdersReportList;
+    }
 
     
+
     
 	
 }

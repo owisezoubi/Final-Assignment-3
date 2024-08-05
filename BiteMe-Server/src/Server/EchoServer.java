@@ -8,8 +8,11 @@ import java.io.*;
 import java.net.InetAddress;
 import java.util.ArrayList;
 
+import common.IncomeOrdersDetails;
 import common.Item;
-import common.OrderDetails;
+import common.OrdersReport;
+import common.PerformanceReport;
+import common.QuarterlyOrdersReport;
 import common.Restaurant;
 import common.User;
 import ocsf.server.*;
@@ -219,10 +222,6 @@ public class EchoServer extends AbstractServer {
 
 			break;
 
-			
-			
-			
-			
 		// getting restaurants menu after choosing in Order process
 		case "Get Item's Additions Info":
 
@@ -240,23 +239,67 @@ public class EchoServer extends AbstractServer {
 
 			break;
 
-			
-			
-			
-			
-			
-			
-			
-			
 		// getting msg from client - retrieving data for OrderReport
 		case "Get OrdersReport Info":
 			try {
 				System.out.println("Get OrderReport Info: " + inputList.toString());
-				ArrayList<OrderDetails> OrdersInfo = null;
-				OrdersInfo = DataBaseControl.getOrdersByMonthYear(inputList.get(1), inputList.get(2), inputList.get(3));
-				System.out.println("EchoServer: " + OrdersInfo.toString());
+				ArrayList<OrdersReport> ordersReportInfo = null;
+				ordersReportInfo = DataBaseControl.getOrdersReport(inputList.get(1), inputList.get(2), inputList.get(3));
+				System.out.println("EchoServer: " + ordersReportInfo.toString());
 
-				this.sendToAllClients(OrdersInfo);
+				this.sendToAllClients(ordersReportInfo);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			break;
+
+		case "Get IncomeReport Info":
+			try {
+				System.out.println("Get IncomeReport Info: " + inputList.toString());
+				ArrayList<IncomeOrdersDetails> incomeReportInfo = null;
+				incomeReportInfo = DataBaseControl.getOrderStatsForMonthYear(inputList.get(1), inputList.get(2),
+						inputList.get(3));
+				System.out.println("EchoServer: " + incomeReportInfo.toString());
+
+				this.sendToAllClients(incomeReportInfo);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			break;
+
+		case "Get PerformanceReport Info":
+			try {
+				System.out.println("Get PerformanceReport Info: " + inputList.toString());
+				ArrayList<PerformanceReport> performanceReportInfo = null;
+				performanceReportInfo = DataBaseControl.getLatePerformanceReport(inputList.get(1), inputList.get(2),
+						inputList.get(3));
+				System.out.println("EchoServer: " + performanceReportInfo.toString());
+
+				this.sendToAllClients(performanceReportInfo);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			break;
+
+		case "Get QuarterlyReport Info":
+			System.out.println("EchoServer: QuarterlyReportInfo Case");
+			
+			try {
+				System.out.println("Get QuarterlyReport Info: " + inputList.toString());
+				ArrayList<QuarterlyOrdersReport> quarterlyReportInfo = null;
+				quarterlyReportInfo = DataBaseControl.getQuarterlyOrdersReport(inputList.get(1), inputList.get(2),
+						inputList.get(3), inputList.get(4), inputList.get(5));
+				System.out.println("EchoServer: " + quarterlyReportInfo.toString());
+				
+				this.sendToAllClients(quarterlyReportInfo);
+				
+				System.out.println("msg got sent");
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

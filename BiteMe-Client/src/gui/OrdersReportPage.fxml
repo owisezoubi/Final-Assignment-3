@@ -6,19 +6,21 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="513.0" prefWidth="589.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.OrdersReportPageController">
+<AnchorPane prefHeight="561.0" prefWidth="770.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.OrdersReportPageController">
    <children>
-      <TableView fx:id="ordersReportTableView" layoutX="53.0" layoutY="155.0" prefHeight="243.0" prefWidth="479.0">
+      <TableView fx:id="ordersReportTableView" layoutX="82.0" layoutY="188.0" prefHeight="243.0" prefWidth="606.0">
         <columns>
-          <TableColumn prefWidth="105.0" text="Order Id" />
-          <TableColumn prefWidth="173.0" text="Product Type" />
-            <TableColumn prefWidth="90.0" text="Quantity" />
-            <TableColumn prefWidth="110.0" text="Price" />
+          <TableColumn fx:id="dateTableColumn" prefWidth="117.0" text="date" />
+          <TableColumn fx:id="mainDishTableColumn" prefWidth="136.0" text="Main Dish" />
+          <TableColumn fx:id="saladTableColumn" prefWidth="123.0" text="Salad" />
+          <TableColumn fx:id="drinkTableColumn" prefWidth="98.0" text="Drink" />
+          <TableColumn fx:id="dessertTableColumn" prefWidth="131.0" text="Dessert" />
         </columns>
       </TableView>
-      <Label fx:id="branchnameLabel" layoutX="69.0" layoutY="102.0" text="Branch name" />
-      <Label fx:id="restaurantnameLabel" layoutX="69.0" layoutY="79.0" text="Restaurant name" />
-      <Label fx:id="OodersReportLabel" layoutX="267.0" layoutY="28.0" text="Orders Report" />
-      <Button fx:id="finishOrdersReportButton" layoutX="229.0" layoutY="451.0" mnemonicParsing="false" text="Finish" />
+      <Label fx:id="branchnameLabel" layoutX="82.0" layoutY="111.0" text="Branch name" />
+      <Label fx:id="restaurantnameLabel" layoutX="86.0" layoutY="84.0" text="Restaurant name" />
+      <Label fx:id="OrdersReportLabel" layoutX="340.0" layoutY="31.0" text="Orders Report" />
+      <Button fx:id="finishOrdersReportButton" layoutX="302.0" layoutY="454.0" mnemonicParsing="false" onAction="#finishOrdersReportButtonOnClickAction" text="Finish" />
+      <Label fx:id="messageOrdersReportPage" layoutX="82.0" layoutY="149.0" prefHeight="21.0" prefWidth="606.0" style="-fx-background-color: pink;" />
    </children>
 </AnchorPane>

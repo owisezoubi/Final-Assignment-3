@@ -1,13 +1,12 @@
 package gui;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import client.ChatClient;
 import client.ClientUI;
-import common.OrderDetails;
+import common.OrdersReport;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -27,23 +26,23 @@ import javafx.stage.Stage;
 public class OrdersReportPageController implements Initializable {
 
     @FXML
-    private TableView<OrderDetails> ordersReportTableView;
+    private TableView<OrdersReport> ordersReportTableView;
 
     @FXML
-    private TableColumn<OrderDetails, String> OrderIdTableColumn;
+    private TableColumn<OrdersReport, String> dateTableColumn;
 
     @FXML
-    private TableColumn<OrderDetails, String> MainDishTableColumn;
+    private TableColumn<OrdersReport, String> mainDishTableColumn;
 
     @FXML
-    private TableColumn<OrderDetails, String> DrinksTableColumn;
+    private TableColumn<OrdersReport, String> saladTableColumn;
 
     @FXML
-    private TableColumn<OrderDetails, String> SaladTableColumn;
+    private TableColumn<OrdersReport, String> drinkTableColumn;
 
     @FXML
-    private TableColumn<OrderDetails, String> DessertTableColumn;
-    
+    private TableColumn<OrdersReport, String> dessertTableColumn;
+
     @FXML
     private Label branchnameLabel;
 
@@ -51,45 +50,59 @@ public class OrdersReportPageController implements Initializable {
     private Label restaurantnameLabel;
 
     @FXML
-    private Label OodersReportLabel;
+    private Label OrdersReportLabel;
 
     @FXML
     private Button finishOrdersReportButton;
+    
+    @FXML
+    private Label messageOrdersReportPage;
+    
+    private Stage stage;
 
-    private ObservableList<OrderDetails> orderDetailsList = FXCollections.observableArrayList();
+    private ObservableList<OrdersReport> ordersReportList = FXCollections.observableArrayList();
 
     @FXML
     void finishOrdersReportButtonOnClickAction(ActionEvent event) throws Exception {
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    	// closing current page
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
 
+        // opening BranchManagerHomePage
         TypesOfReportsPageController TORP = new TypesOfReportsPageController();
-        Stage primaryStage = new Stage();
-        TORP.start(primaryStage);
+        Stage newStage = new Stage();
+        TORP.start(newStage);
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public void initialize(URL location, ResourceBundle resources) {
+        restaurantnameLabel.setText("Restaurant Name: " +ChatClient.chosenRestaurantReport.getRestaurant_name());
+        branchnameLabel.setText("Restaurant Name: " +ChatClient.chosenRestaurantReport.getBranch());
+
         ArrayList<String> msg = new ArrayList<>();
         msg.add(0, "Get OrdersReport Info");
         msg.add(1, ChatClient.chosenRestaurantReport.getRestaurant_name());
         msg.add(2, ChatClient.chosenRestaurantReport.getMonth());
         msg.add(3, ChatClient.chosenRestaurantReport.getYear());
         ClientUI.chat.accept(msg);
-        
-        ArrayList<OrderDetails> OrdersInfo = (ArrayList<OrderDetails>) ChatClient.inputList;
-        System.out.println("result from Server, in OrdersReportPageController: " + OrdersInfo);
+
+        ArrayList<OrdersReport> ordersInfo = (ArrayList<OrdersReport>) ChatClient.inputList;
+        if (ordersInfo.isEmpty()) {
+        	messageOrdersReportPage.setText("There are no orders for the specified restaurant on the given date.");
+        }
+        System.out.println("Result from Server, in OrdersReportPageController: " + ordersInfo);
 
         // Set up the TableView columns
-        OrderIdTableColumn.setCellValueFactory(new PropertyValueFactory<>("orderId"));
-        MainDishTableColumn.setCellValueFactory(new PropertyValueFactory<>("mainDish"));
-        DrinksTableColumn.setCellValueFactory(new PropertyValueFactory<>("drinks"));
-        SaladTableColumn.setCellValueFactory(new PropertyValueFactory<>("salad"));
-        DessertTableColumn.setCellValueFactory(new PropertyValueFactory<>("dessert"));
+        dateTableColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+        mainDishTableColumn.setCellValueFactory(new PropertyValueFactory<>("mainDish"));
+        saladTableColumn.setCellValueFactory(new PropertyValueFactory<>("salad"));
+        drinkTableColumn.setCellValueFactory(new PropertyValueFactory<>("drink"));
+        dessertTableColumn.setCellValueFactory(new PropertyValueFactory<>("dessert"));
 
         // Populate the TableView with data from the server
-        orderDetailsList.addAll(OrdersInfo);
-        ordersReportTableView.setItems(orderDetailsList);
+        ordersReportList.addAll(ordersInfo);
+        ordersReportTableView.setItems(ordersReportList);
     }
 
     public void start(Stage primaryStage) throws Exception {

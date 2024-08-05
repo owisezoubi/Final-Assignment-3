@@ -1,8 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1">
-	<!-- TODO Add Nodes -->
+<AnchorPane prefHeight="605.0" prefWidth="774.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.IncomeReportPageController">
+   <children>
+      <TableView fx:id="incomeReportTableView" layoutX="67.0" layoutY="160.0" prefHeight="333.0" prefWidth="589.0">
+        <columns>
+            <TableColumn fx:id="dateTableColumn" prefWidth="203.0" text="Date" />
+            <TableColumn fx:id="NumberOfOrdersTableColumn" prefWidth="187.0" text="Number of Orders" />
+          <TableColumn fx:id="totalSalesRevenueTableColumn" prefWidth="198.0" text="Total sales revenue" />
+        </columns>
+      </TableView>
+      <Label fx:id="incomeReportLabel" layoutX="285.0" layoutY="23.0" text="Income  Report" />
+      <Label fx:id="restaurantnameLabel" layoutX="67.0" layoutY="75.0" text="Restaurant name" />
+      <Label fx:id="branchnameLabel" layoutX="67.0" layoutY="96.0" text="Branch name" />
+      <Button fx:id="finishIncomeReportButton" layoutX="323.0" layoutY="517.0" mnemonicParsing="false" onAction="#finishIncomeReportButtonOnClickAction" text="Finish" />
+      <Label fx:id="messageIncomeReportPage" layoutX="67.0" layoutY="127.0" prefHeight="21.0" prefWidth="589.0" style="-fx-background-color: pink;" />
+   </children>
 </AnchorPane>
-
