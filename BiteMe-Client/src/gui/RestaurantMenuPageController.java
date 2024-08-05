@@ -132,7 +132,7 @@ public class RestaurantMenuPageController implements Initializable {
         // Implement the functionality to finalize the order
     	
     	if (ChatClient.cart.isEmpty()) {
-    		Alert alert = new Alert(AlertType.INFORMATION);
+    		Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Alert");
             alert.setHeaderText(null); // You can set a header text if needed
             alert.setContentText("The Cart is Empty.\nPlease choose an Item.");

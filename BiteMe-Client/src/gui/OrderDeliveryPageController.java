@@ -96,14 +96,12 @@ public class OrderDeliveryPageController implements Initializable {
     @FXML
     private TextField orderNameTextField;
     
-
     @FXML
     private Label numberOfParticipantsLabel;
 
     @FXML
     private ComboBox<String> numberOfParticipantsComboBox;
-    
-    
+
     public String deliveryMethodString;
     
     @FXML
@@ -120,23 +118,54 @@ public class OrderDeliveryPageController implements Initializable {
 
     @FXML
     void NextButtonOnClickAction(ActionEvent event) throws Exception {
+        // Validate required fields
+        if (ChatClient.cart.isEmpty() ||
+            deliveryAddressTextField.getText().isEmpty() ||
+            phoneNumberTextField.getText().isEmpty() ||
+            orderNameTextField.getText().isEmpty() ||
+            (deliveryTypeComboBox.isDisabled() && deliveryTypeComboBox.getValue() == null) ||
+            (numberOfParticipantsComboBox.isVisible() && numberOfParticipantsComboBox.getValue() == null)) {
+            
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Input Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Please fill in all required fields.");
+            alert.showAndWait();
+            return;
+        }
+        
+        System.out.println("ComboBox: " + recievingMethodComboBox.getValue());
+        deliveryMethodString = "";
 
-    	System.out.println("ComboBox: " + recievingMethodComboBox.getValue());
-    	deliveryMethodString = "";
-    	
-    	// updating order_recieving_method to current order
-    	if (recievingMethodComboBox.getValue() == "Pick Up") {
-    		deliveryMethodString = recievingMethodComboBox.getValue();
-		} else {
-	    	deliveryMethodString = recievingMethodComboBox.getValue() + ", " + deliveryTypeComboBox.getValue();
-		}
-    	
-    	ChatClient.currentOrder.setOrder_recieving_method(deliveryMethodString);
-    	
-    	System.out.println("currentOrder: " + ChatClient.currentOrder);
+        // Updating order_recieving_method to current order
+        if ("Pick Up".equals(recievingMethodComboBox.getValue())) {
+            deliveryMethodString = recievingMethodComboBox.getValue();
+        } else {
+            deliveryMethodString = recievingMethodComboBox.getValue() + ", " + deliveryTypeComboBox.getValue();
+        }
+        
+        ChatClient.currentOrder.setOrder_recieving_method(deliveryMethodString);
 
-    	
-    	 // Can't move to next page if cart is empty
+        // Calculate delivery price
+        if ("Shared".equals(deliveryTypeComboBox.getValue())) {
+            int numParticipants = Integer.parseInt(numberOfParticipantsComboBox.getValue());
+            if (numParticipants == 1) {
+                deliveryPriceLabel.setText("+ 25 ₪");
+            } else if (numParticipants == 2) {
+                deliveryPriceLabel.setText("+ 20 ₪");
+            } else if (numParticipants >= 3) {
+                deliveryPriceLabel.setText("+ 15 ₪");
+            }
+        } else {
+            deliveryPriceLabel.setText("");
+        }
+
+        // Update total price
+        updateTotalPrice(null);
+
+        System.out.println("currentOrder: " + ChatClient.currentOrder);
+
+        // Can't move to next page if cart is empty
         if (ChatClient.cart.isEmpty()) {
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle("Alert");
@@ -154,13 +183,16 @@ public class OrderDeliveryPageController implements Initializable {
             OrderConfirmationPageController OCP = new OrderConfirmationPageController();
             Stage primaryStage = new Stage();
             OCP.start(primaryStage);
-
-            //System.out.println(ChatClient.cart);
         }
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+    	
+    	//hiding elements
+    	numberOfParticipantsLabel.setVisible(false);
+        numberOfParticipantsComboBox.setVisible(false);
+        deliveryPriceLabel.setText("");
     	
     	
         // Initialize TableView columns
@@ -180,9 +212,13 @@ public class OrderDeliveryPageController implements Initializable {
                             setText(null);
                         } else {
                             ChosenItem chosenItem = (ChosenItem) getTableRow().getItem();
-                            ArrayList<String> additions = chosenItem.getItem_additions();
-                            if (additions != null) {
-                                setText(String.join(", ", additions));
+                            if (chosenItem != null) {
+                                ArrayList<String> additions = chosenItem.getItem_additions();
+                                if (additions != null) {
+                                    setText(String.join(", ", additions));
+                                } else {
+                                    setText("");
+                                }
                             } else {
                                 setText("");
                             }
@@ -203,7 +239,7 @@ public class OrderDeliveryPageController implements Initializable {
                             ChosenItem chosenItem = getTableView().getItems().get(getIndex());
                             getTableView().getItems().remove(chosenItem);
                             ChatClient.cart.remove(chosenItem);
-                            updateTotalPrice(); 
+                            updateTotalPrice(chosenItem); 
                         });
                     }
 
@@ -222,12 +258,11 @@ public class OrderDeliveryPageController implements Initializable {
         cartTableView.setItems(cartItems);
 
         // Update total price
-        updateTotalPrice();
+        updateTotalPrice(null);
 
         // Configure receiving Method ComboBox
         recievingMethodComboBox.getItems().addAll("Pick Up", "Delivery");
         recievingMethodComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
-        	
             handleRecievingMethodChange(newVal);
         });
 
@@ -236,10 +271,16 @@ public class OrderDeliveryPageController implements Initializable {
         deliveryTypeComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
             handleDeliveryTypeChange(newVal);
         });
-        
-        
-        
-        
+
+        // Configure Number of Participants ComboBox
+        ObservableList<String> participantOptions = FXCollections.observableArrayList();
+        for (int i = 1; i <= 20; i++) {
+            participantOptions.add(String.valueOf(i));
+        }
+        numberOfParticipantsComboBox.setItems(participantOptions);
+        numberOfParticipantsComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
+            handleNumberOfParticipantsChange(newVal);
+        });
     }
 
     private void handleRecievingMethodChange(String newMethod) {
@@ -257,45 +298,89 @@ public class OrderDeliveryPageController implements Initializable {
         deliveryTypeComboBox.setDisable(disable);
         
         if (disable) {
-            deliveryAddressTextField.setStyle("-fx-text-fill: gray;");
-            deliveryTypeComboBox.setStyle("-fx-text-fill: gray;");
-            numberOfParticipantsComboBox.setStyle("-fx-text-fill: gray;");
-            
-            //set grey color to labels 
-            DeliveryAddressLabel.setStyle("-fx-text-fill: gray;");
-            deliveryTypeLabel.setStyle("-fx-text-fill: gray;");
-            numberOfParticipantsLabel.setStyle("-fx-text-fill: gray;");
-            
+            deliveryAddressTextField.setStyle("-fx-background-color: #d3d3d3;"); // Greyed out background
+            numberOfParticipantsComboBox.setStyle("-fx-background-color: #d3d3d3;"); // Greyed out background
+            deliveryTypeComboBox.setStyle("-fx-background-color: #d3d3d3;"); // Greyed out background
         } else {
-            deliveryAddressTextField.setStyle("");
-            deliveryTypeComboBox.setStyle("");
-            numberOfParticipantsComboBox.setStyle("");
-            
-            //set normal style to labels 
-            DeliveryAddressLabel.setStyle("");
-            deliveryTypeLabel.setStyle("");
-            numberOfParticipantsLabel.setStyle("");
+            deliveryAddressTextField.setStyle("-fx-background-color: white;");
+            numberOfParticipantsComboBox.setStyle("-fx-background-color: white;");
+            deliveryTypeComboBox.setStyle("-fx-background-color: white;");
         }
     }
 
-    private void handleDeliveryTypeChange(String deliveryType) {
-        if ("Regular".equals(deliveryType)) {
-            deliveryPriceLabel.setText("+ 25 ₪");
-        } else if ("Shared".equals(deliveryType)) {
-            deliveryPriceLabel.setText("");
-        } else if ("Robot".equals(deliveryType)) {
+    private void handleDeliveryTypeChange(String newType) {
+    	
+    	
+    	
+    	
+        if ("Shared".equals(newType)) {
+        	
+        	numberOfParticipantsComboBox.setValue(null);
+        	
+            numberOfParticipantsLabel.setVisible(true);
+            numberOfParticipantsComboBox.setVisible(true);
+        } else {
+            numberOfParticipantsLabel.setVisible(false);
+            numberOfParticipantsComboBox.setVisible(false);
             deliveryPriceLabel.setText("");
         }
+        
+        if ("Regular".equals(newType)) {
+			deliveryPriceLabel.setText("+ 25 ₪");
+		} 
     }
 
-    private void updateTotalPrice() {
-        double totalPrice = Double.parseDouble(ChatClient.currentOrder.getTotal_price());
+    private void handleNumberOfParticipantsChange(String newValue) {
+		if ("Shared".equals(deliveryTypeComboBox.getValue())) {
+			if (newValue != null) {
+				int numParticipants = Integer.parseInt(newValue);
+				if (numParticipants == 1) {
+					deliveryPriceLabel.setText("+ 25 ₪");
+				} else if (numParticipants == 2) {
+					deliveryPriceLabel.setText("+ 20 ₪");
+				} else if (numParticipants >= 3) {
+					deliveryPriceLabel.setText("+ 15 ₪");
+				}
+			}
+		}
+    }
+
+    private void updateTotalPrice(ChosenItem deletedItem) {
+        double totalPrice = 0.0;
+        try {
+            totalPrice = Double.parseDouble(ChatClient.currentOrder.getTotal_price());
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid total price format: " + e.getMessage());
+        }
+
+        // If an item is deleted, subtract its price from the total
+        if (deletedItem != null) {
+            try {
+                double itemPrice = Double.parseDouble(deletedItem.getItem().getItem_price());
+                totalPrice -= itemPrice;
+            } catch (NumberFormatException e) {
+                System.err.println("Invalid item price format: " + e.getMessage());
+            }
+        }
+
+        // Update the total price based on the delivery type
         if (deliveryPriceLabel.getText().contains("25 ₪")) {
             totalPrice += 25;
+        } else if (deliveryPriceLabel.getText().contains("20 ₪")) {
+            totalPrice += 20;
+        } else if (deliveryPriceLabel.getText().contains("15 ₪")) {
+            totalPrice += 15;
         }
+
+        // Update the total price label
         totalPriceValueLabel.setText(String.format("%.2f ₪", totalPrice));
+
+        // Update the currentOrder with the new total price
+        ChatClient.currentOrder.setTotal_price(String.valueOf(totalPrice));
     }
 
+    
+    
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/OrderDeliveryPage.fxml"));
         Parent root = loader.load();
@@ -306,4 +391,8 @@ public class OrderDeliveryPageController implements Initializable {
 
         scene.getStylesheets().add(getClass().getResource("/gui/OrderDeliveryPage.css").toExternalForm());
     }
+    
 }
+
+
+

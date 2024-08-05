@@ -224,14 +224,14 @@ public class OrderTypePageController implements Initializable {
     @FXML
     void nextButtonOnClickAction(ActionEvent event) throws Exception {
         if (ChatClient.cart.isEmpty()) {
-            Alert alert = new Alert(AlertType.INFORMATION);
+            Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Alert");
             alert.setHeaderText(null);
             alert.setContentText("The Cart is Empty.\nPlease get back to Menu Page and choose an Item.");
             alert.showAndWait();
         } else {
             if (ordersTypeComboBox.getValue() == null || arrivalTimeInHoursComboBox.getValue() == null || arrivalTimeInMinutesComboBox.getValue() == null) {
-                Alert alert = new Alert(AlertType.INFORMATION);
+                Alert alert = new Alert(AlertType.ERROR);
                 alert.setTitle("Alert");
                 alert.setHeaderText(null);
                 alert.setContentText("Please fill all the data");
