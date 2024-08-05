@@ -109,7 +109,7 @@ public class OrderDeliveryPageController implements Initializable {
     }
 
     @FXML
-    void NextButtonOnClickAction(ActionEvent event) {
+    void NextButtonOnClickAction(ActionEvent event) throws Exception {
         // Implement next button logic here
     	
     	 // Can't move to next page if cart is empty
@@ -127,9 +127,9 @@ public class OrderDeliveryPageController implements Initializable {
             stage.close();
 
             // Opening new page
-            //OrderDeliveryPageController ODP = new OrderDeliveryPageController();
-            //Stage primaryStage = new Stage();
-            //ODP.start(primaryStage);
+            OrderConfirmationPageController OCP = new OrderConfirmationPageController();
+            Stage primaryStage = new Stage();
+            OCP.start(primaryStage);
 
             System.out.println(ChatClient.cart);
         }

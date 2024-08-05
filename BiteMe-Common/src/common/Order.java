@@ -1,154 +1,164 @@
 package common;
 
 public class Order {
-    private String orderId;
-    private String restaurantId;
-    private String userId;
+    private String order_id;
+    private String restaurant_id;
+    private String user_id;
     private String date;
-    private String startTime;
-    private String arrivalTime;
+    private String start_time;
+    private String arrival_time;
     private String price;
-    private String totalPrice;
-    private String restaurantConfirmed;
-    private String customerConfirmed;
-    private String isReady;
-    private String isLate;
+    private String total_price;
+    private String restaurant_confirmed;
+    private String customer_confirmed;
+    private String is_ready;
+    private String is_late;
+    private String order_type;
+    private String order_recieving_method;
+    
+    
+    
+	public Order(String order_id, String restaurant_id, String user_id, String date, String start_time,
+			String arrival_time, String price, String total_price, String restaurant_confirmed,
+			String customer_confirmed, String is_ready, String is_late, String order_type,
+			String order_recieving_method) {
+		super();
+		this.order_id = order_id;
+		this.restaurant_id = restaurant_id;
+		this.user_id = user_id;
+		this.date = date;
+		this.start_time = start_time;
+		this.arrival_time = arrival_time;
+		this.price = price;
+		this.total_price = total_price;
+		this.restaurant_confirmed = restaurant_confirmed;
+		this.customer_confirmed = customer_confirmed;
+		this.is_ready = is_ready;
+		this.is_late = is_late;
+		this.order_type = order_type;
+		this.order_recieving_method = order_recieving_method;
+	}
+	
+	public String getOrder_id() {
+		return order_id;
+	}
+	
+	public void setOrder_id(String order_id) {
+		this.order_id = order_id;
+	}
+	
+	public String getRestaurant_id() {
+		return restaurant_id;
+	}
+	
+	public void setRestaurant_id(String restaurant_id) {
+		this.restaurant_id = restaurant_id;
+	}
+	
+	public String getUser_id() {
+		return user_id;
+	}
+	
+	public void setUser_id(String user_id) {
+		this.user_id = user_id;
+	}
+	
+	public String getDate() {
+		return date;
+	}
+	
+	public void setDate(String date) {
+		this.date = date;
+	}
+	
+	public String getStart_time() {
+		return start_time;
+	}
+	
+	public void setStart_time(String start_time) {
+		this.start_time = start_time;
+	}
+	
+	public String getArrival_time() {
+		return arrival_time;
+	}
+	
+	public void setArrival_time(String arrival_time) {
+		this.arrival_time = arrival_time;
+	}
+	
+	public String getPrice() {
+		return price;
+	}
+	
+	public void setPrice(String price) {
+		this.price = price;
+	}
+	
+	public String getTotal_price() {
+		return total_price;
+	}
+	
+	public void setTotal_price(String total_price) {
+		this.total_price = total_price;
+	}
+	
+	public String getRestaurant_confirmed() {
+		return restaurant_confirmed;
+	}
+	
+	public void setRestaurant_confirmed(String restaurant_confirmed) {
+		this.restaurant_confirmed = restaurant_confirmed;
+	}
+	
+	public String getCustomer_confirmed() {
+		return customer_confirmed;
+	}
+	
+	public void setCustomer_confirmed(String customer_confirmed) {
+		this.customer_confirmed = customer_confirmed;
+	}
+	
+	public String getIs_ready() {
+		return is_ready;
+	}
+	
+	public void setIs_ready(String is_ready) {
+		this.is_ready = is_ready;
+	}
+	
+	public String getIs_late() {
+		return is_late;
+	}
+	
+	public void setIs_late(String is_late) {
+		this.is_late = is_late;
+	}
+	
+	public String getOrder_type() {
+		return order_type;
+	}
+	
+	public void setOrder_type(String order_type) {
+		this.order_type = order_type;
+	}
+	
+	public String getOrder_recieving_method() {
+		return order_recieving_method;
+	}
+	
+	public void setOrder_recieving_method(String order_recieving_method) {
+		this.order_recieving_method = order_recieving_method;
+	}
+    
+    
+	@Override
+	public String toString() {
+		return "Order [order_id=" + order_id + ", restaurant_id=" + restaurant_id + ", user_id=" + user_id + ", date="
+				+ date + ", start_time=" + start_time + ", arrival_time=" + arrival_time + ", price=" + price
+				+ ", total_price=" + total_price + ", restaurant_confirmed=" + restaurant_confirmed
+				+ ", customer_confirmed=" + customer_confirmed + ", is_ready=" + is_ready + ", is_late=" + is_late
+				+ ", order_type=" + order_type + ", order_recieving_method=" + order_recieving_method + "]";
+	}
 
-    // Default constructor
-    public Order() {
-    }
-
-    // Parameterized constructor
-    public Order(String orderId, String restaurantId, String userId, String date, 
-                 String startTime, String arrivalTime, String price, String totalPrice, 
-                 String restaurantConfirmed, String customerConfirmed, 
-                 String isReady, String isLate) {
-        this.orderId = orderId;
-        this.restaurantId = restaurantId;
-        this.userId = userId;
-        this.date = date;
-        this.startTime = startTime;
-        this.arrivalTime = arrivalTime;
-        this.price = price;
-        this.totalPrice = totalPrice;
-        this.restaurantConfirmed = restaurantConfirmed;
-        this.customerConfirmed = customerConfirmed;
-        this.isReady = isReady;
-        this.isLate = isLate;
-    }
-
-    // Getters and Setters
-    public String getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
-    }
-
-    public String getRestaurantId() {
-        return restaurantId;
-    }
-
-    public void setRestaurantId(String restaurantId) {
-        this.restaurantId = restaurantId;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
-
-    public String getArrivalTime() {
-        return arrivalTime;
-    }
-
-    public void setArrivalTime(String arrivalTime) {
-        this.arrivalTime = arrivalTime;
-    }
-
-    public String getPrice() {
-        return price;
-    }
-
-    public void setPrice(String price) {
-        this.price = price;
-    }
-
-    public String getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(String totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
-    public String getRestaurantConfirmed() {
-        return restaurantConfirmed;
-    }
-
-    public void setRestaurantConfirmed(String restaurantConfirmed) {
-        this.restaurantConfirmed = restaurantConfirmed;
-    }
-
-    public String getCustomerConfirmed() {
-        return customerConfirmed;
-    }
-
-    public void setCustomerConfirmed(String customerConfirmed) {
-        this.customerConfirmed = customerConfirmed;
-    }
-
-    public String getIsReady() {
-        return isReady;
-    }
-
-    public void setIsReady(String isReady) {
-        this.isReady = isReady;
-    }
-
-    public String getIsLate() {
-        return isLate;
-    }
-
-    public void setIsLate(String isLate) {
-        this.isLate = isLate;
-    }
-
-    @Override
-    public String toString() {
-        return "Order{" +
-                "orderId='" + orderId + '\'' +
-                ", restaurantId='" + restaurantId + '\'' +
-                ", userId='" + userId + '\'' +
-                ", date='" + date + '\'' +
-                ", startTime='" + startTime + '\'' +
-                ", arrivalTime='" + arrivalTime + '\'' +
-                ", price='" + price + '\'' +
-                ", totalPrice='" + totalPrice + '\'' +
-                ", restaurantConfirmed='" + restaurantConfirmed + '\'' +
-                ", customerConfirmed='" + customerConfirmed + '\'' +
-                ", isReady='" + isReady + '\'' +
-                ", isLate='" + isLate + '\'' +
-                '}';
-    }
 }
