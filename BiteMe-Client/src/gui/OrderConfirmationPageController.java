@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -65,8 +66,15 @@ public class OrderConfirmationPageController implements Initializable {
     private Label recipientPhoneNumberValueLabel;
 
     @FXML
-    void BackButtonOnClickAction(ActionEvent event) {
-
+    void BackButtonOnClickAction(ActionEvent event) throws Exception {
+    	 // Closing current page
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.close();
+        
+        // Opening new page
+        OrderDeliveryPageController ODP = new OrderDeliveryPageController();
+        Stage primaryStage = new Stage();
+        ODP.start(primaryStage);
     }
 
     @FXML

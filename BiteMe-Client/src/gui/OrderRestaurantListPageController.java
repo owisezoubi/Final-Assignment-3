@@ -8,6 +8,7 @@ import client.ChatClient;
 import client.ClientUI;
 import common.ChatIF;
 import common.Item;
+import common.Order;
 import common.Restaurant;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -58,6 +59,8 @@ public class OrderRestaurantListPageController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
     	// empty the cart
     	ChatClient.cart = new ArrayList<>();
+    	
+    	ChatClient.currentOrder = new Order(null, null, null, null, null, null, null, null, null, null, null, null, null, null);
     	
         // restaurantsInfo is already populated
         populateGridView();

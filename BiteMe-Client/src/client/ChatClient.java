@@ -36,15 +36,14 @@ public class ChatClient extends AbstractClient
 	public static ArrayList<Restaurant> restaurantsInfo;
 	public static RestaurantReport chosenRestaurantReport;
 	
+	// Static Objects for Customer's Interface
 	public static Restaurant chosenRestaurantByCustomer;
 	public static ArrayList<Item> choosenRestaurantMenu;
-	
 	public static Item chosenItemInOrder;
-	
 	public static ArrayList<ChosenItem> cart;
 	public static Order currentOrder;
 	
-	// Static methods for Branch Manger's Interface
+	// Static Objects for Branch Manger's Interface
 	public static String branch;
 	
 	

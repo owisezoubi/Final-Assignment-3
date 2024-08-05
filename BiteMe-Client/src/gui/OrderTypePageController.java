@@ -136,6 +136,12 @@ public class OrderTypePageController implements Initializable {
 
         // Update total price initially
         updateTotalPrice();
+        
+        ordersTypeComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
+        	updateTotalPrice();
+        	ChatClient.currentOrder.setOrder_type(newVal.toLowerCase());
+        	
+        });
 
         // Configure ComboBoxes for order type and arrival times
         configureOrderTypeComboBox();
@@ -143,7 +149,7 @@ public class OrderTypePageController implements Initializable {
     }
 
     private void configureOrderTypeComboBox() {
-        ordersTypeComboBox.getItems().addAll("Normal Order", "Early Order");
+        ordersTypeComboBox.getItems().addAll("Normal", "Early");
     }
 
     private void configureArrivalTimeComboBoxes() {
@@ -156,11 +162,11 @@ public class OrderTypePageController implements Initializable {
         ordersTypeComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
             arrivalTimeInHoursComboBox.getItems().clear();
             int currentHour = java.time.LocalTime.now().getHour();
-            if ("Normal Order".equals(newVal)) {
+            if ("Normal".equals(newVal)) {
                 for (int i = currentHour; i < 24; i++) {
                     arrivalTimeInHoursComboBox.getItems().add(String.format("%02d", i));
                 }
-            } else if ("Early Order".equals(newVal)) {
+            } else if ("Early".equals(newVal)) {
                 for (int i = currentHour + 2; i < 24; i++) {
                     arrivalTimeInHoursComboBox.getItems().add(String.format("%02d", i));
                 }
@@ -170,16 +176,37 @@ public class OrderTypePageController implements Initializable {
     }
 
     private void updateTotalPrice() {
+
         double totalPrice = 0.0;
         for (ChosenItem item : cartItems) {
-            try {
-                totalPrice += Double.parseDouble(item.getItemPrice());
-            } catch (NumberFormatException e) {
-                // Handle exception if item price is not a valid number
-                System.err.println("Invalid price format for item: " + item.getItemPrice());
+            String itemPriceStr = item.getItemPrice();
+            if (itemPriceStr != null && !itemPriceStr.isEmpty()) {
+                try {
+                    totalPrice += Double.parseDouble(itemPriceStr);
+                } catch (NumberFormatException e) {
+                    System.err.println("Invalid price format for item: " + itemPriceStr);
+                }
+            } else {
+                System.err.println("Item price is null or empty for item: " + item.getItemName());
             }
         }
+        
+        
+        System.out.println("total price before discount: " + totalPrice);
+        
+     
+        if ("Early".equals(ordersTypeComboBox.getValue())) {
+            totalPrice *= 0.9; // Apply 10% discount
+            System.out.println("entered");
+        }
+        System.out.println("total price after discount: " + totalPrice);
+        
         priceTextField.setText(String.format("%.2f ₪", totalPrice));
+        
+        ChatClient.currentOrder.setTotal_price(String.format("%.2f", totalPrice));
+        
+        System.out.println("total price in ChatClient.currentOrder: " + ChatClient.currentOrder);
+
     }
 
     @FXML
@@ -196,29 +223,30 @@ public class OrderTypePageController implements Initializable {
 
     @FXML
     void nextButtonOnClickAction(ActionEvent event) throws Exception {
-        // Can't move to next page if cart is empty
         if (ChatClient.cart.isEmpty()) {
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle("Alert");
-            alert.setHeaderText(null); // You can set a header text if needed
+            alert.setHeaderText(null);
             alert.setContentText("The Cart is Empty.\nPlease get back to Menu Page and choose an Item.");
-
-            // Show the alert dialog
             alert.showAndWait();
         } else {
-        	
-        	
-        	if (ordersTypeComboBox.getValue() == null || arrivalTimeInHoursComboBox.getValue() == null || arrivalTimeInMinutesComboBox.getValue() == null) {
-    			// display an alert for empty input
-            	Alert alert = new Alert(AlertType.INFORMATION);
+            if (ordersTypeComboBox.getValue() == null || arrivalTimeInHoursComboBox.getValue() == null || arrivalTimeInMinutesComboBox.getValue() == null) {
+                Alert alert = new Alert(AlertType.INFORMATION);
                 alert.setTitle("Alert");
-                alert.setHeaderText(null); // You can set a header text if needed
+                alert.setHeaderText(null);
                 alert.setContentText("Please fill all the data");
-
-                // Show the alert dialog
                 alert.showAndWait();
-    		} else {
-    			// Closing current page
+            } else {
+                String orderType = ordersTypeComboBox.getValue();
+                ChatClient.currentOrder.setOrder_type(orderType);
+
+                String selectedHour = arrivalTimeInHoursComboBox.getValue();
+                String selectedMinute = arrivalTimeInMinutesComboBox.getValue();
+                String desiredTime = selectedHour + ":" + selectedMinute;
+                ChatClient.currentOrder.setDesired_time(desiredTime);
+
+                
+                // Closing current page
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 stage.close();
 
@@ -226,13 +254,8 @@ public class OrderTypePageController implements Initializable {
                 OrderDeliveryPageController ODP = new OrderDeliveryPageController();
                 Stage primaryStage = new Stage();
                 ODP.start(primaryStage);
-
-                System.out.println(ChatClient.cart);
-			}
-            
-        }      
-            
-        
+            }
+        }
     }
 
     public void start(Stage primaryStage) throws Exception {

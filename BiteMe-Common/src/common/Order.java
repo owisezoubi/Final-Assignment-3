@@ -5,7 +5,7 @@ public class Order {
     private String restaurant_id;
     private String user_id;
     private String date;
-    private String start_time;
+    private String desired_time;
     private String arrival_time;
     private String price;
     private String total_price;
@@ -18,7 +18,7 @@ public class Order {
     
     
     
-	public Order(String order_id, String restaurant_id, String user_id, String date, String start_time,
+	public Order(String order_id, String restaurant_id, String user_id, String date, String desired_time,
 			String arrival_time, String price, String total_price, String restaurant_confirmed,
 			String customer_confirmed, String is_ready, String is_late, String order_type,
 			String order_recieving_method) {
@@ -27,7 +27,7 @@ public class Order {
 		this.restaurant_id = restaurant_id;
 		this.user_id = user_id;
 		this.date = date;
-		this.start_time = start_time;
+		this.desired_time = desired_time;
 		this.arrival_time = arrival_time;
 		this.price = price;
 		this.total_price = total_price;
@@ -71,12 +71,12 @@ public class Order {
 		this.date = date;
 	}
 	
-	public String getStart_time() {
-		return start_time;
+	public String getDesired_time() {
+		return desired_time;
 	}
 	
-	public void setStart_time(String start_time) {
-		this.start_time = start_time;
+	public void setDesired_time(String desired_time) {
+		this.desired_time = desired_time;
 	}
 	
 	public String getArrival_time() {
@@ -155,7 +155,7 @@ public class Order {
 	@Override
 	public String toString() {
 		return "Order [order_id=" + order_id + ", restaurant_id=" + restaurant_id + ", user_id=" + user_id + ", date="
-				+ date + ", start_time=" + start_time + ", arrival_time=" + arrival_time + ", price=" + price
+				+ date + ", desired_time=" + desired_time + ", arrival_time=" + arrival_time + ", price=" + price
 				+ ", total_price=" + total_price + ", restaurant_confirmed=" + restaurant_confirmed
 				+ ", customer_confirmed=" + customer_confirmed + ", is_ready=" + is_ready + ", is_late=" + is_late
 				+ ", order_type=" + order_type + ", order_recieving_method=" + order_recieving_method + "]";

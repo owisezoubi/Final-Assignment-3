@@ -96,6 +96,16 @@ public class OrderDeliveryPageController implements Initializable {
     @FXML
     private TextField orderNameTextField;
     
+
+    @FXML
+    private Label numberOfParticipantsLabel;
+
+    @FXML
+    private ComboBox<String> numberOfParticipantsComboBox;
+    
+    
+    public String deliveryMethodString;
+    
     @FXML
     void BackButtonOnClickAction(ActionEvent event) throws Exception {
         // Closing current page
@@ -110,7 +120,21 @@ public class OrderDeliveryPageController implements Initializable {
 
     @FXML
     void NextButtonOnClickAction(ActionEvent event) throws Exception {
-        // Implement next button logic here
+
+    	System.out.println("ComboBox: " + recievingMethodComboBox.getValue());
+    	deliveryMethodString = "";
+    	
+    	// updating order_recieving_method to current order
+    	if (recievingMethodComboBox.getValue() == "Pick Up") {
+    		deliveryMethodString = recievingMethodComboBox.getValue();
+		} else {
+	    	deliveryMethodString = recievingMethodComboBox.getValue() + ", " + deliveryTypeComboBox.getValue();
+		}
+    	
+    	ChatClient.currentOrder.setOrder_recieving_method(deliveryMethodString);
+    	
+    	System.out.println("currentOrder: " + ChatClient.currentOrder);
+
     	
     	 // Can't move to next page if cart is empty
         if (ChatClient.cart.isEmpty()) {
@@ -131,12 +155,14 @@ public class OrderDeliveryPageController implements Initializable {
             Stage primaryStage = new Stage();
             OCP.start(primaryStage);
 
-            System.out.println(ChatClient.cart);
+            //System.out.println(ChatClient.cart);
         }
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+    	
+    	
         // Initialize TableView columns
         itemNameColumn.setCellValueFactory(new PropertyValueFactory<>("itemName"));
         itemPriceColumn.setCellValueFactory(new PropertyValueFactory<>("itemPrice"));
@@ -176,6 +202,7 @@ public class OrderDeliveryPageController implements Initializable {
                         deleteButton.setOnAction(event -> {
                             ChosenItem chosenItem = getTableView().getItems().get(getIndex());
                             getTableView().getItems().remove(chosenItem);
+                            ChatClient.cart.remove(chosenItem);
                             updateTotalPrice(); 
                         });
                     }
@@ -197,21 +224,26 @@ public class OrderDeliveryPageController implements Initializable {
         // Update total price
         updateTotalPrice();
 
-        // Configure Recieving Method ComboBox
-        recievingMethodComboBox.getItems().addAll("Pick-Up", "Delivery");
+        // Configure receiving Method ComboBox
+        recievingMethodComboBox.getItems().addAll("Pick Up", "Delivery");
         recievingMethodComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
+        	
             handleRecievingMethodChange(newVal);
         });
 
         // Configure Delivery Type ComboBox
-        deliveryTypeComboBox.getItems().addAll("Regular", "Shared", "via Robot");
+        deliveryTypeComboBox.getItems().addAll("Regular", "Shared", "Robot");
         deliveryTypeComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
             handleDeliveryTypeChange(newVal);
         });
+        
+        
+        
+        
     }
 
     private void handleRecievingMethodChange(String newMethod) {
-        if ("Pick-Up".equals(newMethod)) {
+        if ("Pick Up".equals(newMethod)) {
             disableDeliveryFields(true);
             deliveryPriceLabel.setText("");
         } else if ("Delivery".equals(newMethod)) {
@@ -221,18 +253,28 @@ public class OrderDeliveryPageController implements Initializable {
 
     private void disableDeliveryFields(boolean disable) {
         deliveryAddressTextField.setDisable(disable);
+        numberOfParticipantsComboBox.setDisable(disable);
         deliveryTypeComboBox.setDisable(disable);
         
         if (disable) {
             deliveryAddressTextField.setStyle("-fx-text-fill: gray;");
-            phoneNumberTextField.setStyle("-fx-text-fill: gray;");
-            orderNameTextField.setStyle("-fx-text-fill: gray;");
             deliveryTypeComboBox.setStyle("-fx-text-fill: gray;");
+            numberOfParticipantsComboBox.setStyle("-fx-text-fill: gray;");
+            
+            //set grey color to labels 
+            DeliveryAddressLabel.setStyle("-fx-text-fill: gray;");
+            deliveryTypeLabel.setStyle("-fx-text-fill: gray;");
+            numberOfParticipantsLabel.setStyle("-fx-text-fill: gray;");
+            
         } else {
             deliveryAddressTextField.setStyle("");
-            phoneNumberTextField.setStyle("");
-            orderNameTextField.setStyle("");
             deliveryTypeComboBox.setStyle("");
+            numberOfParticipantsComboBox.setStyle("");
+            
+            //set normal style to labels 
+            DeliveryAddressLabel.setStyle("");
+            deliveryTypeLabel.setStyle("");
+            numberOfParticipantsLabel.setStyle("");
         }
     }
 
@@ -241,15 +283,13 @@ public class OrderDeliveryPageController implements Initializable {
             deliveryPriceLabel.setText("+ 25 ₪");
         } else if ("Shared".equals(deliveryType)) {
             deliveryPriceLabel.setText("");
-        } else if ("via Robot".equals(deliveryType)) {
+        } else if ("Robot".equals(deliveryType)) {
             deliveryPriceLabel.setText("");
         }
     }
 
     private void updateTotalPrice() {
-        double totalPrice = ChatClient.cart.stream()
-                .mapToDouble(item -> Double.parseDouble(item.getItemPrice()))
-                .sum();
+        double totalPrice = Double.parseDouble(ChatClient.currentOrder.getTotal_price());
         if (deliveryPriceLabel.getText().contains("25 ₪")) {
             totalPrice += 25;
         }
