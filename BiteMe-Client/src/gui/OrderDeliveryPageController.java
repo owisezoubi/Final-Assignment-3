@@ -119,12 +119,11 @@ public class OrderDeliveryPageController implements Initializable {
     @FXML
     void NextButtonOnClickAction(ActionEvent event) throws Exception {
         // Validate required fields
-        if (ChatClient.cart.isEmpty() ||
-            deliveryAddressTextField.getText().isEmpty() ||
-            phoneNumberTextField.getText().isEmpty() ||
-            orderNameTextField.getText().isEmpty() ||
-            (deliveryTypeComboBox.isDisabled() && deliveryTypeComboBox.getValue() == null) ||
-            (numberOfParticipantsComboBox.isVisible() && numberOfParticipantsComboBox.getValue() == null)) {
+        if ((deliveryTypeComboBox.isDisabled() && deliveryTypeComboBox.getValue() == null) ||
+        	(numberOfParticipantsComboBox.isVisible() && numberOfParticipantsComboBox.getValue() == null) ||
+            (!deliveryAddressTextField.isDisabled() && deliveryAddressTextField.getText().isEmpty()) ||
+             phoneNumberTextField.getText().isEmpty() ||
+             orderNameTextField.getText().isEmpty()) {
             
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Input Error");
@@ -132,7 +131,14 @@ public class OrderDeliveryPageController implements Initializable {
             alert.setContentText("Please fill in all required fields.");
             alert.showAndWait();
             return;
-        }
+        } else if (ChatClient.cart.isEmpty()) {
+        	Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Input Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Cart is Empty, please go back to Menu Page and add an Item.");
+            alert.showAndWait();
+            return;
+		}
         
         System.out.println("ComboBox: " + recievingMethodComboBox.getValue());
         deliveryMethodString = "";
@@ -348,7 +354,7 @@ public class OrderDeliveryPageController implements Initializable {
     private void updateTotalPrice(ChosenItem deletedItem) {
         double totalPrice = 0.0;
         try {
-            totalPrice = Double.parseDouble(ChatClient.currentOrder.getTotal_price());
+            totalPrice = Double.parseDouble(ChatClient.currentOrder.getPrice());
         } catch (NumberFormatException e) {
             System.err.println("Invalid total price format: " + e.getMessage());
         }
@@ -376,7 +382,7 @@ public class OrderDeliveryPageController implements Initializable {
         totalPriceValueLabel.setText(String.format("%.2f ₪", totalPrice));
 
         // Update the currentOrder with the new total price
-        ChatClient.currentOrder.setTotal_price(String.valueOf(totalPrice));
+        ChatClient.currentOrder.setPrice(String.valueOf(totalPrice));
     }
 
     

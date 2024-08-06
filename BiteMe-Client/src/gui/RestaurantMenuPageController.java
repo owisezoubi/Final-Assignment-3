@@ -1,12 +1,15 @@
 package gui;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import client.ChatClient;
 import common.Item;
+import common.Order;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -158,10 +161,37 @@ public class RestaurantMenuPageController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-    	
+    	//ChatClient.currentOrder.setRestaurant_id(ChatClient.choosenRestaurantMenu);
     	
     	categorizeItemsByCategory();
+    	
+    	// get today's date
+    	String todayDate = getTodayDate();
+        
+        System.out.println(ChatClient.chosenRestaurantByCustomer.getId());
+        System.out.println(ChatClient.user.getId());
+        
+        // create current order instance
+    	ChatClient.currentOrder = new Order(null, ChatClient.chosenRestaurantByCustomer.getId(), ChatClient.user.getId(), todayDate, null, null, null, null, null, null, null, null, null, null, null);
+
     }
+    
+    
+    
+    
+    private String getTodayDate() {
+		// TODO Auto-generated method stub
+    	// Get current date
+        LocalDate today = LocalDate.now();
+
+        // Format date
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String formattedToday = today.format(formatter);
+
+        System.out.println("Current date: " + formattedToday);
+        
+        return formattedToday;
+	}
 
     private void categorizeItemsByCategory() {
         // Retrieve the list of items from the chosen restaurant's menu

@@ -203,7 +203,7 @@ public class OrderTypePageController implements Initializable {
         
         priceTextField.setText(String.format("%.2f ₪", totalPrice));
         
-        ChatClient.currentOrder.setTotal_price(String.format("%.2f", totalPrice));
+        ChatClient.currentOrder.setPrice(String.format("%.2f", totalPrice));
         
         System.out.println("total price in ChatClient.currentOrder: " + ChatClient.currentOrder);
 
@@ -256,6 +256,11 @@ public class OrderTypePageController implements Initializable {
                 ODP.start(primaryStage);
             }
         }
+        
+        String desiredTimeString = arrivalTimeInHoursComboBox + ":" + arrivalTimeInMinutesComboBox;
+        
+        // load desired_time for currentOrder
+        ChatClient.currentOrder.setDesired_time(desiredTimeString);
     }
 
     public void start(Stage primaryStage) throws Exception {

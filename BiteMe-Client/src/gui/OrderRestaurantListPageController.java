@@ -1,6 +1,8 @@
 package gui;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -27,7 +29,6 @@ import javafx.stage.Stage;
 public class OrderRestaurantListPageController implements Initializable {
 	
 	
-	private ObservableList<String> restaurantData = FXCollections.observableArrayList();
 	
 	
 
@@ -41,6 +42,7 @@ public class OrderRestaurantListPageController implements Initializable {
 
     @FXML
     private GridPane gridViewRestaurantList;
+    
 
     @FXML
     void backtoHomePageButtonOnClickAction(ActionEvent event) throws Exception {
@@ -60,7 +62,6 @@ public class OrderRestaurantListPageController implements Initializable {
     	// empty the cart
     	ChatClient.cart = new ArrayList<>();
     	
-    	ChatClient.currentOrder = new Order(null, null, null, null, null, null, null, null, null, null, null, null, null, null);
     	
         // restaurantsInfo is already populated
         populateGridView();
@@ -68,7 +69,10 @@ public class OrderRestaurantListPageController implements Initializable {
     
     
 
-    private void populateGridView() {
+    
+
+
+	private void populateGridView() {
         int column = 0;
         int row = 0;
 
