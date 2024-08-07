@@ -172,7 +172,7 @@ public class RestaurantMenuPageController implements Initializable {
         System.out.println(ChatClient.user.getId());
         
         // create current order instance
-    	ChatClient.currentOrder = new Order(null, ChatClient.chosenRestaurantByCustomer.getId(), ChatClient.user.getId(), todayDate, null, null, null, null, null, null, null, null, null, null, null);
+    	ChatClient.currentOrder = new Order(null, ChatClient.chosenRestaurantByCustomer.getId(), ChatClient.user.getId(), todayDate, null, null, null, "0", "0", "0", "0", null, null, null, null, null);
 
     }
     

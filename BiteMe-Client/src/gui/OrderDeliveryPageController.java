@@ -3,6 +3,8 @@ package gui;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import client.ChatClient;
 import common.ChosenItem;
@@ -29,6 +31,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 
 public class OrderDeliveryPageController implements Initializable {
+
 
     @FXML
     private Label orderDeliveryPageLabel;
@@ -104,6 +107,27 @@ public class OrderDeliveryPageController implements Initializable {
 
     public String deliveryMethodString;
     
+    public boolean isDeliveryDetailsAreInvinsible = true;
+    
+    public static double deliveryFee;
+    
+    private ObservableList<ChosenItem> cartItems;
+    
+    
+    
+    
+    
+    
+    // Define a pattern for validating phone numbers
+    private static final String PHONE_NUMBER_PATTERN = "\\d{10}";
+
+    // Method to validate phone numbers
+    public static boolean isValidPhoneNumber(String phoneNumber) {
+        Pattern pattern = Pattern.compile(PHONE_NUMBER_PATTERN);
+        Matcher matcher = pattern.matcher(phoneNumber);
+        return matcher.matches();
+    }
+    
     @FXML
     void BackButtonOnClickAction(ActionEvent event) throws Exception {
         // Closing current page
@@ -118,10 +142,23 @@ public class OrderDeliveryPageController implements Initializable {
 
     @FXML
     void NextButtonOnClickAction(ActionEvent event) throws Exception {
+    	
+    	OrderTypePageController.totalPrice += deliveryFee;
+    	
+    	System.out.println("Delivery fee: " + deliveryFee + " totalPrice: " + OrderTypePageController.totalPrice);
+    	
+    	if (ChatClient.cart.isEmpty()) {
+        	Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Input Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Cart is Empty, please go back to Menu Page and add an Item.");
+            alert.showAndWait();
+            return;
+		}   else 	
         // Validate required fields
-        if ((deliveryTypeComboBox.isDisabled() && deliveryTypeComboBox.getValue() == null) ||
-        	(numberOfParticipantsComboBox.isVisible() && numberOfParticipantsComboBox.getValue() == null) ||
-            (!deliveryAddressTextField.isDisabled() && deliveryAddressTextField.getText().isEmpty()) ||
+        if ((isDeliveryDetailsAreInvinsible && recievingMethodComboBox.getValue().equals(null)) ||
+        	(!isDeliveryDetailsAreInvinsible && (deliveryTypeComboBox.getValue() == null || deliveryAddressTextField.getText().isEmpty())) ||
+            (!isDeliveryDetailsAreInvinsible && deliveryTypeComboBox.getValue().equals("Shared") && numberOfParticipantsComboBox.getValue() == null) ||
              phoneNumberTextField.getText().isEmpty() ||
              orderNameTextField.getText().isEmpty()) {
             
@@ -131,11 +168,12 @@ public class OrderDeliveryPageController implements Initializable {
             alert.setContentText("Please fill in all required fields.");
             alert.showAndWait();
             return;
-        } else if (ChatClient.cart.isEmpty()) {
-        	Alert alert = new Alert(AlertType.ERROR);
+        }  
+    	if (!isValidPhoneNumber(phoneNumberTextField.getText())) {
+    		Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Input Error");
             alert.setHeaderText(null);
-            alert.setContentText("Cart is Empty, please go back to Menu Page and add an Item.");
+            alert.setContentText("Wrong Phone Number Format. \nPhone Number must be 10 digits number");
             alert.showAndWait();
             return;
 		}
@@ -167,9 +205,21 @@ public class OrderDeliveryPageController implements Initializable {
         }
 
         // Update total price
-        updateTotalPrice(null);
-
-        System.out.println("currentOrder: " + ChatClient.currentOrder);
+        //updateTotalPrice(null);
+        
+      
+//        System.out.println("Price: " + totalPriceValueLabel);
+//        System.out.println("Recipient Name: " + orderNameTextField.getText());
+//        System.out.println("Recipient Phone Number: " + phoneNumberTextField.getText());
+//        
+        
+        ChatClient.currentOrder.setDelivery_address(deliveryAddressTextField.getText());
+        ChatClient.currentOrder.setRecipient_name(orderNameTextField.getText());
+        ChatClient.currentOrder.setRecipient_phone_number(phoneNumberTextField.getText());
+        
+       
+        
+        
 
         // Can't move to next page if cart is empty
         if (ChatClient.cart.isEmpty()) {
@@ -195,10 +245,14 @@ public class OrderDeliveryPageController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
     	
-    	//hiding elements
+    	hideDeliveryFields(true);
+    	
+    	deliveryFee = 0.0;
+    	
+    	
+//    	//hiding elements
     	numberOfParticipantsLabel.setVisible(false);
         numberOfParticipantsComboBox.setVisible(false);
-        deliveryPriceLabel.setText("");
     	
     	
         // Initialize TableView columns
@@ -260,7 +314,7 @@ public class OrderDeliveryPageController implements Initializable {
         });
 
         // Load cart items into TableView
-        ObservableList<ChosenItem> cartItems = FXCollections.observableArrayList(ChatClient.cart);
+        cartItems = FXCollections.observableArrayList(ChatClient.cart);
         cartTableView.setItems(cartItems);
 
         // Update total price
@@ -291,27 +345,26 @@ public class OrderDeliveryPageController implements Initializable {
 
     private void handleRecievingMethodChange(String newMethod) {
         if ("Pick Up".equals(newMethod)) {
-            disableDeliveryFields(true);
+            hideDeliveryFields(true);
             deliveryPriceLabel.setText("");
+            
+            isDeliveryDetailsAreInvinsible = true;
+            
         } else if ("Delivery".equals(newMethod)) {
-            disableDeliveryFields(false);
+        	hideDeliveryFields(false);
+        	isDeliveryDetailsAreInvinsible = false;
         }
     }
 
-    private void disableDeliveryFields(boolean disable) {
-        deliveryAddressTextField.setDisable(disable);
-        numberOfParticipantsComboBox.setDisable(disable);
-        deliveryTypeComboBox.setDisable(disable);
+    private void hideDeliveryFields(boolean disable) {
+    	deliveryTypeLabel.setVisible(!disable);
+        deliveryTypeComboBox.setVisible(!disable);
         
-        if (disable) {
-            deliveryAddressTextField.setStyle("-fx-background-color: #d3d3d3;"); // Greyed out background
-            numberOfParticipantsComboBox.setStyle("-fx-background-color: #d3d3d3;"); // Greyed out background
-            deliveryTypeComboBox.setStyle("-fx-background-color: #d3d3d3;"); // Greyed out background
-        } else {
-            deliveryAddressTextField.setStyle("-fx-background-color: white;");
-            numberOfParticipantsComboBox.setStyle("-fx-background-color: white;");
-            deliveryTypeComboBox.setStyle("-fx-background-color: white;");
-        }
+        
+
+    	DeliveryAddressLabel.setVisible(!disable);
+    	deliveryAddressTextField.setVisible(!disable);
+    	      
     }
 
     private void handleDeliveryTypeChange(String newType) {
@@ -325,6 +378,8 @@ public class OrderDeliveryPageController implements Initializable {
         	
             numberOfParticipantsLabel.setVisible(true);
             numberOfParticipantsComboBox.setVisible(true);
+            
+            
         } else {
             numberOfParticipantsLabel.setVisible(false);
             numberOfParticipantsComboBox.setVisible(false);
@@ -333,6 +388,11 @@ public class OrderDeliveryPageController implements Initializable {
         
         if ("Regular".equals(newType)) {
 			deliveryPriceLabel.setText("+ 25 ₪");
+			
+			deliveryFee = 25;
+			//deliveryFee = 25;
+		} else if ("Shared".equals(newType)) {
+			deliveryPriceLabel.setText("");
 		} 
     }
 
@@ -342,47 +402,51 @@ public class OrderDeliveryPageController implements Initializable {
 				int numParticipants = Integer.parseInt(newValue);
 				if (numParticipants == 1) {
 					deliveryPriceLabel.setText("+ 25 ₪");
+					deliveryFee = 25;
+					
 				} else if (numParticipants == 2) {
 					deliveryPriceLabel.setText("+ 20 ₪");
+					deliveryFee = 20;
+					
 				} else if (numParticipants >= 3) {
 					deliveryPriceLabel.setText("+ 15 ₪");
+					deliveryFee = 15;
 				}
 			}
 		}
     }
 
-    private void updateTotalPrice(ChosenItem deletedItem) {
-        double totalPrice = 0.0;
-        try {
-            totalPrice = Double.parseDouble(ChatClient.currentOrder.getPrice());
-        } catch (NumberFormatException e) {
-            System.err.println("Invalid total price format: " + e.getMessage());
-        }
-
-        // If an item is deleted, subtract its price from the total
-        if (deletedItem != null) {
-            try {
-                double itemPrice = Double.parseDouble(deletedItem.getItem().getItem_price());
-                totalPrice -= itemPrice;
-            } catch (NumberFormatException e) {
-                System.err.println("Invalid item price format: " + e.getMessage());
+    private void updateTotalPrice(ChosenItem deletedItem) {   
+    	OrderTypePageController.totalPrice = 0.0;
+        for (ChosenItem item : cartItems) {
+            String itemPriceStr = item.getItemPrice();
+            if (itemPriceStr != null && !itemPriceStr.isEmpty()) {
+                try {
+                	OrderTypePageController.totalPrice += Double.parseDouble(itemPriceStr);
+                } catch (NumberFormatException e) {
+                    System.err.println("Invalid price format for item: " + itemPriceStr);
+                }
+            } else {
+                System.err.println("Item price is null or empty for item: " + item.getItemName());
             }
         }
 
-        // Update the total price based on the delivery type
-        if (deliveryPriceLabel.getText().contains("25 ₪")) {
-            totalPrice += 25;
-        } else if (deliveryPriceLabel.getText().contains("20 ₪")) {
-            totalPrice += 20;
-        } else if (deliveryPriceLabel.getText().contains("15 ₪")) {
-            totalPrice += 15;
-        }
-
+        System.out.println("OrderDeliveryPage: " + ChatClient.currentOrder.getOrder_type());
+        
+        if (ChatClient.currentOrder.getOrder_type().equals("Early")) {
+        	OrderTypePageController.totalPrice *= 0.9;
+		}
+        
+        System.out.println("OrderDeliveryPage: " + OrderTypePageController.totalPrice);
+        
+        
+        //
+        
+        System.out.println("OrderDeliveryPage ---> Total Price: " + OrderTypePageController.totalPrice + " delivery fee: " + deliveryFee);
+        
         // Update the total price label
-        totalPriceValueLabel.setText(String.format("%.2f ₪", totalPrice));
-
-        // Update the currentOrder with the new total price
-        ChatClient.currentOrder.setPrice(String.valueOf(totalPrice));
+        totalPriceValueLabel.setText(String.format("%.2f ₪", OrderTypePageController.totalPrice));
+        
     }
 
     

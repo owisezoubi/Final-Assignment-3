@@ -1,6 +1,7 @@
 package gui;
 
 import java.net.URL;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -65,11 +66,30 @@ public class OrderTypePageController implements Initializable {
 
     @FXML
     private TableColumn<ChosenItem, Void> deleteColumn;
+    
+    @FXML
+    private Label doubleDotsForArrivalTimeLabel;
+    
+    @FXML
+    private Label arrivalTimeLabel;
 
     private ObservableList<ChosenItem> cartItems;
+    
+    public static double totalPrice;
+    int currentHour, currentMinutes;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        arrivalTimeLabel.setVisible(false);
+        arrivalTimeInHoursComboBox.setVisible(false);
+        arrivalTimeInMinutesComboBox.setVisible(false);
+        doubleDotsForArrivalTimeLabel.setVisible(false);
+
+        // Getting current time
+        LocalTime now = LocalTime.now();
+        currentHour = now.getHour();
+        currentMinutes = now.getMinute();
+
         // Initialize TableView columns
         itemNameColumn.setCellValueFactory(new PropertyValueFactory<>("itemName"));
         itemPriceColumn.setCellValueFactory(new PropertyValueFactory<>("itemPrice"));
@@ -137,10 +157,26 @@ public class OrderTypePageController implements Initializable {
         // Update total price initially
         updateTotalPrice();
         
+        // Listeners for ComboBox changes
         ordersTypeComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
-        	updateTotalPrice();
-        	ChatClient.currentOrder.setOrder_type(newVal.toLowerCase());
-        	
+            if ("Early".equals(newVal)) {
+                arrivalTimeLabel.setVisible(true);
+                arrivalTimeInHoursComboBox.setVisible(true);
+                arrivalTimeInMinutesComboBox.setVisible(true);
+                doubleDotsForArrivalTimeLabel.setVisible(true);
+                populateHoursComboBox();
+            } else {
+                arrivalTimeLabel.setVisible(false);
+                arrivalTimeInHoursComboBox.setVisible(false);
+                arrivalTimeInMinutesComboBox.setVisible(false);
+                doubleDotsForArrivalTimeLabel.setVisible(false);
+            }
+            updateTotalPrice();
+            ChatClient.currentOrder.setOrder_type(newVal);
+        });
+
+        arrivalTimeInHoursComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
+            populateMinutesComboBox();
         });
 
         // Configure ComboBoxes for order type and arrival times
@@ -153,31 +189,44 @@ public class OrderTypePageController implements Initializable {
     }
 
     private void configureArrivalTimeComboBoxes() {
-        // Populate minutes combo box
-        for (int i = 0; i < 60; i++) {
-            arrivalTimeInMinutesComboBox.getItems().add(String.format("%02d", i));
-        }
         arrivalTimeInMinutesComboBox.getSelectionModel().selectFirst();
+    }
 
-        ordersTypeComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
-            arrivalTimeInHoursComboBox.getItems().clear();
-            int currentHour = java.time.LocalTime.now().getHour();
-            if ("Normal".equals(newVal)) {
-                for (int i = currentHour; i < 24; i++) {
-                    arrivalTimeInHoursComboBox.getItems().add(String.format("%02d", i));
+    private void populateHoursComboBox() {
+        arrivalTimeInHoursComboBox.getItems().clear();
+        for (int i = currentHour + 2; i < 24; i++) {
+            arrivalTimeInHoursComboBox.getItems().add(String.format("%02d", i));
+        }
+        arrivalTimeInHoursComboBox.getSelectionModel().selectFirst();
+        populateMinutesComboBox();
+    }
+
+    private void populateMinutesComboBox() {
+        arrivalTimeInMinutesComboBox.getItems().clear();
+        String selectedHourStr = arrivalTimeInHoursComboBox.getValue();
+        if (selectedHourStr != null) {
+            int selectedHour = Integer.parseInt(selectedHourStr);
+
+            if (selectedHour == currentHour + 2) {
+                // Populate minutes from currentMinutes to 59
+                for (int j = currentMinutes; j < 60; j++) {
+                    arrivalTimeInMinutesComboBox.getItems().add(String.format("%02d", j));
                 }
-            } else if ("Early".equals(newVal)) {
-                for (int i = currentHour + 2; i < 24; i++) {
-                    arrivalTimeInHoursComboBox.getItems().add(String.format("%02d", i));
+            } else {
+                // Populate minutes from 00 to 59
+                for (int j = 0; j < 60; j++) {
+                    arrivalTimeInMinutesComboBox.getItems().add(String.format("%02d", j));
                 }
             }
-            arrivalTimeInHoursComboBox.getSelectionModel().selectFirst();
-        });
+        }
+        // Set default selection for minutes ComboBox
+        if (arrivalTimeInMinutesComboBox.getItems().size() > 0) {
+            arrivalTimeInMinutesComboBox.getSelectionModel().selectFirst();
+        }
     }
 
     private void updateTotalPrice() {
-
-        double totalPrice = 0.0;
+        totalPrice = 0.0;
         for (ChosenItem item : cartItems) {
             String itemPriceStr = item.getItemPrice();
             if (itemPriceStr != null && !itemPriceStr.isEmpty()) {
@@ -191,22 +240,12 @@ public class OrderTypePageController implements Initializable {
             }
         }
         
-        
-        System.out.println("total price before discount: " + totalPrice);
-        
-     
+        // Apply discount if necessary
         if ("Early".equals(ordersTypeComboBox.getValue())) {
             totalPrice *= 0.9; // Apply 10% discount
-            System.out.println("entered");
         }
-        System.out.println("total price after discount: " + totalPrice);
-        
-        priceTextField.setText(String.format("%.2f ₪", totalPrice));
-        
-        ChatClient.currentOrder.setPrice(String.format("%.2f", totalPrice));
-        
-        System.out.println("total price in ChatClient.currentOrder: " + ChatClient.currentOrder);
 
+        priceTextField.setText(String.format("%.2f ₪", totalPrice));
     }
 
     @FXML
@@ -230,47 +269,43 @@ public class OrderTypePageController implements Initializable {
             alert.setContentText("The Cart is Empty.\nPlease get back to Menu Page and choose an Item.");
             alert.showAndWait();
         } else {
-            if (ordersTypeComboBox.getValue() == null || arrivalTimeInHoursComboBox.getValue() == null || arrivalTimeInMinutesComboBox.getValue() == null) {
+            if (ordersTypeComboBox.getValue() == null) {
                 Alert alert = new Alert(AlertType.ERROR);
                 alert.setTitle("Alert");
                 alert.setHeaderText(null);
-                alert.setContentText("Please fill all the data");
+                alert.setContentText("Please select an order type.");
                 alert.showAndWait();
-            } else {
-                String orderType = ordersTypeComboBox.getValue();
-                ChatClient.currentOrder.setOrder_type(orderType);
+                return;
+            }
 
-                String selectedHour = arrivalTimeInHoursComboBox.getValue();
-                String selectedMinute = arrivalTimeInMinutesComboBox.getValue();
+            // Set the desired time based on selections
+            String selectedHour = arrivalTimeInHoursComboBox.getValue();
+            String selectedMinute = arrivalTimeInMinutesComboBox.getValue();
+            if (selectedHour != null && selectedMinute != null) {
                 String desiredTime = selectedHour + ":" + selectedMinute;
                 ChatClient.currentOrder.setDesired_time(desiredTime);
-
-                
-                // Closing current page
-                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                stage.close();
-
-                // Opening new page
-                OrderDeliveryPageController ODP = new OrderDeliveryPageController();
-                Stage primaryStage = new Stage();
-                ODP.start(primaryStage);
             }
+
+            // Closing current page
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.close();
+
+            // Opening new page
+            OrderDeliveryPageController ODP = new OrderDeliveryPageController();
+            Stage primaryStage = new Stage();
+            ODP.start(primaryStage);
         }
-        
-        String desiredTimeString = arrivalTimeInHoursComboBox + ":" + arrivalTimeInMinutesComboBox;
-        
-        // load desired_time for currentOrder
-        ChatClient.currentOrder.setDesired_time(desiredTimeString);
     }
 
-    public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader();
-        Parent root = loader.load(getClass().getResource("/gui/OrderTypePage.fxml").openStream());
-        Scene scene = new Scene(root);
-        primaryStage.setTitle("OrderTypePage");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+	public void start(Stage primaryStage) throws Exception {
+		FXMLLoader loader = new FXMLLoader();
+		Parent root = loader.load(getClass().getResource("/gui/OrderTypePage.fxml").openStream());
+		Scene scene = new Scene(root);
+		primaryStage.setTitle("OrderTypePage");
+		primaryStage.setScene(scene);
+		primaryStage.show();
 
-        scene.getStylesheets().add(getClass().getResource("/gui/OrderTypePage.css").toExternalForm());
-    }
+		scene.getStylesheets().add(getClass().getResource("/gui/OrderTypePage.css").toExternalForm());
+	}
+
 }

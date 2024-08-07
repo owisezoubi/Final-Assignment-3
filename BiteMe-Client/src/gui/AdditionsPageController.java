@@ -14,6 +14,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -111,20 +113,41 @@ public class AdditionsPageController implements Initializable {
 
     @FXML
     void doneAdditionsOnClickAction(ActionEvent event) {
+        // Check if the category is "drink" and if a radio button is selected
+        if (category.equalsIgnoreCase("drink")) {
+            ToggleGroup toggleGroup = getToggleGroup();
+            if (toggleGroup.getSelectedToggle() == null) {
+                // Show alert if no radio button is selected
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Selection Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Please select the drink's size.");
+                alert.showAndWait();
+                return; // Exit the method without proceeding
+            }
+        }
+
         // Optionally, handle saving the selected additions or moving to the next step
         System.out.println("Selected additions: " + selectedAdditions);
 
         System.out.println("chosenItemInOrder: " + ChatClient.chosenItemInOrder);
-        
+
         System.out.println("selectedAdditions: " + selectedAdditions);
-        
-        
+
         ChosenItem chosenItem = new ChosenItem(ChatClient.chosenItemInOrder, selectedAdditions);
         ChatClient.cart.add(chosenItem);
-        
-        
+
         // Close the current window or proceed as needed
         Stage stage = (Stage) doneAdditionsButton.getScene().getWindow();
         stage.close();
+    }
+
+    private ToggleGroup getToggleGroup() {
+        for (Node node : additionsVBox.getChildren()) {
+            if (node instanceof RadioButton) {
+                return ((RadioButton) node).getToggleGroup();
+            }
+        }
+        return null; // Return null if no ToggleGroup is found
     }
 }

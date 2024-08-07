@@ -1,6 +1,9 @@
 package common;
 
-public class Order {
+import java.io.Serializable;
+
+public class Order implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private String order_id;
 	private String restaurant_id;
 	private String user_id;
@@ -14,13 +17,15 @@ public class Order {
 	private String is_late;
 	private String order_type;
 	private String order_recieving_method;
+	private String delivery_address;
 	private String recipient_name;
 	private String recipient_phone_number;
 
 	public Order(String order_id, String restaurant_id, String user_id, String date, String desired_time,
 			String arrival_time, String price, String restaurant_confirmed_receiving,
 			String customer_confirmed_receiving, String is_ready, String is_late, String order_type,
-			String order_recieving_method, String recipient_name, String recipient_phone_number) {
+			String order_recieving_method, String delivery_address, String recipient_name,
+			String recipient_phone_number) {
 		super();
 		this.order_id = order_id;
 		this.restaurant_id = restaurant_id;
@@ -35,6 +40,7 @@ public class Order {
 		this.is_late = is_late;
 		this.order_type = order_type;
 		this.order_recieving_method = order_recieving_method;
+		this.delivery_address = delivery_address;
 		this.recipient_name = recipient_name;
 		this.recipient_phone_number = recipient_phone_number;
 	}
@@ -143,6 +149,14 @@ public class Order {
 		this.order_recieving_method = order_recieving_method;
 	}
 
+	public String getDelivery_address() {
+		return delivery_address;
+	}
+
+	public void setDelivery_address(String delivery_address) {
+		this.delivery_address = delivery_address;
+	}
+
 	public String getRecipient_name() {
 		return recipient_name;
 	}
@@ -166,8 +180,8 @@ public class Order {
 				+ ", restaurant_confirmed_receiving=" + restaurant_confirmed_receiving
 				+ ", customer_confirmed_receiving=" + customer_confirmed_receiving + ", is_ready=" + is_ready
 				+ ", is_late=" + is_late + ", order_type=" + order_type + ", order_recieving_method="
-				+ order_recieving_method + ", recipient_name=" + recipient_name + ", recipient_phone_number="
-				+ recipient_phone_number + "]";
+				+ order_recieving_method + ", delivery_address=" + delivery_address + ", recipient_name="
+				+ recipient_name + ", recipient_phone_number=" + recipient_phone_number + "]";
 	}
 
 }
