@@ -1,9 +1,11 @@
 package common;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class ChosenItem {
-    private Item item;
+public class ChosenItem implements Serializable {
+    private static final long serialVersionUID = 1L;
+	private Item item;
     private ArrayList<String> item_additions;
 
     public ChosenItem(Item item, ArrayList<String> item_additions) {

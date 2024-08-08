@@ -11,7 +11,7 @@
       <AnchorPane prefHeight="910.0" prefWidth="750.0">
          <children>
             <Button fx:id="backButton" layoutX="44.0" layoutY="26.0" mnemonicParsing="false" onAction="#BackButtonOnClickAction" prefHeight="35.0" prefWidth="59.0" text="Back" />
-            <Button fx:id="confirmOrderButton" layoutX="302.0" layoutY="802.0" mnemonicParsing="false" onAction="#ConfirmOrderOnClickAction" prefHeight="57.0" prefWidth="163.0" text="Confirm Order" />
+            <Button fx:id="confirmOrderButton" layoutX="302.0" layoutY="826.0" mnemonicParsing="false" onAction="#ConfirmOrderOnClickAction" prefHeight="57.0" prefWidth="163.0" text="Confirm Order" />
             <TableView fx:id="cartTableView" layoutX="58.0" layoutY="86.0" prefHeight="400.0" prefWidth="650.0">
               <columns>
                 <TableColumn fx:id="itemNameColumn" prefWidth="178.0" text="Item Name" />
@@ -35,6 +35,7 @@
             <Label fx:id="recipientPhoneNumberValueLabel" layoutX="580.0" layoutY="554.0" prefHeight="18.0" prefWidth="155.0" text="recipientPhoneNumberValue" />
             <Label fx:id="orderAddressLabel" layoutX="83.0" layoutY="631.0" text="Order's Address:" />
             <Label fx:id="orderAddressValueLabel" layoutX="189.0" layoutY="631.0" text="orderAdressValue" />
+            <Label fx:id="refundStatusMessageLabel" layoutX="324.0" layoutY="773.0" prefHeight="18.0" prefWidth="204.0" text="refundStatusMessage" />
          </children>
       </AnchorPane>
    </children>

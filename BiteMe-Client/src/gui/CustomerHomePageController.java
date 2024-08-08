@@ -5,8 +5,11 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import client.ChatClient;
+import client.ClientController;
 import client.ClientUI;
+import common.Customer;
 import common.Restaurant;
+import common.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -83,10 +86,16 @@ public class CustomerHomePageController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
 		
+		// sending message to server for getting customers info to get the is_eligible_for_refund value
+		ArrayList<String> checkCustomerRefundStatus = new ArrayList<String>();
+		checkCustomerRefundStatus.add("Get Customer Refund Status");
+		checkCustomerRefundStatus.add(ChatClient.user.getId());
 		
+		ClientUI.chat.accept(checkCustomerRefundStatus);
 		
+		ChatClient.customer = (Customer) ChatClient.inputList;
 		
-		
+		System.out.println("Customer Info: " + ChatClient.customer);
 		
 		greetingsCustomerHomePageLabel.setText("Welcome Back " + ChatClient.user.getUser_name());
 		

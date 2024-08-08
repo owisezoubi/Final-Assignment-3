@@ -130,6 +130,10 @@ public class OrderDeliveryPageController implements Initializable {
     
     @FXML
     void BackButtonOnClickAction(ActionEvent event) throws Exception {
+    	
+    	// resetting desired_time to null after going back to OrderTypePage
+    	OrderTypePageController.desired_time = null;
+    	
         // Closing current page
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
@@ -327,7 +331,12 @@ public class OrderDeliveryPageController implements Initializable {
         });
 
         // Configure Delivery Type ComboBox
-        deliveryTypeComboBox.getItems().addAll("Regular", "Shared", "Robot");
+        if (ChatClient.customer.getCustomer_type().equals("business")) {
+        	deliveryTypeComboBox.getItems().addAll("Regular", "Shared", "Robot");
+		} else {
+			deliveryTypeComboBox.getItems().addAll("Regular", "Robot");
+		}
+        
         deliveryTypeComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
             handleDeliveryTypeChange(newVal);
         });

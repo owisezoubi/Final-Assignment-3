@@ -75,6 +75,7 @@ public class OrderTypePageController implements Initializable {
 
     private ObservableList<ChosenItem> cartItems;
     
+    public static String desired_time;
     public static double totalPrice;
     int currentHour, currentMinutes;
 
@@ -283,8 +284,12 @@ public class OrderTypePageController implements Initializable {
             String selectedMinute = arrivalTimeInMinutesComboBox.getValue();
             if (selectedHour != null && selectedMinute != null) {
                 String desiredTime = selectedHour + ":" + selectedMinute;
-                ChatClient.currentOrder.setDesired_time(desiredTime);
+                desired_time = desiredTime;
+                
+                System.out.println("desired_time: " + desired_time);
             }
+            
+            System.out.println("desired_time: " + desired_time);
 
             // Closing current page
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

@@ -9,8 +9,10 @@ import java.util.ArrayList;
 
 import javax.jws.Oneway;
 
+import common.Customer;
 import common.IncomeOrdersDetails;
 import common.Item;
+import common.Order;
 import common.OrdersReport;
 import common.PerformanceReport;
 import common.QuarterlyOrdersReport;
@@ -388,7 +390,143 @@ public class DataBaseControl {
 	}
 
 	
+	// getting customer info 
+	public static Customer getCustomerInfo(String user_id) throws Exception {
+	    ensureInternalConnection(); // Ensure connection is established
+
+		
+	    Customer customer = null;
+	    String sql = "SELECT id, user_name, password, is_logged_in, user_type, home_branch, first_name, last_name, " +
+	                 "phone_number, email, credit_card_number, credit_card_cvv, credit_card_month, credit_card_year, " +
+	                 "is_eligible_for_refund, customer_type FROM customers WHERE id = ?";
+
+	    try (PreparedStatement pstmt = internalConnection.prepareStatement(sql)) {
+	        pstmt.setString(1, user_id);
+	        try (ResultSet rs = pstmt.executeQuery()) {
+	            if (rs.next()) {
+	                // Create a Customer object with the retrieved data
+	                customer = new Customer(
+	                    rs.getString("id"),
+	                    rs.getString("user_name"),
+	                    rs.getString("password"),
+	                    rs.getString("is_logged_in"),
+	                    rs.getString("user_type"),
+	                    rs.getString("home_branch"),
+	                    rs.getString("first_name"),
+	                    rs.getString("last_name"),
+	                    rs.getString("phone_number"),
+	                    rs.getString("email"),
+	                    rs.getString("credit_card_number"),
+	                    rs.getString("credit_card_cvv"),
+	                    rs.getString("credit_card_month"),
+	                    rs.getString("credit_card_year"),
+	                    rs.getString("is_eligible_for_refund"),
+	                    rs.getString("customer_type")
+	                );
+	            } else {
+	                System.out.println("Customer not found with ID: " + user_id);
+	            }
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("Error retrieving customer information: " + e.getMessage());
+	    }
+
+	    return customer;
+	}
+
+	// Method to generate a new order_id
+	public static String generateNewOrderId() throws Exception {
+		ensureInternalConnection(); // Ensure connection is established
+
+		String newOrderId = null;
+		String sql = "SELECT MAX(order_id) AS max_order_id FROM orders";
+
+		try (PreparedStatement pstmt = internalConnection.prepareStatement(sql); ResultSet rs = pstmt.executeQuery()) {
+			if (rs.next()) {
+				String maxOrderId = rs.getString("max_order_id");
+				if (maxOrderId != null) {
+					// Extract the numeric part of the order_id
+					int maxIdNumber = Integer.parseInt(maxOrderId.substring(1));
+					// Increment the number and format it
+					int newIdNumber = maxIdNumber + 1;
+					newOrderId = String.format("O%03d", newIdNumber);
+				} else {
+					// If no orders exist, start with O001
+					newOrderId = "O001";
+				}
+			}
+		} catch (SQLException e) {
+			System.out.println("Error generating new order_id: " + e.getMessage());
+		}
+
+		return newOrderId;
+	}
 	
+	public static ArrayList<String> saveOrder(ArrayList<String> current_order) throws Exception {
+		ensureInternalConnection();
+		
+		ArrayList<String> savingOrderStatuStrings = new ArrayList<String>();
+		
+        String sql = "INSERT INTO orders (order_id, restaurant_id, user_id, date, desired_time, arrival_time, " +
+                     "price, restaurant_confirmed_receiving, customer_confirmed_receiving, is_ready, is_late, " +
+                     "order_type, order_receiving_method, delivery_address, recipient_name, recipient_phone_number) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement pstmt = internalConnection.prepareStatement(sql)) {
+
+            pstmt.setString(1, current_order.get(1));
+            pstmt.setString(2, current_order.get(2));
+            pstmt.setString(3, current_order.get(3));
+            pstmt.setString(4, current_order.get(4));
+            pstmt.setString(5, current_order.get(5));
+            pstmt.setString(6, current_order.get(6));
+            pstmt.setString(7, current_order.get(7));
+            pstmt.setString(8, current_order.get(8));
+            pstmt.setString(9, current_order.get(9));
+            pstmt.setString(10, current_order.get(10));
+            pstmt.setString(11, current_order.get(11));
+            pstmt.setString(12, current_order.get(12));
+            pstmt.setString(13, current_order.get(13));
+            pstmt.setString(14, current_order.get(14));
+            pstmt.setString(15, current_order.get(15));
+            pstmt.setString(16, current_order.get(16));
+
+            pstmt.executeUpdate();
+            System.out.println("DataBaseControl: Order saved successfully.");
+            savingOrderStatuStrings.add("Order Saved");
+            
+        } catch (SQLException e) {
+            System.out.println("Error saving order: " + e.getMessage());
+            savingOrderStatuStrings.add("Order Not Saved");
+
+            throw e; // Re-throw the exception to handle it at a higher level if needed
+        }
+        return savingOrderStatuStrings;
+    }
+	
+	// save order's data to order_category
+	public static void saveCategoryQuantity(ArrayList<String> data) throws Exception {
+        ensureInternalConnection();
+
+        String orderId = data.get(1);
+        String category = data.get(2);
+        String quantity = data.get(3);
+
+        String query = "INSERT INTO order_category (order_id, category, quantity) VALUES (?, ?, ?)";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, orderId);
+            preparedStatement.setString(2, category);
+            preparedStatement.setString(3, quantity);
+
+            preparedStatement.executeUpdate();
+            
+            System.out.println("Category's Quantity saved in \"order_category\" successfully");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Category's Quantity: failed to save in sql");
+        }
+    }
 	
 	// get data from table orders, for the OrdersReport
 	public static ArrayList<OrdersReport> getOrdersReport(String restaurantName, String month, String year) throws Exception {

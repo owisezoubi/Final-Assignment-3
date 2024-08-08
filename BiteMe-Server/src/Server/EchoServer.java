@@ -8,8 +8,10 @@ import java.io.*;
 import java.net.InetAddress;
 import java.util.ArrayList;
 
+import common.Customer;
 import common.IncomeOrdersDetails;
 import common.Item;
+import common.Order;
 import common.OrdersReport;
 import common.PerformanceReport;
 import common.QuarterlyOrdersReport;
@@ -223,6 +225,66 @@ public class EchoServer extends AbstractServer {
 			break;
 
 		// getting restaurants menu after choosing in Order process
+		case "Get New Order Id":
+
+			try {
+				System.out.println("EchoServer: ---> before getting new ID: " + inputList.toString());
+				ArrayList<String> orderNewId = new ArrayList<String>(); 
+				orderNewId.add(DataBaseControl.generateNewOrderId());
+
+				System.out.println("EchoServer: ---> after getting new ID: " + orderNewId);
+
+				this.sendToAllClients(orderNewId);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			break;
+
+		// getting restaurants menu after choosing in Order process
+		case "Save Order":
+
+			try {
+				
+				ArrayList<String> current_order = (ArrayList<String>) msg;
+				
+				System.out.println("before Saving Order: " + current_order.get(0));
+				
+				ArrayList<String> savingOrderStatuStrings = DataBaseControl.saveOrder(current_order);
+
+				System.out.println("after Saving Order");
+
+				this.sendToAllClients(savingOrderStatuStrings);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			break;
+
+		// getting restaurants menu after choosing in Order process
+		case "Save Category Quantity":
+
+			try {
+
+				ArrayList<String> current_order = (ArrayList<String>) msg;
+
+				System.out.println("before Saving Category Quantity: " + current_order.get(0));
+
+				DataBaseControl.saveCategoryQuantity(current_order);
+
+				System.out.println("after Saving Category Quantity");
+
+				this.sendToAllClients(null);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			break;
+
+		// getting restaurants menu after choosing in Order process
 		case "Get Item's Additions Info":
 
 			try {
@@ -239,6 +301,25 @@ public class EchoServer extends AbstractServer {
 
 			break;
 
+		// getting customers info
+		case "Get Customer Refund Status":
+			try {
+				System.out.println("EchoServer:  before Get Customer's Info: " + inputList.toString());
+				Customer customer = DataBaseControl.getCustomerInfo(inputList.get(1));
+
+				System.out.println("EchoServer:  after Get Customer's Info: " + customer);
+
+				
+				this.sendToAllClients(customer);
+				
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+			
+			break;
+			
+			
 		// getting msg from client - retrieving data for OrderReport
 		case "Get OrdersReport Info":
 			try {

@@ -10,7 +10,7 @@ public class ServerUI extends Application {
 
     final public static int DEFAULT_PORT = 5555;
     
-    public static EchoServer sv = new EchoServer(DEFAULT_PORT);
+    public static EchoServer sv;
     
 
     public static ServerPortFrameController aFrame;

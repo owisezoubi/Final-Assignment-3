@@ -8,6 +8,7 @@ import ocsf.client.*;
 import client.*;
 import common.ChatIF;
 import common.ChosenItem;
+import common.Customer;
 import common.Item;
 import common.Order;
 import common.Restaurant;
@@ -37,6 +38,7 @@ public class ChatClient extends AbstractClient
 	public static RestaurantReport chosenRestaurantReport;
 	
 	// Static Objects for Customer's Interface
+	public static Customer customer;
 	public static Restaurant chosenRestaurantByCustomer;
 	public static ArrayList<Item> choosenRestaurantMenu;
 	public static Item chosenItemInOrder;
