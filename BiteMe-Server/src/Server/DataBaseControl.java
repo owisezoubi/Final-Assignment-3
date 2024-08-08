@@ -16,6 +16,7 @@ import common.Order;
 import common.OrdersReport;
 import common.PerformanceReport;
 import common.QuarterlyOrdersReport;
+import common.QuarterlyRevenueReport;
 import common.Restaurant;
 import common.User;
 import gui.ServerPortFrameController;
@@ -577,7 +578,7 @@ public class DataBaseControl {
         ArrayList<IncomeOrdersDetails> orderStatsList = new ArrayList<>();
         String sql = "SELECT DATE(date) as order_date, " +
                      "COUNT(order_id) as number_of_orders, " +
-                     "SUM(total_price) as total_price " +
+                     "SUM(price) as total_price " +
                      "FROM orders o " +
                      "JOIN restaurants r ON o.restaurant_id = r.id " +
                      "WHERE r.restaurant_name = ? " +
@@ -649,34 +650,40 @@ public class DataBaseControl {
     
     
 	
-    // Method to get quarterly orders report for specified months and year
-    public static ArrayList<QuarterlyOrdersReport> getQuarterlyOrdersReport(String branchId, String month1, String month2, String month3, String year) throws Exception {
+ // Method to get quarterly orders report for specified months and year
+    public static ArrayList<QuarterlyOrdersReport> getQuarterlyOrdersReport(String branchId, String year, String month1, String month2, String month3) throws Exception {
         ensureInternalConnection();
+        System.out.println("Branch ID: " + branchId);
+        System.out.println("Year: " + year);
+        System.out.println("Months: " + month1 + ", " + month2 + ", " + month3);
 
         ArrayList<QuarterlyOrdersReport> quarterlyOrdersReportList = new ArrayList<>();
-        String sql = "SELECT DATE(o.date) as order_date, r.restaurant_name, COUNT(o.order_id) as number_of_orders " +
-                     "FROM orders o " +
-                     "JOIN restaurants r ON o.restaurant_id = r.id " +
-                     "WHERE r.home_branch = ? " +
-                     "AND (MONTH(STR_TO_DATE(o.date, '%Y-%m-%d')) = ? " +
-                     "OR MONTH(STR_TO_DATE(o.date, '%Y-%m-%d')) = ? " +
-                     "OR MONTH(STR_TO_DATE(o.date, '%Y-%m-%d')) = ?) " +
-                     "AND YEAR(STR_TO_DATE(o.date, '%Y-%m-%d')) = ? " +
-                     "GROUP BY DATE(o.date), r.restaurant_name";
+        String sql = "SELECT r.restaurant_name, " +
+                     "SUM(CASE WHEN MONTH(o.date) = ? THEN 1 ELSE 0 END) AS ordersMonth1, " +
+                     "SUM(CASE WHEN MONTH(o.date) = ? THEN 1 ELSE 0 END) AS ordersMonth2, " +
+                     "SUM(CASE WHEN MONTH(o.date) = ? THEN 1 ELSE 0 END) AS ordersMonth3 " +
+                     "FROM orders o JOIN restaurants r ON o.restaurant_id = r.id " +
+                     "WHERE r.home_branch = ? AND YEAR(o.date) = ? AND MONTH(o.date) IN (?, ?, ?) " +
+                     "GROUP BY r.restaurant_name";
 
         try (PreparedStatement pstmt = internalConnection.prepareStatement(sql)) {
-            pstmt.setString(1, branchId);
-            pstmt.setString(2, month1);
-            pstmt.setString(3, month2);
-            pstmt.setString(4, month3);
-            pstmt.setString(5, year);
+            pstmt.setInt(1, Integer.parseInt(month1));
+            pstmt.setInt(2, Integer.parseInt(month2));
+            pstmt.setInt(3, Integer.parseInt(month3));
+            pstmt.setString(4, branchId);
+            pstmt.setInt(5, Integer.parseInt(year));
+            pstmt.setInt(6, Integer.parseInt(month1));
+            pstmt.setInt(7, Integer.parseInt(month2));
+            pstmt.setInt(8, Integer.parseInt(month3));
+
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
-                    String orderDate = rs.getString("order_date");
                     String restaurantName = rs.getString("restaurant_name");
-                    int numberOfOrders = rs.getInt("number_of_orders");
-                    QuarterlyOrdersReport quarterlyOrdersReport = new QuarterlyOrdersReport(orderDate, restaurantName, numberOfOrders);
-                    quarterlyOrdersReportList.add(quarterlyOrdersReport);
+                    int ordersMonth1 = rs.getInt("ordersMonth1");
+                    int ordersMonth2 = rs.getInt("ordersMonth2");
+                    int ordersMonth3 = rs.getInt("ordersMonth3");
+                    QuarterlyOrdersReport report = new QuarterlyOrdersReport(restaurantName, ordersMonth1, ordersMonth2, ordersMonth3);
+                    quarterlyOrdersReportList.add(report);
                 }
             }
         } catch (SQLException e) {
@@ -686,8 +693,48 @@ public class DataBaseControl {
         return quarterlyOrdersReportList;
     }
 
-    
+    // function to get QuarterlyRevenueReport data orders
+    public static ArrayList<QuarterlyRevenueReport> getQuarterlyRevenueReport(String branchId, String year, String month1, String month2, String month3) throws Exception {
+        ensureInternalConnection();
+        System.out.println("Branch ID: " + branchId);
+        System.out.println("Year: " + year);
+        System.out.println("Months: " + month1 + ", " + month2 + ", " + month3);
 
+        ArrayList<QuarterlyRevenueReport> quarterlyRevenueReportList = new ArrayList<>();
+        String sql = "SELECT r.restaurant_name, " +
+                     "SUM(CASE WHEN MONTH(o.date) = ? THEN o.price ELSE 0 END) AS revenueMonth1, " +
+                     "SUM(CASE WHEN MONTH(o.date) = ? THEN o.price ELSE 0 END) AS revenueMonth2, " +
+                     "SUM(CASE WHEN MONTH(o.date) = ? THEN o.price ELSE 0 END) AS revenueMonth3 " +
+                     "FROM orders o JOIN restaurants r ON o.restaurant_id = r.id " +
+                     "WHERE r.home_branch = ? AND YEAR(o.date) = ? AND MONTH(o.date) IN (?, ?, ?) " +
+                     "GROUP BY r.restaurant_name";
+
+        try (PreparedStatement pstmt = internalConnection.prepareStatement(sql)) {
+            pstmt.setInt(1, Integer.parseInt(month1));
+            pstmt.setInt(2, Integer.parseInt(month2));
+            pstmt.setInt(3, Integer.parseInt(month3));
+            pstmt.setString(4, branchId);
+            pstmt.setInt(5, Integer.parseInt(year));
+            pstmt.setInt(6, Integer.parseInt(month1));
+            pstmt.setInt(7, Integer.parseInt(month2));
+            pstmt.setInt(8, Integer.parseInt(month3));
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    String restaurantName = rs.getString("restaurant_name");
+                    double revenueMonth1 = rs.getDouble("revenueMonth1");
+                    double revenueMonth2 = rs.getDouble("revenueMonth2");
+                    double revenueMonth3 = rs.getDouble("revenueMonth3");
+                    QuarterlyRevenueReport report = new QuarterlyRevenueReport(restaurantName, revenueMonth1, revenueMonth2, revenueMonth3);
+                    quarterlyRevenueReportList.add(report);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error retrieving quarterly revenue report: " + e.getMessage());
+        }
+
+        return quarterlyRevenueReportList;
+    }
     
 	
 }

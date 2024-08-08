@@ -15,6 +15,7 @@ import common.Order;
 import common.OrdersReport;
 import common.PerformanceReport;
 import common.QuarterlyOrdersReport;
+import common.QuarterlyRevenueReport;
 import common.Restaurant;
 import common.User;
 import ocsf.server.*;
@@ -319,16 +320,15 @@ public class EchoServer extends AbstractServer {
 			
 			break;
 			
-			
 		// getting msg from client - retrieving data for OrderReport
 		case "Get OrdersReport Info":
 			try {
 				System.out.println("Get OrderReport Info: " + inputList.toString());
-				ArrayList<OrdersReport> ordersReportInfo = null;
-				ordersReportInfo = DataBaseControl.getOrdersReport(inputList.get(1), inputList.get(2), inputList.get(3));
-				System.out.println("EchoServer: " + ordersReportInfo.toString());
+				ArrayList<OrdersReport> OrdersInfo = null;
+				OrdersInfo = DataBaseControl.getOrdersReport(inputList.get(1), inputList.get(2), inputList.get(3));
+				System.out.println("EchoServer: " + OrdersInfo.toString());
 
-				this.sendToAllClients(ordersReportInfo);
+				this.sendToAllClients(OrdersInfo);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -339,12 +339,12 @@ public class EchoServer extends AbstractServer {
 		case "Get IncomeReport Info":
 			try {
 				System.out.println("Get IncomeReport Info: " + inputList.toString());
-				ArrayList<IncomeOrdersDetails> incomeReportInfo = null;
-				incomeReportInfo = DataBaseControl.getOrderStatsForMonthYear(inputList.get(1), inputList.get(2),
+				ArrayList<IncomeOrdersDetails> OrdersInfo = null;
+				OrdersInfo = DataBaseControl.getOrderStatsForMonthYear(inputList.get(1), inputList.get(2),
 						inputList.get(3));
-				System.out.println("EchoServer: " + incomeReportInfo.toString());
+				System.out.println("EchoServer: " + OrdersInfo.toString());
 
-				this.sendToAllClients(incomeReportInfo);
+				this.sendToAllClients(OrdersInfo);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -355,12 +355,12 @@ public class EchoServer extends AbstractServer {
 		case "Get PerformanceReport Info":
 			try {
 				System.out.println("Get PerformanceReport Info: " + inputList.toString());
-				ArrayList<PerformanceReport> performanceReportInfo = null;
-				performanceReportInfo = DataBaseControl.getLatePerformanceReport(inputList.get(1), inputList.get(2),
+				ArrayList<PerformanceReport> OrdersInfo = null;
+				OrdersInfo = DataBaseControl.getLatePerformanceReport(inputList.get(1), inputList.get(2),
 						inputList.get(3));
-				System.out.println("EchoServer: " + performanceReportInfo.toString());
+				System.out.println("EchoServer: " + OrdersInfo.toString());
 
-				this.sendToAllClients(performanceReportInfo);
+				this.sendToAllClients(OrdersInfo);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -368,19 +368,29 @@ public class EchoServer extends AbstractServer {
 
 			break;
 
-		case "Get QuarterlyReport Info":
-			System.out.println("EchoServer: QuarterlyReportInfo Case");
-			
+		case "Get QuarterlyOrdersReport Info":
 			try {
-				System.out.println("Get QuarterlyReport Info: " + inputList.toString());
-				ArrayList<QuarterlyOrdersReport> quarterlyReportInfo = null;
-				quarterlyReportInfo = DataBaseControl.getQuarterlyOrdersReport(inputList.get(1), inputList.get(2),
+				System.out.println("Get QuarterlyOrdersReport Info" + inputList.toString());
+				ArrayList<QuarterlyOrdersReport> ordersInfo = null;
+				ordersInfo = DataBaseControl.getQuarterlyOrdersReport(inputList.get(1), inputList.get(2),
 						inputList.get(3), inputList.get(4), inputList.get(5));
-				System.out.println("EchoServer: " + quarterlyReportInfo.toString());
-				
-				this.sendToAllClients(quarterlyReportInfo);
-				
-				System.out.println("msg got sent");
+				System.out.println("EchoServer: " + ordersInfo.toString());
+				this.sendToAllClients(ordersInfo);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			break;
+
+		case "Get QuarterlyRevenueReport Info":
+			try {
+				System.out.println("Get QuarterlyRevenueReport Info " + inputList.toString());
+				ArrayList<QuarterlyRevenueReport> ordersInfo = null;
+				ordersInfo = DataBaseControl.getQuarterlyRevenueReport(inputList.get(1), inputList.get(2),
+						inputList.get(3), inputList.get(4), inputList.get(5));
+				System.out.println("EchoServer: " + ordersInfo.toString());
+				this.sendToAllClients(ordersInfo);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

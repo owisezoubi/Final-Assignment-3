@@ -7,13 +7,14 @@
 
 <AnchorPane prefHeight="636.0" prefWidth="875.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.TypesOfReportsPageController">
    <children>
-      <Button fx:id="showReportButton" layoutX="353.0" layoutY="445.0" mnemonicParsing="false" onAction="#showReportButtonOnClickAction" prefHeight="31.0" prefWidth="162.0" text="Show Report" />
-      <Label fx:id="reportTypesLabel" layoutX="378.0" layoutY="14.0" prefHeight="48.0" prefWidth="113.0" text="Report Types" />
+      <Button fx:id="showReportButton" layoutX="328.0" layoutY="506.0" mnemonicParsing="false" onAction="#showReportButtonOnClickAction" prefHeight="31.0" prefWidth="162.0" text="Show Report" />
+      <Label fx:id="reportTypesLabel" layoutX="344.0" layoutY="14.0" prefHeight="48.0" prefWidth="113.0" text="Report Types" />
       <Button fx:id="backToBranchManagerHomePageButton" layoutX="135.0" layoutY="523.0" mnemonicParsing="false" onAction="#backToBranchManagerHomePageButtonOnClickAction" text="Back" />
-      <ComboBox fx:id="restaurantNameCombobox" layoutX="343.0" layoutY="152.0" prefHeight="39.0" prefWidth="202.0" promptText="Restaurant Name " />
-      <Label fx:id="messageTypesOfReportsPageLabel" layoutX="160.0" layoutY="351.0" prefHeight="31.0" prefWidth="567.0" style="-fx-background-color: lightBlue;" />
-      <ComboBox fx:id="reportTypeComboBox" layoutX="343.0" layoutY="81.0" prefHeight="39.0" prefWidth="202.0" promptText="Report Type" />
-      <ComboBox fx:id="monthComboBox" layoutX="343.0" layoutY="279.0" prefHeight="39.0" prefWidth="202.0" promptText="Month" />
-      <ComboBox fx:id="yearComboBox" layoutX="343.0" layoutY="217.0" prefHeight="39.0" prefWidth="202.0" promptText="Year" />
+      <ComboBox fx:id="restaurantNameCombobox" layoutX="318.0" layoutY="213.0" prefHeight="39.0" prefWidth="202.0" promptText="Restaurant Name " />
+      <Label fx:id="messageTypesOfReportsPageLabel" layoutX="135.0" layoutY="412.0" prefHeight="31.0" prefWidth="567.0" style="-fx-background-color: lightBlue;" />
+      <ComboBox fx:id="reportTypeComboBox" layoutX="318.0" layoutY="152.0" prefHeight="39.0" prefWidth="202.0" promptText="Report Type" />
+      <ComboBox fx:id="monthComboBox" layoutX="318.0" layoutY="340.0" prefHeight="39.0" prefWidth="202.0" promptText="Month" />
+      <ComboBox fx:id="yearComboBox" layoutX="318.0" layoutY="278.0" prefHeight="39.0" prefWidth="202.0" promptText="Year" />
+      <ComboBox fx:id="branchComboBox" layoutX="318.0" layoutY="91.0" prefHeight="39.0" prefWidth="202.0" promptText="Branch" />
    </children>
 </AnchorPane>

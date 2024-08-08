@@ -43,6 +43,9 @@ public class TypesOfReportsPageController implements Initializable {
 
     @FXML
     private ComboBox<String> yearComboBox;
+    
+    @FXML
+    private ComboBox<String> branchComboBox;
 
     private Stage stage;
 
@@ -126,16 +129,69 @@ public class TypesOfReportsPageController implements Initializable {
     	}
     }
 
+//    @Override
+//    public void initialize(URL url, ResourceBundle rb) {
+//        // Ensure ComboBox is initialized before adding items
+//    	String branch;
+//    	if(ChatClient.user.getUser_type().equals("branch_manager"))
+//    		branch=ChatClient.user.getHome_branch();
+//    	else {
+//    		branch=ChatClient.branch;
+//
+//    	}
+//        if (yearComboBox != null) {
+//            yearComboBox.getItems().addAll("2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024");
+//        }
+//
+//        if (reportTypeComboBox != null) {
+//            reportTypeComboBox.getItems().addAll("Orders Report", "Income Report", "Performance Report");
+//        }
+//
+//        if (monthComboBox != null) {
+//            monthComboBox.getItems().addAll("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
+//        }
+//
+//        // Populate restaurantNameCombobox with restaurant names
+//        if (restaurantNameCombobox != null) {
+//        	
+//            for (Restaurant restaurant : ChatClient.restaurantsInfo) {
+//            	String branchName=ChatClient.user.getUser_type().equals("branch_manager")? ChatClient.user.getHome_branch() :ChatClient.branch;           	
+//            	if(branchName.equals(restaurant.getHome_branch())) {
+//                restaurantNameCombobox.getItems().add(restaurant.getRestaurant_name());
+//            	}
+//            	
+//            }
+//        }
+//    }
+    
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // Ensure ComboBox is initialized before adding items
-    	String branch;
-    	if(ChatClient.user.getUser_type().equals("branch_manager"))
-    		branch=ChatClient.user.getHome_branch();
-    	else {
-    		branch=ChatClient.branch;
+        // Initially hide the restaurant combo box until a branch is selected
+        restaurantNameCombobox.setVisible(false);
 
-    	}
+        // Setup branch combo box
+        if (ChatClient.user.getUser_type().equals("branch_manager")) {
+        	String branch;
+        	if(ChatClient.user.getHome_branch().equals("1"))
+        		branch="North";
+        	else if (ChatClient.user.getHome_branch().equals("2"))
+        		branch="South";
+        	else 
+				branch="Central";
+            branchComboBox.getItems().add(branch);
+        } 
+        else {
+            branchComboBox.getItems().addAll("North", "South", "Central");
+        }
+
+        // Set up listeners to update restaurant names based on selected branch
+        branchComboBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            System.out.println("Selected Branch: " + newVal);  // Debugging statement
+            updateRestaurantCombobox(newVal);
+        });
+
+        // Populate other comboboxes
         if (yearComboBox != null) {
             yearComboBox.getItems().addAll("2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024");
         }
@@ -147,20 +203,37 @@ public class TypesOfReportsPageController implements Initializable {
         if (monthComboBox != null) {
             monthComboBox.getItems().addAll("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
         }
+    }
 
-        // Populate restaurantNameCombobox with restaurant names
-        if (restaurantNameCombobox != null) {
-        	
+    private void updateRestaurantCombobox(String selectedBranch) {
+        restaurantNameCombobox.getItems().clear(); // Clear existing items
+
+        if (selectedBranch != null) {
+            restaurantNameCombobox.setVisible(true); // Show the combobox if a branch is selected
+            String branch;
+            if (selectedBranch.equals("North")) {
+    			branch="1";
+    		}
+    		else if (selectedBranch.equals("South")) {
+    			branch="2";
+    		}
+    		else {
+    			branch="3";
+    		}
+            // Filter and add restaurants from the selected branch
             for (Restaurant restaurant : ChatClient.restaurantsInfo) {
-            	String branchName=ChatClient.user.getUser_type().equals("branch_manager")? ChatClient.user.getHome_branch() :ChatClient.branch;           	
-            	if(branchName.equals(restaurant.getHome_branch())) {
-                restaurantNameCombobox.getItems().add(restaurant.getRestaurant_name());
-            	}
-            	
+                if (restaurant.getHome_branch().equals(branch)) {
+                    restaurantNameCombobox.getItems().add(restaurant.getRestaurant_name());
+                    System.out.println("Added Restaurant: " + restaurant.getRestaurant_name());  // Debugging statement
+                }
             }
+        } else {
+            restaurantNameCombobox.setVisible(false); // Hide the combobox if no branch is selected
         }
     }
 
+ 
+    
     public void start(Stage primaryStage) throws Exception {
     	
         FXMLLoader loader = new FXMLLoader();

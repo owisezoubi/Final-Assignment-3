@@ -3,25 +3,24 @@ package common;
 import java.io.Serializable;
 
 public class QuarterlyOrdersReport implements Serializable {
-    private static final long serialVersionUID = 1L;
-	private String orderDate;
-    private String restaurantName;
-    private int numberOfOrders;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private String restaurantName;
+    private int ordersMonth1;
+    private int ordersMonth2;
+    private int ordersMonth3;
 
-    public QuarterlyOrdersReport(String orderDate, String restaurantName, int numberOfOrders) {
-        this.orderDate = orderDate;
+    // Constructor
+    public QuarterlyOrdersReport(String restaurantName, int ordersMonth1, int ordersMonth2, int ordersMonth3) {
         this.restaurantName = restaurantName;
-        this.numberOfOrders = numberOfOrders;
+        this.ordersMonth1 = ordersMonth1;
+        this.ordersMonth2 = ordersMonth2;
+        this.ordersMonth3 = ordersMonth3;
     }
 
-    public String getOrderDate() {
-        return orderDate;
-    }
-
-    public void setOrderDate(String orderDate) {
-        this.orderDate = orderDate;
-    }
-
+    // Getters and Setters
     public String getRestaurantName() {
         return restaurantName;
     }
@@ -30,19 +29,37 @@ public class QuarterlyOrdersReport implements Serializable {
         this.restaurantName = restaurantName;
     }
 
-    public int getNumberOfOrders() {
-        return numberOfOrders; 
+    public int getOrdersMonth1() {
+        return ordersMonth1;
     }
 
-    public void setNumberOfOrders(int numberOfOrders) {
-        this.numberOfOrders = numberOfOrders;
+    public void setOrdersMonth1(int ordersMonth1) {
+        this.ordersMonth1 = ordersMonth1;
     }
 
-	@Override
-	public String toString() {
-		return "QuarterlyOrdersReport [orderDate=" + orderDate + ", restaurantName=" + restaurantName
-				+ ", numberOfOrders=" + numberOfOrders + "]";
-	}
+    public int getOrdersMonth2() {
+        return ordersMonth2;
+    }
 
-    
+    public void setOrdersMonth2(int ordersMonth2) {
+        this.ordersMonth2 = ordersMonth2;
+    }
+
+    public int getOrdersMonth3() {
+        return ordersMonth3;
+    }
+
+    public void setOrdersMonth3(int ordersMonth3) {
+        this.ordersMonth3 = ordersMonth3;
+    }
+
+    @Override
+    public String toString() {
+        return "QuarterlyOrdersReport{" +
+               "restaurantName='" + restaurantName + '\'' +
+               ", ordersMonth1=" + ordersMonth1 +
+               ", ordersMonth2=" + ordersMonth2 +
+               ", ordersMonth3=" + ordersMonth3 +
+               '}';
+    }
 }

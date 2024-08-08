@@ -21,9 +21,6 @@ import javafx.stage.Stage;
 public class CEOHomePageController implements Initializable {
 
     @FXML
-    private Button compraeCeoButton;
-
-    @FXML
     private Button logoutCeoButton;
 
     @FXML
@@ -35,8 +32,8 @@ public class CEOHomePageController implements Initializable {
     @FXML
     private Button quarterlyReportButton;
     
-    @FXML
-    private ComboBox<String> BranchComboBox;
+//    @FXML
+//    private ComboBox<String> BranchComboBox;
     
     @FXML
     private Label messageBranchLabel;
@@ -47,16 +44,16 @@ public class CEOHomePageController implements Initializable {
     @FXML
     void quarterlyReportButtonOnClickAction(ActionEvent event) throws Exception {
     	
- 	String selectedBranch=BranchComboBox.getValue();
-    	if(selectedBranch==null)
-    		messageBranchLabel.setText("please choose a branch");
-    	else {
-    	if (selectedBranch.equals("North"))
-    		ChatClient.branch="1";
-    	else if (selectedBranch.equals("South"))
-    		ChatClient.branch="2";
-    	else 
-    		ChatClient.branch="3";
+// 	String selectedBranch=BranchComboBox.getValue();
+//    	if(selectedBranch==null)
+//    		messageBranchLabel.setText("please choose a branch");
+//    	else {
+//    	if (selectedBranch.equals("North"))
+//    		ChatClient.branch="1";
+//    	else if (selectedBranch.equals("South"))
+//    		ChatClient.branch="2";
+//    	else 
+//    		ChatClient.branch="3";
 
     	// closing current page
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -66,14 +63,9 @@ public class CEOHomePageController implements Initializable {
         QuarterlyReportPageController QRC = new QuarterlyReportPageController();
         Stage newStage = new Stage();
         QRC.start(newStage);
-    	}
+//    	}
     } 
     
-    
-    @FXML
-    void compraeCEOButtonOnClickAction(ActionEvent event) {
-
-    }
 
     @FXML
     void logoutCEOButtonOnClickAction(ActionEvent event) throws Exception {
@@ -98,21 +90,21 @@ public class CEOHomePageController implements Initializable {
     @FXML
     void showReportCEOButtonOnClickAction(ActionEvent event) throws Exception {
     	
-    	String selectedBranch=BranchComboBox.getValue();
-    	if (selectedBranch== null) {
-   		 messageBranchLabel.setText("Please choose a branch.");
-        }
-    	else {
-    		if (selectedBranch.equals("North")) {
-    			ChatClient.branch="1";
-    		}
-    		else if (selectedBranch.equals("South")) {
-    			ChatClient.branch="2";
-    		}
-    		else {
-    			ChatClient.branch="3";
-    		}
-    		// closing current page
+//    	String selectedBranch=BranchComboBox.getValue();
+//    	if (selectedBranch== null) {
+//   		 messageBranchLabel.setText("Please choose a branch.");
+//        }
+//    	else {
+//    		if (selectedBranch.equals("North")) {
+//    			ChatClient.branch="1";
+//    		}
+//    		else if (selectedBranch.equals("South")) {
+//    			ChatClient.branch="2";
+//    		}
+//    		else {
+//    			ChatClient.branch="3";
+//    		}
+//    		// closing current page
     		Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
     		stage.close();
 
@@ -120,18 +112,15 @@ public class CEOHomePageController implements Initializable {
     		TypesOfReportsPageController Ceo = new TypesOfReportsPageController();
     		Stage newStage = new Stage();
     		Ceo.start(newStage);
-    	}
+//    	}
     }
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-        if (BranchComboBox != null) {
-        	BranchComboBox.getItems().addAll("North", "South", "Central");
-        }
-
-      
-		
+//        if (BranchComboBox != null) {
+//        	BranchComboBox.getItems().addAll("North", "South", "Central");
+//        }
 	}
 	
 	
