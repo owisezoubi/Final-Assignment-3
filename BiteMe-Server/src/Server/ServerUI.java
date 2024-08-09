@@ -43,30 +43,25 @@ public class ServerUI extends Application {
      */
 	public static void runServer(int defaultPort)
 	{
-//		 int port = 0; //Port to listen on
-//
-//	        try
-//	        {
-//	        	port = defaultPort; //Set port to 5555
-//	          
-//	        }
-//	        catch(Throwable t)
-//	        {
-//	        	System.out.println("ERROR - Could not connect!");
-//	        }
-//	        
-	       // sv.setPort(port);
-	        
-	        try 
-	        {
-	          sv.listen(); //Start listening for connections
-	          System.out.println("Server listenning for clients!");
+		 int port = 0; //Port to listen on
 
-	        } 
-	        catch (Exception ex) 
+	        try
 	        {
-	          System.out.println("ERROR - Could not listen for clients!");
+	        	port = defaultPort; //Set port to 5555
+	          
 	        }
+	        catch(Throwable t)
+	        {
+	        	System.out.println("ERROR - Could not connect!");
+	        }
+	        
+	        sv = new EchoServer(port);
+
+			try {
+				sv.listen(); // Start listening for connections
+			} catch (Exception ex) {
+				System.out.println("ERROR - Could not listen for clients!");
+			}
 	}
 	
 	public static void stopServer() throws IOException

@@ -293,6 +293,48 @@ public class DataBaseControl {
     }
     
     
+    // save order's cart to order_items table
+    public static void saveOrderItems(ArrayList<String> orderItems) throws Exception {
+        ensureInternalConnection();
+        PreparedStatement pstmt = null;
+
+        try {
+            String sql = "INSERT INTO order_items (order_id, menu_id, item_id, item_selected_Additions) VALUES (?, ?, ?, ?)";
+            pstmt = internalConnection.prepareStatement(sql);
+
+            // Assuming the first element in the ArrayList is a message string
+            // and the rest are items in groups of 4
+            for (int i = 1; i < orderItems.size(); i += 4) {
+                String orderId = orderItems.get(i);
+                String menuId = orderItems.get(i + 1);
+                String itemId = orderItems.get(i + 2);
+                String itemSelectedAdditions = orderItems.get(i + 3);
+
+                pstmt.setString(1, orderId);
+                pstmt.setString(2, menuId);
+                pstmt.setString(3, itemId);
+                pstmt.setString(4, itemSelectedAdditions);
+
+                pstmt.addBatch(); // Add to batch
+            }
+
+            // Execute the batch of insertions
+            pstmt.executeBatch();
+            System.out.println("Order items saved successfully.");
+        } catch (SQLException e) {
+            System.out.println("Error saving order items: " + e.getMessage());
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+    }
+
+    
 
     // method to get all the restaurants info 
 	public static ArrayList<Restaurant> getRestaurantsInfo() throws Exception {
@@ -561,6 +603,50 @@ public class DataBaseControl {
 	    }
 	}
 
+	
+	// Method to get orders that are ready for confirmation for a given user
+	public static ArrayList<Order> getOrdersForConfirmation(String userId) throws Exception {
+	    ensureInternalConnection(); // Ensure connection is established
+
+	    ArrayList<Order> ordersList = new ArrayList<>();
+	    String sql = "SELECT order_id, restaurant_id, user_id, date, desired_time, arrival_time, price, " +
+	                 "restaurant_confirmed_receiving, customer_confirmed_receiving, is_ready, is_late, " +
+	                 "order_type, order_receiving_method, delivery_address, recipient_name, recipient_phone_number " +
+	                 "FROM orders WHERE user_id = ? AND is_ready = '1'";
+
+	    try (PreparedStatement pstmt = internalConnection.prepareStatement(sql)) {
+	        pstmt.setString(1, userId);
+	        try (ResultSet rs = pstmt.executeQuery()) {
+	            while (rs.next()) {
+	                Order order = new Order(
+	                    rs.getString("order_id"),
+	                    rs.getString("restaurant_id"),
+	                    rs.getString("user_id"),
+	                    rs.getString("date"),
+	                    rs.getString("desired_time"),
+	                    rs.getString("arrival_time"),
+	                    rs.getString("price"),
+	                    rs.getString("restaurant_confirmed_receiving"),
+	                    rs.getString("customer_confirmed_receiving"),
+	                    rs.getString("is_ready"),
+	                    rs.getString("is_late"),
+	                    rs.getString("order_type"),
+	                    rs.getString("order_receiving_method"),
+	                    rs.getString("delivery_address"),
+	                    rs.getString("recipient_name"),
+	                    rs.getString("recipient_phone_number")
+	                );
+	                ordersList.add(order);
+	            }
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("Error retrieving orders for confirmation: " + e.getMessage());
+	    }
+
+	    return ordersList;
+	}
+
+	
 	
 	// get data from table orders, for the OrdersReport
 	public static ArrayList<OrdersReport> getOrdersReport(String restaurantName, String month, String year) throws Exception {

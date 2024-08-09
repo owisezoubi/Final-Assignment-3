@@ -67,7 +67,7 @@ public class EchoServer extends AbstractServer {
 
 			UpdateClient(client.getInetAddress(), client.getInetAddress().getHostAddress(), "Disconnected");
 		} catch (Exception e) {
-			// e.printStackTrace();
+			 e.printStackTrace();
 		}
 	}
 
@@ -93,6 +93,14 @@ public class EchoServer extends AbstractServer {
 
 		switch (inputList.get(0)) {
 
+		case "Client Connected":
+			UpdateClient(client.getInetAddress(), inputList.get(2), "Connected");
+			break;
+
+		case "Client Disconnected":
+			UpdateClient(client.getInetAddress(), inputList.get(2), "Disconnected");
+			break;
+
 		case "Get Login Validation":
 
 			try {
@@ -104,7 +112,7 @@ public class EchoServer extends AbstractServer {
 
 				System.out.println("EchoServer: result: " + resultList.toString());
 
-				this.sendToAllClients(resultList);
+				client.sendToClient(resultList);
 
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -357,6 +365,30 @@ public class EchoServer extends AbstractServer {
 
 			break;
 
+		// getting msg from client - Save Order Cart
+		case "Save Order Cart":
+			try {
+				System.out.println("EchoServer: before Save Order Cart: " + inputList.toString());
+				DataBaseControl.saveOrderItems(inputList);
+				System.out.println("EchoServer: after Save Order Cart: DONE");
+
+				this.sendToAllClients(null);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			break;
+			
+			
+			
+			
+			
+			
+			
+			
+			
+
 		// getting msg from client - retrieving data for OrderReport
 		case "Get OrdersReport Info":
 			try {
@@ -457,6 +489,10 @@ public class EchoServer extends AbstractServer {
 		System.out.println("Server has stopped listening for connections.");
 	}
 
+	
+	synchronized protected void clientDisconnected(ArrayList<String> client) {
+		System.out.println("Client " + client.get(0) + " Disconnected from IP: " + client.get(1));
+	}
 	// Class methods ***************************************************
 
 }

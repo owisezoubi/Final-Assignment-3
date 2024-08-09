@@ -35,7 +35,7 @@ public class ServerPortFrameController implements Initializable {
 
 	public static ArrayList<String> DBInfo = new ArrayList<>();
 
-    private static ObservableList<ClientInfo> clients = FXCollections.observableArrayList();
+    private static ObservableList<ClientInfo> clients;
 
     @FXML
     private TableView<ClientInfo> ClientsTableView;
@@ -116,6 +116,8 @@ public class ServerPortFrameController implements Initializable {
         guestNameColumn.setCellValueFactory(new PropertyValueFactory<ClientInfo, String>("hostName"));
         ipColumn.setCellValueFactory(new PropertyValueFactory<ClientInfo, String>("ip"));
         statusTabelColumn.setCellValueFactory(new PropertyValueFactory<ClientInfo, String>("Status"));
+        
+        clients = FXCollections.observableArrayList();
         ClientsTableView.setItems(clients);
     }
 
@@ -221,7 +223,13 @@ public class ServerPortFrameController implements Initializable {
     public void UpdateClient(InetAddress Host, String IP, String Status) {
         javafx.application.Platform.runLater(() -> {
             ClientInfo client = new ClientInfo(Host.getHostName(), IP, Status);
-            clients.add(client);
+            
+            if (Status.equals("Connected")) {
+            	clients.add(client);
+			} else {
+				clients.remove(client);
+			}
+            
         });
     }
 }

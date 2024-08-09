@@ -22,31 +22,28 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 public class OrderRestaurantListPageController implements Initializable {
 	
-	
-	
-	
+	@FXML
+	private ComboBox<String> BranchRestaurantsComboBox;
 
-	
+	@FXML
+	private Label RestaurantslistLabel;
 
-    @FXML
-    private Label RestaurantslistLabel;
+	@FXML
+	private Button backtoHomePageButton;
 
-    @FXML
-    private Button backtoHomePageButton;
+	@FXML
+	private GridPane gridViewRestaurantList;
 
-    @FXML
-    private GridPane gridViewRestaurantList;
-    
-
-    @FXML
-    void backtoHomePageButtonOnClickAction(ActionEvent event) throws Exception {
-    	// closing current page
+	@FXML
+	void backtoHomePageButtonOnClickAction(ActionEvent event) throws Exception {
+		// closing current page
 		Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 		stage.close();
 
@@ -63,66 +60,104 @@ public class OrderRestaurantListPageController implements Initializable {
     	ChatClient.cart = new ArrayList<>();
     	
     	
+    	// Populate the ComboBox with branch options
+        BranchRestaurantsComboBox.setItems(FXCollections.observableArrayList("North", "South", "Center"));
+
+        // Set the initial value based on the customer's home branch
+        String homeBranch = ChatClient.customer.getHome_branch();
+        BranchRestaurantsComboBox.setValue(getBranchNameFromCode(homeBranch));
+    	
+    	
         // restaurantsInfo is already populated
-        populateGridView();
+        populateGridView(homeBranch);
     }
     
-    
+    @FXML
+    void handleBranchSelection(ActionEvent event) {
+        String selectedBranch = BranchRestaurantsComboBox.getValue();
+        String branchCode = getBranchCodeFromName(selectedBranch);
+        populateGridView(branchCode);
+    }
+
+    private String getBranchCodeFromName(String branchName) {
+        switch (branchName) {
+            case "North":
+                return "1";
+            case "South":
+                return "2";
+            case "Center":
+                return "3";
+            default:
+                return "1"; // Default to North if unknown
+        }
+    }
 
     
+    private String getBranchNameFromCode(String branchCode) {
+        switch (branchCode) {
+            case "1":
+                return "North";
+            case "2":
+                return "South";
+            case "3":
+                return "Center";
+            default:
+                return "Unknown";
+        }
+    }
+    
 
 
-	private void populateGridView() {
+    private void populateGridView(String branchCode) {
+        gridViewRestaurantList.getChildren().clear(); // Clear previous content
+
         int column = 0;
         int row = 0;
 
         for (final Restaurant restaurant : ChatClient.restaurantsInfo) {
-            Button restaurantButton = new Button(restaurant.getRestaurant_name());
+            // Only show restaurants that match the selected branch
+            if (restaurant.getHome_branch().equals(branchCode)) {
+                Button restaurantButton = new Button(restaurant.getRestaurant_name());
 
-            restaurantButton.setOnAction(new javafx.event.EventHandler<javafx.event.ActionEvent>() {
-                @Override
-                public void handle(javafx.event.ActionEvent event) {
-                	
-                	ChatClient.chosenRestaurantByCustomer = restaurant;
-                	
-                	System.out.println("chosen restaurant: " + ChatClient.chosenRestaurantByCustomer);
-                	
+                restaurantButton.setOnAction(new javafx.event.EventHandler<javafx.event.ActionEvent>() {
+                    @Override
+                    public void handle(javafx.event.ActionEvent event) {
+                        ChatClient.chosenRestaurantByCustomer = restaurant;
+                        System.out.println("Chosen restaurant: " + ChatClient.chosenRestaurantByCustomer);
 
-                	// getting the restaurants menu info from DB
-                	ArrayList<String> msg = new ArrayList<>();
-                	msg.add(0, "Get Restaurant Menu Info");
-                	msg.add(1, ChatClient.chosenRestaurantByCustomer.getMenu_id());
+                        // Getting the restaurant's menu info from DB
+                        ArrayList<String> msg = new ArrayList<>();
+                        msg.add("Get Restaurant Menu Info");
+                        msg.add(ChatClient.chosenRestaurantByCustomer.getMenu_id());
 
-                	ClientUI.chat.accept(msg);
-                	ChatClient.choosenRestaurantMenu = (ArrayList<Item>) ChatClient.inputList;
-                	
-                	
-                	
-                	try {
-                		// closing current page
-                		Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                		stage.close();
-					
-						// opening new page
-						RestaurantMenuPageController RMP = new RestaurantMenuPageController();
-						Stage primaryStage = new Stage();
-						RMP.start(primaryStage);
-						
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}              }
-            });
+                        ClientUI.chat.accept(msg);
+                        ChatClient.choosenRestaurantMenu = (ArrayList<Item>) ChatClient.inputList;
 
-            gridViewRestaurantList.add(restaurantButton, column, row);
+                        try {
+                            // Close current page and open new page
+                            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                            stage.close();
 
-            column++;
-            if (column > 2) { // 3 restaurants per row
-                column = 0;
-                row++;
+                            RestaurantMenuPageController RMP = new RestaurantMenuPageController();
+                            Stage primaryStage = new Stage();
+                            RMP.start(primaryStage);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+                gridViewRestaurantList.add(restaurantButton, column, row);
+
+                column++;
+                if (column > 2) { // 3 restaurants per row
+                    column = 0;
+                    row++;
+                }
             }
         }
     }
+
 	
 	
 

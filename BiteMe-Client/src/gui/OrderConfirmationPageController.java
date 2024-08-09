@@ -201,18 +201,16 @@ public class OrderConfirmationPageController implements Initializable {
         ClientUI.chat.accept(saveOrderMessageArrayList);
         
         ArrayList<String> orderSavingStatuStrings = (ArrayList<String>) ChatClient.inputList;
-        
-        
-        
-//        // Print results for verification
-//        System.out.println(saladCategoryItems);
-//        System.out.println(mainDishCategoryItems);
-//        System.out.println(dessertCategoryItems);
-//        System.out.println(drinkCategoryItems);
-        
-   
+
         
 		if (orderSavingStatuStrings.get(0).equals("Order Saved")) {
+			
+			// Count items by category and store in ArrayLists and send messages to save the ArrayList in the SQL table
+	        countItemsByCategory();
+	        
+	        // save the order's items in the order_items
+	        saveOrderCart();
+			
 
 			// Create a confirmation alert for leaving the Menu Page
 			Alert alert = new Alert(AlertType.INFORMATION);
@@ -234,8 +232,7 @@ public class OrderConfirmationPageController implements Initializable {
 				System.out.println("User chose DONE");
 				
 				
-				// Count items by category and store in ArrayLists and send messages to save the ArrayList in the SQL table
-		        countItemsByCategory();
+				
 
 				// Close the current page
 				Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -272,6 +269,34 @@ public class OrderConfirmationPageController implements Initializable {
 		
 
 		
+	}
+
+	private void saveOrderCart() {
+		// TODO Auto-generated method stub
+		
+		// Prepare the ArrayList to send the order items to the server
+	    ArrayList<String> saveOrderCartMessage = new ArrayList<>();
+	    saveOrderCartMessage.add("Save Order Cart");  // Command to indicate this is a request to save cart items
+
+	    // Iterate over each item in the cart
+	    for (ChosenItem chosenItem : ChatClient.cart) {
+	        // Extract details from the chosen item
+	        String orderId = ChatClient.currentOrder.getOrder_id();
+	        String menuId = ChatClient.chosenRestaurantByCustomer.getMenu_id();
+	        String itemId = chosenItem.getItem().getItem_id(); // Assuming you have a method to get item_id
+	        String selectedAdditions = chosenItem.getItem_additions().toString();
+
+	        // Add details to the message
+	        saveOrderCartMessage.add(orderId);
+	        saveOrderCartMessage.add(menuId);
+	        saveOrderCartMessage.add(itemId);
+	        saveOrderCartMessage.add(selectedAdditions);
+	    }
+	    
+	    System.err.println("saveOrderCartMessage: -----> " + saveOrderCartMessage);
+
+	    // Send the message to the server
+	    ClientUI.chat.accept(saveOrderCartMessage);
 	}
 
 	// function to count how much items in each Category, and sending to the server to save in DB
@@ -394,6 +419,7 @@ public class OrderConfirmationPageController implements Initializable {
         itemNameColumn.setCellValueFactory(new PropertyValueFactory<>("itemName"));
         itemPriceColumn.setCellValueFactory(new PropertyValueFactory<>("itemPrice"));
         itemCategoryColumn.setCellValueFactory(new PropertyValueFactory<>("itemCategory"));
+        
 
         // Custom cell factory for additions column
         itemAdditionsColumn.setCellValueFactory(new PropertyValueFactory<>("itemAdditions"));

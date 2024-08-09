@@ -55,9 +55,14 @@ public class CustomerHomePageController implements Initializable {
     }
 
     @FXML
-    void myOrdersCustomerButtonOnClickAction(ActionEvent event) {
+    void myOrdersCustomerButtonOnClickAction(ActionEvent event) throws Exception {
     	
+    	Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    	stage.close();
 
+    	CustomerOrderConfirmationPageController COCP = new CustomerOrderConfirmationPageController();
+    	Stage primaryStage = new Stage();
+    	COCP.start(primaryStage);
     }
     
     
