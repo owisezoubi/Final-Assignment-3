@@ -515,7 +515,7 @@ public class DataBaseControl {
 
         String query = "INSERT INTO order_category (order_id, category, quantity) VALUES (?, ?, ?)";
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (PreparedStatement preparedStatement = internalConnection.prepareStatement(query)) {
             preparedStatement.setString(1, orderId);
             preparedStatement.setString(2, category);
             preparedStatement.setString(3, quantity);
@@ -528,6 +528,39 @@ public class DataBaseControl {
             System.err.println("Category's Quantity: failed to save in sql");
         }
     }
+	
+	
+	// Method to set 'is_eligible_for_refund' to 0 for a specific customer
+	public static void setRefundEligibilityToZero(String customerId) throws Exception {
+	    ensureInternalConnection(); // Ensure connection is established
+
+	    String sql = "UPDATE customers SET is_eligible_for_refund = '0' WHERE id = ?";
+
+	    try (PreparedStatement pstmt = internalConnection.prepareStatement(sql)) {
+	        pstmt.setString(1, customerId);
+	        pstmt.executeUpdate();
+	        System.out.println("Refund eligibility set to 0 for customer ID: " + customerId);
+	    } catch (SQLException e) {
+	        System.out.println("Error updating refund eligibility to 0: " + e.getMessage());
+	    }
+	}
+
+	
+	// Method to set 'is_eligible_for_refund' to 1 for a specific customer
+	public static void setRefundEligibilityToOne(String customerId) throws Exception {
+	    ensureInternalConnection(); // Ensure connection is established
+
+	    String sql = "UPDATE customers SET is_eligible_for_refund = '1' WHERE id = ?";
+
+	    try (PreparedStatement pstmt = internalConnection.prepareStatement(sql)) {
+	        pstmt.setString(1, customerId);
+	        pstmt.executeUpdate();
+	        System.out.println("Refund eligibility set to 1 for customer ID: " + customerId);
+	    } catch (SQLException e) {
+	        System.out.println("Error updating refund eligibility to 1: " + e.getMessage());
+	    }
+	}
+
 	
 	// get data from table orders, for the OrdersReport
 	public static ArrayList<OrdersReport> getOrdersReport(String restaurantName, String month, String year) throws Exception {

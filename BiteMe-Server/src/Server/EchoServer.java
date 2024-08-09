@@ -285,6 +285,9 @@ public class EchoServer extends AbstractServer {
 
 			break;
 
+			
+			
+			
 		// getting restaurants menu after choosing in Order process
 		case "Get Item's Additions Info":
 
@@ -317,9 +320,43 @@ public class EchoServer extends AbstractServer {
 				// TODO: handle exception
 				e.printStackTrace();
 			}
-			
+
 			break;
-			
+
+		// Changing Customer's is_eligible_for_refund to ZERO
+		case "Change Customer Refund Status To Zero":
+			try {
+				System.out.println("EchoServer:  before Changing Customer's is_eligible_for_refund to ZERO: " + inputList.toString());
+				DataBaseControl.setRefundEligibilityToZero(inputList.get(1));
+
+				System.out.println("EchoServer:  after Changing Customer's is_eligible_for_refund to ZERO: DONE!");
+
+				this.sendToAllClients(null);
+
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+
+			break;
+
+		// Changing Customer's is_eligible_for_refund to ONE
+		case "Change Customer Refund Status To One":
+			try {
+				System.out.println("EchoServer:  before Changing Customer's is_eligible_for_refund to ONE: " + inputList.toString());
+				DataBaseControl.setRefundEligibilityToOne(inputList.get(1));
+
+				System.out.println("EchoServer:  after Changing Customer's is_eligible_for_refund to ONE: DONE!");
+
+				this.sendToAllClients(null);
+
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+
+			break;
+
 		// getting msg from client - retrieving data for OrderReport
 		case "Get OrdersReport Info":
 			try {

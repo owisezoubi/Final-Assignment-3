@@ -36,7 +36,6 @@ public class ServerPortFrameController implements Initializable {
 	public static ArrayList<String> DBInfo = new ArrayList<>();
 
     private static ObservableList<ClientInfo> clients = FXCollections.observableArrayList();
-    private static ArrayList<ClientInfo> clientArrayList = new ArrayList<ClientInfo>();
 
     @FXML
     private TableView<ClientInfo> ClientsTableView;

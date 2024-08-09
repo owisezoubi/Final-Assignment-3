@@ -145,6 +145,19 @@ public class OrderConfirmationPageController implements Initializable {
 		} else {
 			ChatClient.currentOrder.setDelivery_address(orderAddressValueLabel.getText());
 		}
+        
+        System.err.println("ChatClient.customer.getIs_eligible_for_refund(): " + ChatClient.customer.getIs_eligible_for_refund());
+        
+        if (ChatClient.customer.getIs_eligible_for_refund().equals("1")) {
+        	
+        	// send a message to server for removing the customer privilege of refund
+        	ArrayList<String> changeCustomerRefundStatus = new ArrayList<String>();
+        	
+        	changeCustomerRefundStatus.add("Change Customer Refund Status To Zero");
+        	changeCustomerRefundStatus.add(ChatClient.customer.getId());
+        	
+        	ClientUI.chat.accept(changeCustomerRefundStatus);
+		}
 
         // Sending message to server to get the last order's id and getting back a new one
         ArrayList<String> getOrderNewIdMessage = new ArrayList<String>();
@@ -189,8 +202,7 @@ public class OrderConfirmationPageController implements Initializable {
         
         ArrayList<String> orderSavingStatuStrings = (ArrayList<String>) ChatClient.inputList;
         
-        // Count items by category and store in ArrayLists and send messages to save the ArrayList in the SQL table
-        countItemsByCategory();
+        
         
 //        // Print results for verification
 //        System.out.println(saladCategoryItems);
@@ -220,6 +232,10 @@ public class OrderConfirmationPageController implements Initializable {
 			// Handle the result
 			if (result == doneButton) {
 				System.out.println("User chose DONE");
+				
+				
+				// Count items by category and store in ArrayLists and send messages to save the ArrayList in the SQL table
+		        countItemsByCategory();
 
 				// Close the current page
 				Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -299,6 +315,8 @@ public class OrderConfirmationPageController implements Initializable {
 		saladCategoryItems.add(1, ChatClient.currentOrder.getOrder_id());
 		saladCategoryItems.add(2, SALAD_CATEGORY);
 		saladCategoryItems.add(3, String.valueOf(saladCount));
+		
+		System.out.println("saladCategoryItems: " + saladCategoryItems);
 
 		ClientUI.chat.accept(saladCategoryItems);
 
@@ -308,7 +326,10 @@ public class OrderConfirmationPageController implements Initializable {
 		mainDishCategoryItems.add(2, MAIN_DISH_CATEGORY);
 		mainDishCategoryItems.add(3, String.valueOf(mainDishCount));
 
-		ClientUI.chat.accept(saladCategoryItems);
+		System.out.println("mainDishCategoryItems: " + mainDishCategoryItems);
+
+		
+		ClientUI.chat.accept(mainDishCategoryItems);
 
 		// sending message to server to save the dessert category's quantity
 		dessertCategoryItems.add(0, "Save Category Quantity");
@@ -316,15 +337,20 @@ public class OrderConfirmationPageController implements Initializable {
 		dessertCategoryItems.add(2, DESSERT_CATEGORY);
 		dessertCategoryItems.add(3, String.valueOf(dessertCount));
 
-		ClientUI.chat.accept(saladCategoryItems);
+		System.out.println("dessertCategoryItems: " + dessertCategoryItems);
+
+		ClientUI.chat.accept(dessertCategoryItems);
 
 		// sending message to server to save the drink category's quantity
 		drinkCategoryItems.add(0, "Save Category Quantity");
 		drinkCategoryItems.add(1, ChatClient.currentOrder.getOrder_id());
 		drinkCategoryItems.add(2, DRINK_CATEGORY);
 		drinkCategoryItems.add(3, String.valueOf(drinkCount));
+		
+		System.out.println("drinkCategoryItems: " + drinkCategoryItems);
 
-		ClientUI.chat.accept(saladCategoryItems);
+
+		ClientUI.chat.accept(drinkCategoryItems);
 	}
 
 	@Override
